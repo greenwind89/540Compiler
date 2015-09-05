@@ -1,0 +1,12 @@
+
+# ignore vim swap files
+*.swp
+
+
+# MAC folder
+.DS_Store
+
+
+.env
+
+
