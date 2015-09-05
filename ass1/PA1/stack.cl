@@ -17,7 +17,7 @@ class StackMachine inherits IO {
         while not shouldExit loop
         {
           currentStr <- in_string();
-          (new IO).out_string(currentStr);
+          -- (new IO).out_string(currentStr);
           let command : StackCommand <- (new StackCommandFactory).getCommandObject(currentStr) in
             shouldExit <- command.initExecute(commandStack);
         }
@@ -26,10 +26,6 @@ class StackMachine inherits IO {
 
      }
     )
-  };
-
-  checkEnd(str: String) : Bool {
-    if (str = "x") then true else false fi
   };
 };
 
@@ -90,20 +86,37 @@ class IntegerStackCommand inherits StackCommand {
 };
 
 class PlusStackCommand inherits StackCommand {
-
-};
-
-class SwapStackCommand inherits StackCommand {
-  initExecute(scl : StackCommandList) : Bool {
+  execute(scl : StackCommandList) : Object {
     {
       let com1: StackCommand <- scl.pop(),
           com2: StackCommand <- scl.pop() in
       {
-        scl.push(com2);
-        scl.push(com1);
+        let int1: Int <- (new A2I).a2i(com1.getCommandString()),
+            int2: Int <- (new A2I).a2i(com2.getCommandString()),
+            int3: Int <- (int1 + int2) in
+          {
+            scl.push((new IntegerStackCommand).init((new A2I).i2a(int3)));
+          };
       };
 
-      false;
+      self;
+    }
+  };
+
+
+};
+
+class SwapStackCommand inherits StackCommand {
+  execute(scl : StackCommandList) : Object {
+    {
+      let com1: StackCommand <- scl.pop(),
+          com2: StackCommand <- scl.pop() in
+      {
+        scl.push(com1);
+        scl.push(com2);
+      };
+
+      self;
     }
   };
 
