@@ -23,11 +23,6 @@ class StackMachine inherits IO {
         }
         pool;
         (new IO).out_string("\n");
-        commandStack.print();
-        commandStack.pop();
-        commandStack.print();
-        commandStack.pop();
-        commandStack.print();
 
      }
     )
@@ -121,7 +116,7 @@ class StackCommandList {
       commandList.print();
     }
     else
-      (new IO).out_string("no command")
+      self
     fi
   };
 
