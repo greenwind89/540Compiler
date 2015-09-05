@@ -37,8 +37,16 @@ class StackCommandFactory {
   getCommandObject(str: String) : StackCommand {
     if (str = "x")
     then (new StopStackCommand).init(str) else
-    (new StackCommand).init(str)
-    fi
+    if (str = "d")
+    then (new DisplayStackCommand).init(str) else
+    if (str = "e")
+    then (new ExecuteStackCommand).init(str) else
+    if (str = "s")
+    then (new SwapStackCommand).init(str) else
+    if (str = "+")
+    then (new PlusStackCommand).init(str) else
+    (new IntegerStackCommand).init(str)
+    fi fi fi fi fi
   };
 };
 
@@ -50,6 +58,12 @@ class StackCommand {
       scl.push(self);
       false;
     }
+  };
+
+  -- called when meet executing e character
+  execute(scl: StackCommandList) : Object {
+    -- by default do nothing
+    self
   };
 
   init(str: String) : StackCommand {
@@ -67,6 +81,58 @@ class StackCommand {
 class StopStackCommand inherits StackCommand{
   initExecute(scl : StackCommandList) : Bool {
     true
+  };
+
+};
+
+class IntegerStackCommand inherits StackCommand {
+
+};
+
+class PlusStackCommand inherits StackCommand {
+
+};
+
+class SwapStackCommand inherits StackCommand {
+  initExecute(scl : StackCommandList) : Bool {
+    {
+      let com1: StackCommand <- scl.pop(),
+          com2: StackCommand <- scl.pop() in
+      {
+        scl.push(com2);
+        scl.push(com1);
+      };
+
+      false;
+    }
+  };
+
+};
+
+class ExecuteStackCommand inherits StackCommand {
+  initExecute(scl: StackCommandList) : Bool {
+    {
+      if (not (scl.isEmpty())) then
+        let currentCommand: StackCommand <- scl.pop() in
+        {
+          currentCommand.execute(scl);
+          false;
+        }
+      else
+        false
+      fi;
+
+    }
+  };
+
+};
+
+class DisplayStackCommand inherits StackCommand {
+  initExecute(scl: StackCommandList) : Bool {
+    {
+      scl.print();
+      false;
+    }
   };
 
 };
@@ -90,6 +156,10 @@ class StackCommandList {
       commandList <- commandList.getCommandList();
       com;
     }
+  };
+
+  isEmpty(): Bool {
+    if (not (isvoid commandList )) then false else true fi
   };
 
   init(sc: StackCommand, sl: StackCommandList) : StackCommandList {
