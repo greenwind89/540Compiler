@@ -23,8 +23,7 @@ stack.s: stack.cl atoi.cl
 	${CLASSDIR}/bin/coolc stack.cl atoi.cl 
 
 test:	compile
-	@echo stack.test
-	${CLASSDIR}/bin/spim -file stack.s < stack.test
+	${CLASSDIR}/bin/spim -file stack.s < './test/testcases/test2.txt'
 
 clean :
 	rm -f *.s core *~

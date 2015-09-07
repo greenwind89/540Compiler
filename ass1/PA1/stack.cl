@@ -17,12 +17,13 @@ class StackMachine inherits IO {
         while not shouldExit loop
         {
           currentStr <- in_string();
+          -- (new IO).out_string("currentStr:");
           -- (new IO).out_string(currentStr);
           let command : StackCommand <- (new StackCommandFactory).getCommandObject(currentStr) in
             shouldExit <- command.initExecute(commandStack);
         }
         pool;
-        (new IO).out_string("\n");
+        -- (new IO).out_string("\n");
 
      }
     )
@@ -82,6 +83,10 @@ class StopStackCommand inherits StackCommand{
 };
 
 class IntegerStackCommand inherits StackCommand {
+  execute(scl: StackCommandList) : Object {
+    -- we always pop item out to execute, in case of integer, we will want to put it back
+    scl.push(self)
+  };
 
 };
 
