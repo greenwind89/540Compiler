@@ -61,10 +61,15 @@ Questions on PA1
 
 1. Describe your implementation of the stack machine in a single short
    paragraph.
-
+We use Factory Method pattern to handle the creation of StackCommand object based on input character. StackCommand class is parent class of PlusStackCommand, ExecuteStackCommand, ... StackCommand provides 2 default methods 'initExecute' which is called when the StackCommand first added to stack and method 'execute' is called when seeing 'e' (ExecuteStackCommand). Each subclass can choose to override one or both of them to change the behavior. Moreover, since COOL does not have built-in support for stack, we implement it as linked list, each element contains link to next element.
 
 2. List 3 things that you like about the Cool programming language.
-
++ A small and simple language so we know exactly what we are supported and what we are not supported.
++ COOL's expressions are ubiquitous and every expression has a value and a type, it allows us to nest expressions together to create very expressive statements.
++ It syntax resembles common structure of modern programming languages like Java, JavaScript and Ruby, this makes it easier to be mastered 
 
 3. List 3 things you DON'T like about Cool.
-
++ Lack of support for advanced data structure like stack, queue, tree, hash table, ...
++ Compiler does not support advanced debugging techniques like printing the trace stack of the errors when error occurs, so it is harder to debug
++ It does not support Interface so it will become harder to practice "programming to interface", in which we do not want to see the detail of classes and every concrete class must implement the Interface.
++ Its if then else structure makes nested if becomes very tedious (full of if, fi)
