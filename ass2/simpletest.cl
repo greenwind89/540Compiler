@@ -10,6 +10,9 @@ Class Main {
         {
             -- test comment
             somethjing <- true;
+            string <- "hello madam \0 how \n are yoiu"
+            string2 <- "hello madam how \
+are yoiu"
             if position = num_cells() - 1 then
                 cell(0)
             else

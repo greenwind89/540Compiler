@@ -58,10 +58,15 @@ LOWERCASE_CHARACTER       [a-z]
 WHITE_SPACE_CHARACTER		  [ \f\r\t\v]
 IDENTIFIER_CHARACTER      [A-Za-z0-9_]
 ASSIGN										<-
+LE 												<
+SPECIAL_NOTATIONS					[+/-*=<.~,;:\(\)@{}]
 
-%x comment
+%x comment str
 %%
 
+	char string_buf[1000];
+	char *string_buf_ptr;
+	curr_lineno = 1;
  /*
   *  Nested comments
   */
@@ -93,6 +98,7 @@ ASSIGN										<-
   */
 {DARROW}		{ return (DARROW); }
 {ASSIGN}		{ return (ASSIGN); }
+{LE}				{ return (LE); }
 
 
  /*
@@ -128,6 +134,43 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
   *
   */
 
+\"      string_buf_ptr = string_buf; BEGIN(str);
+
+     <str>\"        { /* saw closing quote - all done */
+	             BEGIN(INITIAL);
+	             *string_buf_ptr = '\0';
+							yylval.symbol = new Entry(string_buf, strlen(string_buf), 1);
+							return (STR_CONST);
+
+	             /* return string constant token type and
+	              * value to parser
+	              */
+             }
+
+     <str>\n        {
+	             /* error - unterminated string constant */
+	             /* generate error message */
+							 curr_lineno++;
+							 yylval.error_msg = (char *)"Unterminated string constant"; return (ERROR);
+             }
+
+     <str>\\n  *string_buf_ptr++ = '\n';
+     <str>\\t  *string_buf_ptr++ = '\t';
+     <str>\\b  *string_buf_ptr++ = '\b';
+     <str>\\f  *string_buf_ptr++ = '\f';
+     <str>\\0  *string_buf_ptr++ = '0';
+
+		 <str><<EOF>>  	{yylval.error_msg = (char *)"EOF in string constant"; BEGIN(INITIAL); return (ERROR);}
+
+     <str>\\(.|\n)  *string_buf_ptr++ = yytext[1];
+
+     <str>[^\\\n\"]+        {
+             char *yptr = yytext;
+
+             while ( *yptr )
+                     *string_buf_ptr++ = *yptr++;
+             }
+
  /*
   * Type identifiers
   */
@@ -161,5 +204,10 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
   * White spaces
 	*/
 {WHITE_SPACE_CHARACTER}+ {}
+
+ /*
+ 	* If it does not start any token and is not a special notation then throw error
+ 	*/
+[^+/\-*=<>.~,;:\(\)@{}]       {yylval.error_msg = yytext; return (ERROR);};
 
 %%
