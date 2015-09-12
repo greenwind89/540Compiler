@@ -8,6 +8,7 @@
  * to the code in the file.  Don't remove anything that was here initially
  */
 %option noyywrap
+%option stack
 %{
 #include <cool-parse.h>
 #include <stringtab.h>
@@ -50,32 +51,115 @@ extern YYSTYPE cool_yylval;
  * Define names for regular expressions here.
  */
 
-DARROW          =>
+DARROW          					=>
+DIGIT											[0-9]
+UPPERCASE_CHARACTER       [A-Z]
+LOWERCASE_CHARACTER       [a-z]
+WHITE_SPACE_CHARACTER		  [ \f\r\t\v]
+IDENTIFIER_CHARACTER      [A-Za-z0-9_]
+ASSIGN										<-
 
+%x comment
 %%
 
  /*
   *  Nested comments
   */
 
+"(*"         {yy_push_state(INITIAL); BEGIN(comment);}
+
+ <comment>"(*"	{yy_push_state(comment);}
+ <comment>[^*\n(]*        /* eat anything that's not a '*' or '(' */
+ <comment>"("+[^*\n]*   /* eat up '('s not followed by '*'s */
+ <comment>"*"+[^*)\n]*   /* eat up '*'s not followed by ')'s */
+ <comment>\n             ++curr_lineno;
+ <comment>"*"+")"        yy_pop_state();
+ <comment><<EOF>>  	{yylval.error_msg = (char *)"EOF in comment"; BEGIN(INITIAL); return (ERROR);}
+
+ /*
+  * Comment error
+	*/
+
+"*)"			{yylval.error_msg = (char *)"Unmatched *)"; return (ERROR);}
+
+ /*
+  * One line comment
+	*/
+--[^\n]* {}
+
 
  /*
   *  The multiple-character operators.
   */
 {DARROW}		{ return (DARROW); }
+{ASSIGN}		{ return (ASSIGN); }
+
 
  /*
   * Keywords are case-insensitive except for the values true and false,
   * which must begin with a lower-case letter.
   */
+(?i:class)				  {return (CLASS); }
+(?i:else)				    {return (WHILE); }
+(?i:fi)				      {return (FI); }
+(?i:if)				      {return (IF); }
+(?i:in)				      {return (IN); }
+(?i:inherits)				{return (INHERITS); }
+(?i:isvoid)				  {return (ISVOID); }
+(?i:let)						{return (LET); }
+(?i:loop)						{return (LOOP); }
+(?i:pool)						{return (POOL); }
+(?i:then)						{return (THEN); }
+(?i:while)				  {return (WHILE); }
+(?i:case)						{return (CASE); }
+(?i:esac)						{return (ESAC); }
+(?i:new)				  	{return (NEW); }
+(?i:of)							{return (OF); }
+(?i:not)						{return (NOT); }
+
+true								{yylval.boolean = true; return (BOOL_CONST); }
+false								{yylval.boolean = false; return (BOOL_CONST); }
 
 
  /*
   *  String constants (C syntax)
-  *  Escape sequence \c is accepted for all characters c. Except for 
+  *  Escape sequence \c is accepted for all characters c. Except for
   *  \n \t \b \f, the result is c.
   *
   */
 
+ /*
+  * Type identifiers
+  */
+{UPPERCASE_CHARACTER}{IDENTIFIER_CHARACTER}*		{
+	yylval.symbol = new Entry(yytext, yyleng, 1);
+	return (TYPEID);
+}
+
+ /*
+  * Object identifiers
+  */
+{LOWERCASE_CHARACTER}{IDENTIFIER_CHARACTER}*		{
+	yylval.symbol = new Entry(yytext, yyleng, 1);
+	return (OBJECTID);
+}
+
+ /*
+  * Integer
+  */
+{DIGIT}+		{
+	yylval.symbol = new Entry(yytext, yyleng, 1);
+	return (INT_CONST);
+}
+
+ /*
+  * End of line, update line number
+	*/
+\n      ++curr_lineno;
+
+ /*
+  * White spaces
+	*/
+{WHITE_SPACE_CHARACTER}+ {}
 
 %%
