@@ -1,0 +1,815 @@
+#name "./test/testcases/test1.cl"
+#11 CLASS
+#11 TYPEID StackMachine
+#11 INHERITS
+#11 TYPEID IO
+#11 '{'
+#12 OBJECTID run
+#12 '('
+#12 ')'
+#12 ':'
+#12 TYPEID Object
+#12 '{'
+#13 '('
+#13 LET
+#13 OBJECTID shouldExit
+#13 ':'
+#13 TYPEID Bool
+#13 ASSIGN
+#13 BOOL_CONST false
+#13 ','
+#14 OBJECTID commandStack
+#14 ':'
+#14 TYPEID HeadList
+#14 ASSIGN
+#14 '('
+#14 NEW
+#14 TYPEID HeadList
+#14 ')'
+#14 ','
+#15 OBJECTID currentStr
+#15 ':'
+#15 TYPEID String
+#15 IN
+#16 '{'
+#17 WHILE
+#17 NOT
+#17 OBJECTID shouldExit
+#17 LOOP
+#18 '{'
+#19 OBJECTID currentStr
+#19 ASSIGN
+#19 OBJECTID in_string
+#19 '('
+#19 ')'
+#19 ';'
+#22 LET
+#22 OBJECTID command
+#22 ':'
+#22 TYPEID StackCommand
+#22 ASSIGN
+#22 '('
+#22 NEW
+#22 TYPEID StackCommandFactory
+#22 ')'
+#22 '.'
+#22 OBJECTID getCommandObject
+#22 '('
+#22 OBJECTID currentStr
+#22 ')'
+#22 IN
+#23 OBJECTID shouldExit
+#23 ASSIGN
+#23 OBJECTID command
+#23 '.'
+#23 OBJECTID initExecute
+#23 '('
+#23 OBJECTID commandStack
+#23 ')'
+#23 ';'
+#24 '}'
+#25 POOL
+#25 ';'
+#28 '}'
+#29 ')'
+#30 '}'
+#30 ';'
+#31 '}'
+#31 ';'
+#33 CLASS
+#33 TYPEID StackCommandFactory
+#33 '{'
+#34 OBJECTID getCommandObject
+#34 '('
+#34 OBJECTID str
+#34 ':'
+#34 TYPEID String
+#34 ')'
+#34 ':'
+#34 TYPEID StackCommand
+#34 '{'
+#35 IF
+#35 '('
+#35 OBJECTID str
+#35 '='
+#35 STR_CONST "x"
+#35 ')'
+#36 THEN
+#36 '('
+#36 NEW
+#36 TYPEID StopStackCommand
+#36 ')'
+#36 '.'
+#36 OBJECTID init
+#36 '('
+#36 OBJECTID str
+#36 ')'
+#36 ELSE
+#37 IF
+#37 '('
+#37 OBJECTID str
+#37 '='
+#37 STR_CONST "d"
+#37 ')'
+#38 THEN
+#38 '('
+#38 NEW
+#38 TYPEID DisplayStackCommand
+#38 ')'
+#38 '.'
+#38 OBJECTID init
+#38 '('
+#38 OBJECTID str
+#38 ')'
+#38 ELSE
+#39 IF
+#39 '('
+#39 OBJECTID str
+#39 '='
+#39 STR_CONST "e"
+#39 ')'
+#40 THEN
+#40 '('
+#40 NEW
+#40 TYPEID ExecuteStackCommand
+#40 ')'
+#40 '.'
+#40 OBJECTID init
+#40 '('
+#40 OBJECTID str
+#40 ')'
+#40 ELSE
+#41 IF
+#41 '('
+#41 OBJECTID str
+#41 '='
+#41 STR_CONST "s"
+#41 ')'
+#42 THEN
+#42 '('
+#42 NEW
+#42 TYPEID SwapStackCommand
+#42 ')'
+#42 '.'
+#42 OBJECTID init
+#42 '('
+#42 OBJECTID str
+#42 ')'
+#42 ELSE
+#43 IF
+#43 '('
+#43 OBJECTID str
+#43 '='
+#43 STR_CONST "+"
+#43 ')'
+#44 THEN
+#44 '('
+#44 NEW
+#44 TYPEID PlusStackCommand
+#44 ')'
+#44 '.'
+#44 OBJECTID init
+#44 '('
+#44 OBJECTID str
+#44 ')'
+#44 ELSE
+#45 '('
+#45 NEW
+#45 TYPEID IntegerStackCommand
+#45 ')'
+#45 '.'
+#45 OBJECTID init
+#45 '('
+#45 OBJECTID str
+#45 ')'
+#46 FI
+#46 FI
+#46 FI
+#46 FI
+#46 FI
+#47 '}'
+#47 ';'
+#48 '}'
+#48 ';'
+#51 CLASS
+#51 TYPEID StackCommand
+#51 '{'
+#52 OBJECTID cmdStr
+#52 ':'
+#52 TYPEID String
+#52 ';'
+#53 OBJECTID initExecute
+#53 '('
+#53 OBJECTID scl
+#53 ':'
+#53 TYPEID StackCommandList
+#53 ')'
+#53 ':'
+#53 TYPEID Bool
+#53 '{'
+#54 '{'
+#55 OBJECTID scl
+#55 '.'
+#55 OBJECTID push
+#55 '('
+#55 OBJECTID self
+#55 ')'
+#55 ';'
+#56 BOOL_CONST false
+#56 ';'
+#57 '}'
+#58 '}'
+#58 ';'
+#61 OBJECTID execute
+#61 '('
+#61 OBJECTID scl
+#61 ':'
+#61 TYPEID StackCommandList
+#61 ')'
+#61 ':'
+#61 TYPEID Object
+#61 '{'
+#63 OBJECTID self
+#64 '}'
+#64 ';'
+#66 OBJECTID init
+#66 '('
+#66 OBJECTID str
+#66 ':'
+#66 TYPEID String
+#66 ')'
+#66 ':'
+#66 TYPEID StackCommand
+#66 '{'
+#67 '{'
+#68 OBJECTID cmdStr
+#68 ASSIGN
+#68 OBJECTID str
+#68 ';'
+#69 OBJECTID self
+#69 ';'
+#70 '}'
+#71 '}'
+#71 ';'
+#73 OBJECTID getCommandString
+#73 '('
+#73 ')'
+#73 ':'
+#73 TYPEID String
+#73 '{'
+#74 OBJECTID cmdStr
+#75 '}'
+#75 ';'
+#76 '}'
+#76 ';'
+#78 CLASS
+#78 TYPEID StopStackCommand
+#78 INHERITS
+#78 TYPEID StackCommand
+#78 '{'
+#79 OBJECTID initExecute
+#79 '('
+#79 OBJECTID scl
+#79 ':'
+#79 TYPEID StackCommandList
+#79 ')'
+#79 ':'
+#79 TYPEID Bool
+#79 '{'
+#80 BOOL_CONST true
+#81 '}'
+#81 ';'
+#83 '}'
+#83 ';'
+#85 CLASS
+#85 TYPEID IntegerStackCommand
+#85 INHERITS
+#85 TYPEID StackCommand
+#85 '{'
+#86 OBJECTID execute
+#86 '('
+#86 OBJECTID scl
+#86 ':'
+#86 TYPEID StackCommandList
+#86 ')'
+#86 ':'
+#86 TYPEID Object
+#86 '{'
+#88 OBJECTID scl
+#88 '.'
+#88 OBJECTID push
+#88 '('
+#88 OBJECTID self
+#88 ')'
+#89 '}'
+#89 ';'
+#91 '}'
+#91 ';'
+#93 CLASS
+#93 TYPEID PlusStackCommand
+#93 INHERITS
+#93 TYPEID StackCommand
+#93 '{'
+#94 OBJECTID execute
+#94 '('
+#94 OBJECTID scl
+#94 ':'
+#94 TYPEID StackCommandList
+#94 ')'
+#94 ':'
+#94 TYPEID Object
+#94 '{'
+#95 '{'
+#96 LET
+#96 OBJECTID com1
+#96 ':'
+#96 TYPEID StackCommand
+#96 ASSIGN
+#96 OBJECTID scl
+#96 '.'
+#96 OBJECTID pop
+#96 '('
+#96 ')'
+#96 ','
+#97 OBJECTID com2
+#97 ':'
+#97 TYPEID StackCommand
+#97 ASSIGN
+#97 OBJECTID scl
+#97 '.'
+#97 OBJECTID pop
+#97 '('
+#97 ')'
+#97 IN
+#98 '{'
+#99 LET
+#99 OBJECTID int1
+#99 ':'
+#99 TYPEID Int
+#99 ASSIGN
+#99 '('
+#99 NEW
+#99 TYPEID A2I
+#99 ')'
+#99 '.'
+#99 OBJECTID a2i
+#99 '('
+#99 OBJECTID com1
+#99 '.'
+#99 OBJECTID getCommandString
+#99 '('
+#99 ')'
+#99 ')'
+#99 ','
+#100 OBJECTID int2
+#100 ':'
+#100 TYPEID Int
+#100 ASSIGN
+#100 '('
+#100 NEW
+#100 TYPEID A2I
+#100 ')'
+#100 '.'
+#100 OBJECTID a2i
+#100 '('
+#100 OBJECTID com2
+#100 '.'
+#100 OBJECTID getCommandString
+#100 '('
+#100 ')'
+#100 ')'
+#100 ','
+#101 OBJECTID int3
+#101 ':'
+#101 TYPEID Int
+#101 ASSIGN
+#101 '('
+#101 OBJECTID int1
+#101 '+'
+#101 OBJECTID int2
+#101 ')'
+#101 IN
+#102 '{'
+#103 OBJECTID scl
+#103 '.'
+#103 OBJECTID push
+#103 '('
+#103 '('
+#103 NEW
+#103 TYPEID IntegerStackCommand
+#103 ')'
+#103 '.'
+#103 OBJECTID init
+#103 '('
+#103 '('
+#103 NEW
+#103 TYPEID A2I
+#103 ')'
+#103 '.'
+#103 OBJECTID i2a
+#103 '('
+#103 OBJECTID int3
+#103 ')'
+#103 ')'
+#103 ')'
+#103 ';'
+#104 '}'
+#104 ';'
+#105 '}'
+#105 ';'
+#107 OBJECTID self
+#107 ';'
+#108 '}'
+#109 '}'
+#109 ';'
+#112 '}'
+#112 ';'
+#114 CLASS
+#114 TYPEID SwapStackCommand
+#114 INHERITS
+#114 TYPEID StackCommand
+#114 '{'
+#115 OBJECTID execute
+#115 '('
+#115 OBJECTID scl
+#115 ':'
+#115 TYPEID StackCommandList
+#115 ')'
+#115 ':'
+#115 TYPEID Object
+#115 '{'
+#116 '{'
+#117 LET
+#117 OBJECTID com1
+#117 ':'
+#117 TYPEID StackCommand
+#117 ASSIGN
+#117 OBJECTID scl
+#117 '.'
+#117 OBJECTID pop
+#117 '('
+#117 ')'
+#117 ','
+#118 OBJECTID com2
+#118 ':'
+#118 TYPEID StackCommand
+#118 ASSIGN
+#118 OBJECTID scl
+#118 '.'
+#118 OBJECTID pop
+#118 '('
+#118 ')'
+#118 IN
+#119 '{'
+#120 OBJECTID scl
+#120 '.'
+#120 OBJECTID push
+#120 '('
+#120 OBJECTID com1
+#120 ')'
+#120 ';'
+#121 OBJECTID scl
+#121 '.'
+#121 OBJECTID push
+#121 '('
+#121 OBJECTID com2
+#121 ')'
+#121 ';'
+#122 '}'
+#122 ';'
+#124 OBJECTID self
+#124 ';'
+#125 '}'
+#126 '}'
+#126 ';'
+#128 '}'
+#128 ';'
+#130 CLASS
+#130 TYPEID ExecuteStackCommand
+#130 INHERITS
+#130 TYPEID StackCommand
+#130 '{'
+#131 OBJECTID initExecute
+#131 '('
+#131 OBJECTID scl
+#131 ':'
+#131 TYPEID StackCommandList
+#131 ')'
+#131 ':'
+#131 TYPEID Bool
+#131 '{'
+#132 '{'
+#133 IF
+#133 '('
+#133 NOT
+#133 '('
+#133 OBJECTID scl
+#133 '.'
+#133 OBJECTID isEmpty
+#133 '('
+#133 ')'
+#133 ')'
+#133 ')'
+#133 THEN
+#134 LET
+#134 OBJECTID currentCommand
+#134 ':'
+#134 TYPEID StackCommand
+#134 ASSIGN
+#134 OBJECTID scl
+#134 '.'
+#134 OBJECTID pop
+#134 '('
+#134 ')'
+#134 IN
+#135 '{'
+#136 OBJECTID currentCommand
+#136 '.'
+#136 OBJECTID execute
+#136 '('
+#136 OBJECTID scl
+#136 ')'
+#136 ';'
+#137 BOOL_CONST false
+#137 ';'
+#138 '}'
+#139 ELSE
+#140 BOOL_CONST false
+#141 FI
+#141 ';'
+#143 '}'
+#144 '}'
+#144 ';'
+#146 '}'
+#146 ';'
+#148 CLASS
+#148 TYPEID DisplayStackCommand
+#148 INHERITS
+#148 TYPEID StackCommand
+#148 '{'
+#149 OBJECTID initExecute
+#149 '('
+#149 OBJECTID scl
+#149 ':'
+#149 TYPEID StackCommandList
+#149 ')'
+#149 ':'
+#149 TYPEID Bool
+#149 '{'
+#150 '{'
+#151 OBJECTID scl
+#151 '.'
+#151 OBJECTID print
+#151 '('
+#151 ')'
+#151 ';'
+#152 BOOL_CONST false
+#152 ';'
+#153 '}'
+#154 '}'
+#154 ';'
+#156 '}'
+#156 ';'
+#158 CLASS
+#158 TYPEID StackCommandList
+#158 '{'
+#160 OBJECTID command
+#160 ':'
+#160 TYPEID StackCommand
+#160 ';'
+#161 OBJECTID commandList
+#161 ':'
+#161 TYPEID StackCommandList
+#161 ';'
+#163 OBJECTID isHead
+#163 '('
+#163 ')'
+#163 ':'
+#163 TYPEID Bool
+#163 '{'
+#163 BOOL_CONST false
+#163 '}'
+#163 ';'
+#165 OBJECTID push
+#165 '('
+#165 OBJECTID sc
+#165 ':'
+#165 TYPEID StackCommand
+#165 ')'
+#165 ':'
+#165 TYPEID Object
+#165 '{'
+#166 '{'
+#167 OBJECTID commandList
+#167 ASSIGN
+#167 '('
+#167 NEW
+#167 TYPEID StackCommandList
+#167 ')'
+#167 '.'
+#167 OBJECTID init
+#167 '('
+#167 OBJECTID sc
+#167 ','
+#167 OBJECTID commandList
+#167 ')'
+#167 ';'
+#168 '}'
+#169 '}'
+#169 ';'
+#171 OBJECTID pop
+#171 '('
+#171 ')'
+#171 ':'
+#171 TYPEID StackCommand
+#171 '{'
+#172 LET
+#172 OBJECTID com
+#172 ':'
+#172 TYPEID StackCommand
+#172 ASSIGN
+#172 OBJECTID commandList
+#172 '.'
+#172 OBJECTID getCommand
+#172 '('
+#172 ')'
+#172 IN
+#173 '{'
+#174 OBJECTID commandList
+#174 ASSIGN
+#174 OBJECTID commandList
+#174 '.'
+#174 OBJECTID getCommandList
+#174 '('
+#174 ')'
+#174 ';'
+#175 OBJECTID com
+#175 ';'
+#176 '}'
+#177 '}'
+#177 ';'
+#179 OBJECTID isEmpty
+#179 '('
+#179 ')'
+#179 ':'
+#179 TYPEID Bool
+#179 '{'
+#180 IF
+#180 '('
+#180 NOT
+#180 '('
+#180 ISVOID
+#180 OBJECTID commandList
+#180 ')'
+#180 ')'
+#180 THEN
+#180 BOOL_CONST false
+#180 ELSE
+#180 BOOL_CONST true
+#180 FI
+#181 '}'
+#181 ';'
+#183 OBJECTID init
+#183 '('
+#183 OBJECTID sc
+#183 ':'
+#183 TYPEID StackCommand
+#183 ','
+#183 OBJECTID sl
+#183 ':'
+#183 TYPEID StackCommandList
+#183 ')'
+#183 ':'
+#183 TYPEID StackCommandList
+#183 '{'
+#184 '{'
+#185 OBJECTID command
+#185 ASSIGN
+#185 OBJECTID sc
+#185 ';'
+#186 OBJECTID commandList
+#186 ASSIGN
+#186 OBJECTID sl
+#186 ';'
+#187 OBJECTID self
+#187 ';'
+#188 '}'
+#189 '}'
+#189 ';'
+#191 OBJECTID getCommand
+#191 '('
+#191 ')'
+#191 ':'
+#191 TYPEID StackCommand
+#191 '{'
+#192 OBJECTID command
+#193 '}'
+#193 ';'
+#195 OBJECTID getCommandList
+#195 '('
+#195 ')'
+#195 ':'
+#195 TYPEID StackCommandList
+#195 '{'
+#196 OBJECTID commandList
+#197 '}'
+#197 ';'
+#199 OBJECTID print
+#199 '('
+#199 ')'
+#199 ':'
+#199 TYPEID Object
+#199 '{'
+#200 IF
+#200 '('
+#200 NOT
+#200 '('
+#200 ISVOID
+#200 OBJECTID commandList
+#200 ')'
+#200 ')'
+#201 THEN
+#202 '{'
+#203 '('
+#203 NEW
+#203 TYPEID IO
+#203 ')'
+#203 '.'
+#203 OBJECTID out_string
+#203 '('
+#203 '('
+#203 '('
+#203 OBJECTID commandList
+#203 '.'
+#203 OBJECTID getCommand
+#203 '('
+#203 ')'
+#203 ')'
+#203 '.'
+#203 OBJECTID getCommandString
+#203 '('
+#203 ')'
+#203 ')'
+#203 '.'
+#203 OBJECTID concat
+#203 '('
+#203 STR_CONST "\n"
+#203 ')'
+#203 ')'
+#203 ';'
+#204 OBJECTID commandList
+#204 '.'
+#204 OBJECTID print
+#204 '('
+#204 ')'
+#204 ';'
+#205 '}'
+#206 ELSE
+#207 OBJECTID self
+#208 FI
+#209 '}'
+#209 ';'
+#211 '}'
+#211 ';'
+#213 CLASS
+#213 TYPEID HeadList
+#213 INHERITS
+#213 TYPEID StackCommandList
+#213 '{'
+#214 OBJECTID isHead
+#214 '('
+#214 ')'
+#214 ':'
+#214 TYPEID Bool
+#214 '{'
+#214 BOOL_CONST true
+#214 '}'
+#214 ';'
+#215 '}'
+#215 ';'
+#217 CLASS
+#217 TYPEID Main
+#217 INHERITS
+#217 TYPEID IO
+#217 '{'
+#219 OBJECTID main
+#219 '('
+#219 ')'
+#219 ':'
+#219 TYPEID Object
+#219 '{'
+#220 '{'
+#221 '('
+#221 NEW
+#221 TYPEID StackMachine
+#221 ')'
+#221 '.'
+#221 OBJECTID run
+#221 '('
+#221 ')'
+#221 ';'
+#222 '}'
+#223 '}'
+#223 ';'
+#225 '}'
+#225 ';'

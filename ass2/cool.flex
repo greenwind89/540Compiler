@@ -88,8 +88,9 @@ SPECIAL_NOTATIONS					[+/\-*=<>.~,;:\(\)@{}]
 
  /*
   * One line comment
+	* Do not need to increase line number here since the newline detection already cover that
 	*/
---[^\n]* {++curr_lineno;}
+--[^\n]* {}
 
 
  /*
@@ -105,7 +106,7 @@ SPECIAL_NOTATIONS					[+/\-*=<>.~,;:\(\)@{}]
   * which must begin with a lower-case letter.
   */
 (?i:class)				  {return (CLASS); }
-(?i:else)				    {return (WHILE); }
+(?i:else)				    {return (ELSE); }
 (?i:fi)				      {return (FI); }
 (?i:if)				      {return (IF); }
 (?i:in)				      {return (IN); }
@@ -204,7 +205,7 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
 	*/
 {WHITE_SPACE_CHARACTER}+ {}
 
-{SPECIAL_NOTATIONS} { yylval.symbol = new Entry(yytext, yyleng, 1);}
+{SPECIAL_NOTATIONS} { return yytext[0];}
 
  /*
  	* If it does not start any token and is not a special notation then throw error
