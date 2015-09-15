@@ -59,14 +59,13 @@ WHITE_SPACE_CHARACTER		  [ \f\r\t\v]
 IDENTIFIER_CHARACTER      [A-Za-z0-9_]
 ASSIGN										<-
 LE 												<
-SPECIAL_NOTATIONS					[+/-*=<.~,;:\(\)@{}]
+SPECIAL_NOTATIONS					[+/\-*=<>.~,;:\(\)@{}]
 
 %x comment str
 %%
 
 	char string_buf[1000];
 	char *string_buf_ptr;
-	curr_lineno = 1;
  /*
   *  Nested comments
   */
@@ -90,7 +89,7 @@ SPECIAL_NOTATIONS					[+/-*=<.~,;:\(\)@{}]
  /*
   * One line comment
 	*/
---[^\n]* {}
+--[^\n]* {++curr_lineno;}
 
 
  /*
@@ -204,6 +203,8 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
   * White spaces
 	*/
 {WHITE_SPACE_CHARACTER}+ {}
+
+{SPECIAL_NOTATIONS} { yylval.symbol = new Entry(yytext, yyleng, 1);}
 
  /*
  	* If it does not start any token and is not a special notation then throw error
