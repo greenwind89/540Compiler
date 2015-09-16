@@ -3,17 +3,17 @@ README file for Programming Assignment 2 (C++ edition)
 
 Your directory should now contain the following files:
 
- Makefile      
+ Makefile
  README
  flex
  cool.flex
  test.cl
- lextest.cc      
- mycoolc folder       
+ lextest.cc
+ mycoolc folder
  cool-parse.h
- stringtab.{cc|h}    
- utilities.{cc|h}    
- handle_flags.cc 
+ stringtab.{cc|h}
+ utilities.{cc|h}
+ handle_flags.cc
 
 
 We provide a copy of makefile for reference. The Makefile contains targets for compiling and running your program. If you do not like it, you can write your own makefile or just run commands on the shell. You do not need to submit the Makefile.
@@ -26,7 +26,7 @@ flex is the scanner generator.
 cool.flex is a skeleton file for the specification of the lexical analyzer. You should complete it with your regular
 expressions, patterns and actions. Information on how to do this is in the flex manual, which is part of your reader.
 
-test.cl is a COOL program that you can test the lexical analyzer on. It contains some errors, so it won't compile with coolc. However, test.cl does not exercise all lexical constructs of COOL and part of your assignment is to rewrite test.cl with a complete set of tests for your lexical analyzer. 
+test.cl is a COOL program that you can test the lexical analyzer on. It contains some errors, so it won't compile with coolc. However, test.cl does not exercise all lexical constructs of COOL and part of your assignment is to rewrite test.cl with a complete set of tests for your lexical analyzer.
 
 cool-parse.h contains definitions that are used by almost all parts of the compiler. DO NOT MODIFY.
 
@@ -41,11 +41,11 @@ lextest.cc contains the main function which will call your
 lexer and print out the tokens that it returns.  DO NOT MODIFY.
 
 mycoolc is a shell script that glues together the phases of the
-compiler using Unix pipes instead of statically linking code.  
-While inefficient, this architecture makes it easy to mix and match the components you write with those of the course compiler. DO NOT MODIFY.	
+compiler using Unix pipes instead of statically linking code.
+While inefficient, this architecture makes it easy to mix and match the components you write with those of the course compiler. DO NOT MODIFY.
 
-  
-If you are using the Makefile provided: 
+
+If you are using the Makefile provided:
 ------------
 
 	To compile your lextest program type:
@@ -63,7 +63,7 @@ If you are using the Makefile provided:
 	If you think your lexical analyzer is correct and behaves like 	the one we wrote, you can actually try 'mycoolc' and see whether it runs and produces correct code for any examples.
 	If your lexical analyzer behaves in an unexpected manner, you may get errors anywhere, i.e. during parsing, during semantic analysis, during code generation or only when you run the produced code on spim. So beware.
 
- 
+
 GOOD LUCK!
 
 ---8<------8<------8<------8<---cut here---8<------8<------8<------8<---
@@ -71,3 +71,8 @@ GOOD LUCK!
 Write-up for PA2
 ----------------
 
+In this assignment, we only modify cool.flex file so all of our code is contained in that file. Since we do not use yywrap and we use stack to handle nested comment, we turn off yywrap by option "%option noyywrap" and turn on stack by using "%option stack".
+
+The most challenging aspect of building the lexer is to handle nested comments and string. Since both string andc comment behaves completely differently from normal context, we use start condition "comment" and "string" to handle both case. To handle nested comment, we use stack to pop "comment" condition into the stack when encountering "(*" and pop it out when encoutering "*)". The INITIAL condition is always pushed into stack upon encountering the first comment so when we meet the final "*)", we pop INITAL out and everything works as normal context again.
+
+ 
