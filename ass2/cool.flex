@@ -64,7 +64,7 @@ SPECIAL_NOTATIONS					[+/\-*=<>.~,;:\(\)@{}]
 %x comment str
 %%
 
-	char string_buf[1000];
+	char string_buf[MAX_STR_CONST + 90000];
 	char *string_buf_ptr;
  /*
   *  Nested comments
@@ -140,7 +140,13 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
 	             BEGIN(INITIAL);
 	             *string_buf_ptr = '\0';
 							yylval.symbol = new Entry(string_buf, strlen(string_buf), 1);
-							return (STR_CONST);
+							if(strlen(string_buf) > MAX_STR_CONST) {
+							  yylval.error_msg = (char *)"String constant too long";
+								return (ERROR);
+							}
+							else {
+								return (STR_CONST);
+							}
 
 	             /* return string constant token type and
 	              * value to parser
