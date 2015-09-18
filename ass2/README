@@ -6,7 +6,9 @@ In this assignment, we only modify cool.flex file so all of our code is containe
 
 The most challenging aspect of building the lexer is to handle nested comments and string. Since both string andc comment behaves completely differently from normal context, we use start condition "comment" and "string" to handle both case. To handle nested comment, we use stack to pop "comment" condition into the stack when encountering "(*" and pop it out when encoutering "*)". The INITIAL condition is always pushed into stack upon encountering the first comment so when we meet the final "*)", we pop INITAL out and everything works as normal context again.
 
-I wrote the test with a <- "afd \0" and a <- \0 and the lexer provided by instructors returning STR_CONST "afd 0" for the former and ERROR for the latter case, so I guess we will not throw ERROR when encountering null character but repalce it by "0" instead and I implemented my lexer in that way.
+We wrote the test with a <- "afd \0" and a <- \0 and the lexer provided by instructors returning STR_CONST "afd 0" for the former and ERROR for the latter case, so I guess we will not throw ERROR when encountering null character but repalce it by "0" instead and I implemented my lexer in that way.
+
+In case of "<", even though we noticed that there is token type LE in cool-parse.h, we tested on the provided lexer and it produces "<" instead of "LE", so we do not use LE in our program instead, we treat "<" as normal special notation
 
 Test strategy
 
