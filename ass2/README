@@ -13,7 +13,6 @@ In case of "<", even though we noticed that there is token type LE in cool-parse
 
 There may be many exceptions on a string constant, we choose to report the first exception and resume lexing at the end of string (defined in assignment)
 
-Since we only count string length at the end of the string, if there is "unterminated string constant" before the end of string, the error "String constant too long" will not be displayed the unterminated one is displayed. 
 
 Test strategy
 
@@ -32,9 +31,14 @@ Our tests are arranged in the following order
 + String constants
 + Integer constants
 + Exceptions with string Constant
-+ Exceptions with Integer Constant
+  - Unterminated string constants
+  - Long string constant
+  - Long string containing nonterminated
+  - Long string containing valid new line 
+  - Long string span on multiple lines
 + Exception with comment
+  - Unmatched close
 + Exception with invalid characters
-+ Code originally provided by instructors
++ Test code originally provided by instructors
 
 The final block of code is the code provided by instructor
