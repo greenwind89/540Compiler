@@ -173,10 +173,61 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
 					return (ERROR);
        }
      }
-     <str>\\t  *string_buf_ptr++ = '\t';
-     <str>\\b  *string_buf_ptr++ = '\b';
-     <str>\\f  *string_buf_ptr++ = '\f';
-     <str>\\0  *string_buf_ptr++ = '0';
+
+     <str>\\t  {
+       *string_buf_ptr++ = '\t';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
+
+     <str>\\t  {
+       *string_buf_ptr++ = '\t';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
+
+     <str>\\b  {
+       *string_buf_ptr++ = '\b';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
+
+     <str>\\f  {
+       *string_buf_ptr++ = '\f';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
+
+     <str>\\0  {
+       *string_buf_ptr++ = '0';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
 
 		 <str><<EOF>>  	{
               BEGIN(INITIAL);
@@ -187,8 +238,27 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
               }
             }
 
-     <str>\\.  *string_buf_ptr++ = yytext[1]; numCharInString++;
-     <str>\\\n  curr_lineno++; *string_buf_ptr++ = yytext[1];
+     <str>\\.  {
+			 *string_buf_ptr++ = yytext[1];
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+		 }
+
+     <str>\\\n  {
+			 curr_lineno++; *string_buf_ptr++ = yytext[1];
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+		 }
 
      <str>[^\\\n\"]+        {
              char *yptr = yytext;

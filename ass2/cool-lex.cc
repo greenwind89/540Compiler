@@ -450,8 +450,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	(yy_c_buf_p) = yy_cp;
 
 /* %% [4.0] data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 54
-#define YY_END_OF_BUFFER 55
+#define YY_NUM_RULES 55
+#define YY_END_OF_BUFFER 56
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -461,25 +461,25 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[184] =
     {   0,
-        0,    0,    3,    3,    0,    0,    0,    0,   55,   53,
-       51,   50,   31,   52,   52,   52,   52,   49,   52,   52,
-       47,   47,   47,   47,   47,   47,   47,   47,   47,   47,
-       47,   48,   48,   48,   48,   48,   48,   48,   48,   48,
-       48,   48,    3,    6,    4,    5,   41,   33,   32,   54,
-       46,   44,   42,   45,   51,    1,    8,    9,   49,   11,
-       10,   47,   47,   47,   47,   47,   14,   15,   16,   47,
-       47,   47,   47,   47,   27,   47,   47,   47,   48,   48,
-       48,   48,   48,   14,   48,   15,   16,   48,   48,   48,
-       48,   48,   27,   48,   48,   48,   48,    3,    4,    4,
+        0,    0,    3,    3,    0,    0,    0,    0,   56,   54,
+       52,   51,   31,   53,   53,   53,   53,   50,   53,   53,
+       48,   48,   48,   48,   48,   48,   48,   48,   48,   48,
+       48,   49,   49,   49,   49,   49,   49,   49,   49,   49,
+       49,   49,    3,    6,    4,    5,   42,   33,   32,   55,
+       47,   45,   43,   46,   52,    1,    8,    9,   50,   11,
+       10,   48,   48,   48,   48,   48,   14,   15,   16,   48,
+       48,   48,   48,   48,   27,   48,   48,   48,   49,   49,
+       49,   49,   49,   14,   49,   15,   16,   49,   49,   49,
+       49,   49,   27,   49,   49,   49,   49,    3,    4,    4,
 
-        2,    5,    7,    5,   41,   39,   40,   38,   36,   37,
-       34,   35,   46,   43,    9,   47,   47,   47,   47,   47,
-       47,   19,   47,   26,   28,   47,   47,   47,   48,   48,
-       48,   48,   48,   48,   48,   19,   48,   26,   28,   48,
-       48,   48,   48,   24,   47,   13,   25,   47,   47,   20,
-       21,   22,   47,   24,   48,   13,   25,   48,   48,   48,
-       20,   21,   22,   29,   48,   12,   47,   47,   23,   12,
-       30,   48,   48,   23,   47,   18,   48,   18,   47,   48,
+        2,    5,    7,    5,   42,   40,   41,   39,   37,   38,
+       34,   35,   47,   44,    9,   48,   48,   48,   48,   48,
+       48,   19,   48,   26,   28,   48,   48,   48,   49,   49,
+       49,   49,   49,   49,   49,   19,   49,   26,   28,   49,
+       49,   49,   49,   24,   48,   13,   25,   48,   48,   20,
+       21,   22,   48,   24,   49,   13,   25,   49,   49,   49,
+       20,   21,   22,   29,   49,   12,   48,   48,   23,   12,
+       30,   49,   49,   23,   48,   18,   49,   18,   48,   49,
        17,   17,    0
     } ;
 
@@ -681,14 +681,14 @@ static char *yy_last_accepting_cpos;
 extern int yy_flex_debug;
 int yy_flex_debug = 1;
 
-static yyconst flex_int16_t yy_rule_linenum[54] =
+static yyconst flex_int16_t yy_rule_linenum[55] =
     {   0,
        75,   77,   78,   79,   80,   81,   82,   89,   95,  101,
       102,  109,  110,  111,  112,  113,  114,  115,  116,  117,
       118,  119,  120,  121,  122,  123,  124,  125,  127,  128,
-      138,  140,  153,  166,  176,  177,  178,  179,  190,  191,
-      193,  211,  212,  213,  214,  215,  220,  228,  236,  244,
-      249,  251,  256
+      138,  140,  153,  166,  177,  188,  199,  210,  221,  241,
+      252,  263,  281,  282,  283,  284,  285,  290,  298,  306,
+      314,  319,  321,  326
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -1107,13 +1107,13 @@ do_action:	/* This label is used only to access EOF actions. */
 			{
 			if ( yy_act == 0 )
 				fprintf( stderr, "--scanner backing up\n" );
-			else if ( yy_act < 54 )
+			else if ( yy_act < 55 )
 				fprintf( stderr, "--accepting rule at line %ld (\"%s\")\n",
 				         (long)yy_rule_linenum[yy_act], yytext );
-			else if ( yy_act == 54 )
+			else if ( yy_act == 55 )
 				fprintf( stderr, "--accepting default rule (\"%s\")\n",
 				         yytext );
-			else if ( yy_act == 55 )
+			else if ( yy_act == 56 )
 				fprintf( stderr, "--(end of buffer or a NUL)\n" );
 			else
 				fprintf( stderr, "--EOF (start condition %d)\n", YY_START );
@@ -1358,26 +1358,76 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 176 "cool.flex"
-*string_buf_ptr++ = '\t';
+#line 177 "cool.flex"
+{
+       *string_buf_ptr++ = '\t';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 177 "cool.flex"
-*string_buf_ptr++ = '\b';
+#line 188 "cool.flex"
+{
+       *string_buf_ptr++ = '\t';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 178 "cool.flex"
-*string_buf_ptr++ = '\f';
+#line 199 "cool.flex"
+{
+       *string_buf_ptr++ = '\b';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 179 "cool.flex"
-*string_buf_ptr++ = '0';
+#line 210 "cool.flex"
+{
+       *string_buf_ptr++ = '\f';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
+	YY_BREAK
+case 39:
+YY_RULE_SETUP
+#line 221 "cool.flex"
+{
+       *string_buf_ptr++ = '0';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
 	YY_BREAK
 case YY_STATE_EOF(str):
-#line 181 "cool.flex"
+#line 232 "cool.flex"
 {
               BEGIN(INITIAL);
               if (errorInString == false) {
@@ -1387,20 +1437,38 @@ case YY_STATE_EOF(str):
               }
             }
 	YY_BREAK
-case 39:
-YY_RULE_SETUP
-#line 190 "cool.flex"
-*string_buf_ptr++ = yytext[1]; numCharInString++;
-	YY_BREAK
 case 40:
-/* rule 40 can match eol */
 YY_RULE_SETUP
-#line 191 "cool.flex"
-curr_lineno++; *string_buf_ptr++ = yytext[1];
+#line 241 "cool.flex"
+{
+			 *string_buf_ptr++ = yytext[1];
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+		 }
 	YY_BREAK
 case 41:
+/* rule 41 can match eol */
 YY_RULE_SETUP
-#line 193 "cool.flex"
+#line 252 "cool.flex"
+{
+			 curr_lineno++; *string_buf_ptr++ = yytext[1];
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+		 }
+	YY_BREAK
+case 42:
+YY_RULE_SETUP
+#line 263 "cool.flex"
 {
              char *yptr = yytext;
 
@@ -1418,39 +1486,39 @@ YY_RULE_SETUP
 
 					 }
 	YY_BREAK
-case 42:
-YY_RULE_SETUP
-#line 211 "cool.flex"
-BEGIN(INITIAL);
-	YY_BREAK
 case 43:
-/* rule 43 can match eol */
 YY_RULE_SETUP
-#line 212 "cool.flex"
-curr_lineno++;
+#line 281 "cool.flex"
+BEGIN(INITIAL);
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 213 "cool.flex"
-curr_lineno++; BEGIN(INITIAL);
+#line 282 "cool.flex"
+curr_lineno++;
 	YY_BREAK
 case 45:
+/* rule 45 can match eol */
 YY_RULE_SETUP
-#line 214 "cool.flex"
-
+#line 283 "cool.flex"
+curr_lineno++; BEGIN(INITIAL);
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 215 "cool.flex"
+#line 284 "cool.flex"
+
+	YY_BREAK
+case 47:
+YY_RULE_SETUP
+#line 285 "cool.flex"
 {}
 	YY_BREAK
 /*
   * Type identifiers
   */
-case 47:
+case 48:
 YY_RULE_SETUP
-#line 220 "cool.flex"
+#line 290 "cool.flex"
 {
 	yylval.symbol = new Entry(yytext, yyleng, 1);
 	return (TYPEID);
@@ -1459,9 +1527,9 @@ YY_RULE_SETUP
 /*
   * Object identifiers
   */
-case 48:
+case 49:
 YY_RULE_SETUP
-#line 228 "cool.flex"
+#line 298 "cool.flex"
 {
 	yylval.symbol = new Entry(yytext, yyleng, 1);
 	return (OBJECTID);
@@ -1470,9 +1538,9 @@ YY_RULE_SETUP
 /*
   * Integer
   */
-case 49:
+case 50:
 YY_RULE_SETUP
-#line 236 "cool.flex"
+#line 306 "cool.flex"
 {
 	yylval.symbol = new Entry(yytext, yyleng, 1);
 	return (INT_CONST);
@@ -1481,40 +1549,40 @@ YY_RULE_SETUP
 /*
   * End of line, update line number
 	*/
-case 50:
-/* rule 50 can match eol */
+case 51:
+/* rule 51 can match eol */
 YY_RULE_SETUP
-#line 244 "cool.flex"
+#line 314 "cool.flex"
 ++curr_lineno;
 	YY_BREAK
 /*
   * White spaces
 	*/
-case 51:
-YY_RULE_SETUP
-#line 249 "cool.flex"
-{}
-	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 251 "cool.flex"
+#line 319 "cool.flex"
+{}
+	YY_BREAK
+case 53:
+YY_RULE_SETUP
+#line 321 "cool.flex"
 { return yytext[0];}
 	YY_BREAK
 /*
  	* If it does not start any token and is not a special notation then throw error
  	*/
-case 53:
-/* rule 53 can match eol */
+case 54:
+/* rule 54 can match eol */
 YY_RULE_SETUP
-#line 256 "cool.flex"
+#line 326 "cool.flex"
 {yylval.error_msg = yytext; return (ERROR);};
 	YY_BREAK
-case 54:
+case 55:
 YY_RULE_SETUP
-#line 258 "cool.flex"
+#line 328 "cool.flex"
 ECHO;
 	YY_BREAK
-#line 1518 "cool-lex.cc"
+#line 1586 "cool-lex.cc"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(ignoredstr):
 	yyterminate();
@@ -2697,7 +2765,7 @@ void yyfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 258 "cool.flex"
+#line 328 "cool.flex"
 
 
 
