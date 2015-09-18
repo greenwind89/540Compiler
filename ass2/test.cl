@@ -1,32 +1,118 @@
+(* Cover all tokens (including special notations) *)
+(* -- Keywords *)
+class
+else
+fi
+if
+in
+inherits
+isvoid
+let
+loop
+pool
+then
+while
+case
+esac
+new
+of
+not
+true
+false
+(* -- Whitespace characters -- should be ignored*)
+(* tab \t *)
+  (* white space " " *)
+  (* carriage return \r*)
+  (* form feed \f *)
+  (* vertical tab \v*)
+
+(* Special Notations*)
++
+/
+-
+*
+=
+<
+>
+.
+~
+,
+;
+:
+(
+)
+@
+{
+}
+(* Multiple-character operators *)
+=>
+<-
+
+(* Comments and nested comment*)
+-- an inline comment
+(* A nested commend multiple line (*
+ This should work
+*) *)
+(* (* this alaso should work*)*)
+
+(* String constants*)
+"This is a tring"
+"This is another string \
+with multiple lines"
+
+"This is a string with escaped symbols \n \t \b \f \0 \a \b \c \d this should work "
+
+"this is a stirng with comment inside (* *)"
+
+(* Integer constants*)
+1234567890
+
+(* Exceptions)
+(* Exceptions with string*)
+"This is a wrong new line, unterminated string constant error
+Hello"
+
+(* Exceptions with comment*)
+(* this one is unmatched comment*) *)
+
+(* Other Exceptions *)
+(* The following characters are not included in spec, should yield error*)
+&
+^
+%
+$
+
+(* Provided cases *)
+
 (* models one-dimensional cellular automaton on a circle of finite radius
    arrays are faked as Strings,
    X's respresent live cells, dots represent dead cells,
    no error checking is done *)
 class CellularAutomaton inherits IO {
     population_map : String;
-   
+
     init(map : String) : SELF_TYPE {
         {
             population_map <- map;
             self;
         }
     };
-   
+
     print() : SELF_TYPE {
         {
             out_string(population_map.concat("\n"));
             self;
         }
     };
-   
+
     num_cells() : Int {
         population_map.length()
     };
-   
+
     cell(position : Int) : String {
         population_map.substr(position, 1)
     };
-   
+
     cell_left_neighbor(position : Int) : String {
         if position = 0 then
             cell(num_cells() - 1)
@@ -34,7 +120,7 @@ class CellularAutomaton inherits IO {
             cell(position - 1)
         fi
     };
-   
+
     cell_right_neighbor(position : Int) : String {
         if position = num_cells() - 1 then
             cell(0)
@@ -42,7 +128,7 @@ class CellularAutomaton inherits IO {
             cell(position + 1)
         fi
     };
-   
+
     (* a cell will live if exactly 1 of itself and it's immediate
        neighbors are alive *)
     cell_at_next_evolution(position : Int) : String {
@@ -56,7 +142,7 @@ class CellularAutomaton inherits IO {
             '.'
         fi
     };
-   
+
     evolve() : SELF_TYPE {
         (let position : Int in
         (let num : Int <- num_cells[] in
@@ -77,7 +163,7 @@ class CellularAutomaton inherits IO {
 
 class Main {
     cells : CellularAutomaton;
-   
+
     main() : SELF_TYPE {
         {
             cells <- (new CellularAutomaton).init("         X         ");
@@ -88,9 +174,9 @@ class Main {
                         cells.evolve();
                         cells.print();
                         countdown <- countdown - 1;
-                    
+
                 pool
-            );  (* end let countdown
+            );  (* end let countdown, should have EOF in commment
             self;
         }
     };

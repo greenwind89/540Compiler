@@ -7,10 +7,27 @@ In this assignment, we only modify cool.flex file so all of our code is containe
 The most challenging aspect of building the lexer is to handle nested comments and string. Since both string andc comment behaves completely differently from normal context, we use start condition "comment" and "string" to handle both case. To handle nested comment, we use stack to pop "comment" condition into the stack when encountering "(*" and pop it out when encoutering "*)". The INITIAL condition is always pushed into stack upon encountering the first comment so when we meet the final "*)", we pop INITAL out and everything works as normal context again.
 
 I wrote the test with a <- "afd \0" and a <- \0 and the lexer provided by instructors returning STR_CONST "afd 0" for the former and ERROR for the latter case, so I guess we will not throw ERROR when encountering null character but repalce it by "0" instead and I implemented my lexer in that way.
- 
-Test strategy
-In this test, we make the test for lexical coverage, keyword coverage and test for exception and nested comment handler. The testing will reveal all of cool.flex elements.
-There are 4 parts of this test: test  lexicals,test exception and nested comment, test character operators, test keywords.
-- 
 
- 
+Test strategy
+
+In the test, we will not concern about the syntax but our first priority is to make sure that all tokens, exceptional and nested cases are covered, so the test in test.cl will yield syntax error when compiling with parser but give identical result with lexer provided by instructors.
+
+Since we use "diff" in linux to automatically match our test with results our provided lexer, we will focus only on increasing the coverage.
+
+In case of EOF in string and comment, since we can only cover one case per test file, we choose to go with comment to reuse code provided by instructors
+
+Our tests are arranged in the following order
++ Keywords
++ Whitespace
++ Special notations
++ Multiple character operators
++ Comment and nested comment
++ String constants
++ Integer constants
++ Exceptions with string Constant
++ Exceptions with Integer Constant
++ Exception with comment
++ Exception with invalid characters
++ Code originally provided by instructors
+
+The final block of code is the code provided by instructor
