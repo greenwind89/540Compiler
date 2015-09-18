@@ -209,9 +209,9 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
 
 
 <ignoredstr>\" BEGIN(INITIAL);
-<ignoredstr>\\\n curr_lineno++; cout << yytext;
+<ignoredstr>\\\n curr_lineno++;
 <ignoredstr>\n curr_lineno++; BEGIN(INITIAL);
-<ignoredstr>\\ 
+<ignoredstr>\\
 <ignoredstr>[^\\\n\"]+ {}
 
  /*

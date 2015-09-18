@@ -1427,7 +1427,7 @@ case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
 #line 212 "cool.flex"
-curr_lineno++; cout << yytext;
+curr_lineno++;
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
