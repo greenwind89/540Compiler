@@ -9,5 +9,8 @@ The most challenging aspect of building the lexer is to handle nested comments a
 I wrote the test with a <- "afd \0" and a <- \0 and the lexer provided by instructors returning STR_CONST "afd 0" for the former and ERROR for the latter case, so I guess we will not throw ERROR when encountering null character but repalce it by "0" instead and I implemented my lexer in that way.
  
 Test strategy
-In this test, we make the test with the purpose to coverage Cool lexial structure and its syntax. With lexical structures, the program will recognize and tokenize them. They are String, Integer, comment and keywords. In addition, exception case of data will be shown. For testing Cool syntax, we created nested expression and nested comment for input program. The test result success if it can tokenize all code element in nested part.
+In this test, we make the test for lexical coverage, keyword coverage and test for exception and nested comment handler. The testing will reveal all of cool.flex elements.
+There are 4 parts of this test: test  lexicals,test exception and nested comment, test character operators, test keywords.
+- 
+
  
