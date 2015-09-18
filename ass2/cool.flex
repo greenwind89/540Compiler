@@ -61,12 +61,13 @@ ASSIGN										<-
 LE 												<
 SPECIAL_NOTATIONS					[+/\-*=.~,;:\(\)@{}<]
 
-%x comment str
+%x comment str ignoredstr
 %%
 
 	char string_buf[MAX_STR_CONST + 90000];
 	char *string_buf_ptr;
   bool errorInString = false;
+  int numCharInString = 0;
  /*
   *  Nested comments
   */
@@ -134,60 +135,84 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
   *
   */
 
-\"      string_buf_ptr = string_buf; errorInString = false; BEGIN(str); 
+\"      numCharInString = 0; string_buf_ptr = string_buf; errorInString = false; BEGIN(str);
 
      <str>\"        { /* saw closing quote - all done */
-	             BEGIN(INITIAL);
-	             *string_buf_ptr = '\0';
+	            BEGIN(INITIAL);
+	            *string_buf_ptr = '\0';
 							yylval.symbol = new Entry(string_buf, strlen(string_buf), 1);
-							if(strlen(string_buf) > MAX_STR_CONST && errorInString == false) {
-							  yylval.error_msg = (char *)"String constant too long";
-                errorInString = true;
-								return (ERROR);
-							}
-							else {
-                if(errorInString == false) {
-                  return (STR_CONST);
-                }
-							}
+              /* return string constant token type and
+               * value to parser
+               */
+              if(errorInString == false) {
+                return (STR_CONST);
+              }
 
-	             /* return string constant token type and
-	              * value to parser
-	              */
              }
 
      <str>\n        {
 	             /* error - unterminated string constant */
 	             /* generate error message */
-							 curr_lineno++;
-               errorInString = true;
-							 yylval.error_msg = (char *)"Unterminated string constant"; return (ERROR);
+
+              curr_lineno++;
+
+              yylval.error_msg = (char *)"Unterminated string constant";
+              errorInString = true;
+
+              BEGIN(INITIAL);
+              return (ERROR);
              }
 
-     <str>\\n  *string_buf_ptr++ = '\n';
+     <str>\\n  {
+       *string_buf_ptr++ = '\n';
+       numCharInString++;
+       if(numCharInString > MAX_STR_CONST) {
+				  yylval.error_msg = (char *)"String constant too long";
+          errorInString = true;
+					BEGIN(ignoredstr);
+					return (ERROR);
+       }
+     }
      <str>\\t  *string_buf_ptr++ = '\t';
      <str>\\b  *string_buf_ptr++ = '\b';
      <str>\\f  *string_buf_ptr++ = '\f';
      <str>\\0  *string_buf_ptr++ = '0';
 
 		 <str><<EOF>>  	{
-              errorInString = true; 
               BEGIN(INITIAL);
               if (errorInString == false) {
-                yylval.error_msg = (char *)"EOF in string constant"; 
+                yylval.error_msg = (char *)"EOF in string constant";
+                errorInString = true;
                 return (ERROR);
               }
             }
 
-     <str>\\.  *string_buf_ptr++ = yytext[1];
+     <str>\\.  *string_buf_ptr++ = yytext[1]; numCharInString++;
      <str>\\\n  curr_lineno++; *string_buf_ptr++ = yytext[1];
 
      <str>[^\\\n\"]+        {
              char *yptr = yytext;
 
-             while ( *yptr )
-                     *string_buf_ptr++ = *yptr++;
+             while ( *yptr ) {
+               *string_buf_ptr++ = *yptr++;
+				       numCharInString++;
+
+				       if(numCharInString > MAX_STR_CONST) {
+								  yylval.error_msg = (char *)"String constant too long";
+				          errorInString = true;
+									BEGIN(ignoredstr);
+									return (ERROR);
+				       }
              }
+
+					 }
+
+
+<ignoredstr>\" BEGIN(INITIAL);
+<ignoredstr>\\\n curr_lineno++; cout << yytext;
+<ignoredstr>\n curr_lineno++; BEGIN(INITIAL);
+<ignoredstr>\\ 
+<ignoredstr>[^\\\n\"]+ {}
 
  /*
   * Type identifiers

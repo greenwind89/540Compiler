@@ -20,7 +20,6 @@
 #13 OBJECTID longStr
 #13 ASSIGN
 #13 ERROR "String constant too long"
-\
 #16 STR_CONST "test"
 #18 OBJECTID longStr
 #18 ASSIGN
