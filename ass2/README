@@ -11,6 +11,10 @@ We wrote the test with a <- "afd \0" and a <- \0 and the lexer provided by instr
 
 In case of "<", even though we noticed that there is token type LE in cool-parse.h, we tested on the provided lexer and it produces "<" instead of "LE", so we do not use LE in our program instead, we treat "<" as normal special notation
 
+There may be many exceptions on a string constant, we choose to report the first exception and resume lexing at the end of string (defined in assignment)
+
+Since we only count string length at the end of the string, if there is "unterminated string constant" before the end of string, the error "String constant too long" will not be displayed the unterminated one is displayed. 
+
 Test strategy
 
 In the test, we will not concern about the syntax but our first priority is to make sure that all tokens, exceptional and nested cases are covered, so the test in test.cl will yield syntax error when compiling with parser but give identical result with lexer provided by instructors.
