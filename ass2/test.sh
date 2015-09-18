@@ -1,4 +1,4 @@
-for i in {1..2}
+for i in {1..4}
 do
   echo 'Executing test' $i
   gmake lexer && ./lexer ./test/testcases/test$i.cl  > ./test/ourlastresults/result$i.txt;

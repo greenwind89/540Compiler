@@ -59,13 +59,14 @@ WHITE_SPACE_CHARACTER		  [ \f\r\t\v]
 IDENTIFIER_CHARACTER      [A-Za-z0-9_]
 ASSIGN										<-
 LE 												<
-SPECIAL_NOTATIONS					[+/\-*=<>.~,;:\(\)@{}]
+SPECIAL_NOTATIONS					[+/\-*=.~,;:\(\)@{}<]
 
 %x comment str
 %%
 
 	char string_buf[MAX_STR_CONST + 90000];
 	char *string_buf_ptr;
+  bool errorInString = false;
  /*
   *  Nested comments
   */
@@ -98,7 +99,6 @@ SPECIAL_NOTATIONS					[+/\-*=<>.~,;:\(\)@{}]
   */
 {DARROW}		{ return (DARROW); }
 {ASSIGN}		{ return (ASSIGN); }
-{LE}				{ return (LE); }
 
 
  /*
@@ -134,18 +134,21 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
   *
   */
 
-\"      string_buf_ptr = string_buf; BEGIN(str);
+\"      string_buf_ptr = string_buf; errorInString = false; BEGIN(str); 
 
      <str>\"        { /* saw closing quote - all done */
 	             BEGIN(INITIAL);
 	             *string_buf_ptr = '\0';
 							yylval.symbol = new Entry(string_buf, strlen(string_buf), 1);
-							if(strlen(string_buf) > MAX_STR_CONST) {
+							if(strlen(string_buf) > MAX_STR_CONST && errorInString == false) {
 							  yylval.error_msg = (char *)"String constant too long";
+                errorInString = true;
 								return (ERROR);
 							}
 							else {
-								return (STR_CONST);
+                if(errorInString == false) {
+                  return (STR_CONST);
+                }
 							}
 
 	             /* return string constant token type and
@@ -157,6 +160,7 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
 	             /* error - unterminated string constant */
 	             /* generate error message */
 							 curr_lineno++;
+               errorInString = true;
 							 yylval.error_msg = (char *)"Unterminated string constant"; return (ERROR);
              }
 
@@ -166,9 +170,17 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
      <str>\\f  *string_buf_ptr++ = '\f';
      <str>\\0  *string_buf_ptr++ = '0';
 
-		 <str><<EOF>>  	{yylval.error_msg = (char *)"EOF in string constant"; BEGIN(INITIAL); return (ERROR);}
+		 <str><<EOF>>  	{
+              errorInString = true; 
+              BEGIN(INITIAL);
+              if (errorInString == false) {
+                yylval.error_msg = (char *)"EOF in string constant"; 
+                return (ERROR);
+              }
+            }
 
-     <str>\\(.|\n)  *string_buf_ptr++ = yytext[1];
+     <str>\\.  *string_buf_ptr++ = yytext[1];
+     <str>\\\n  curr_lineno++; *string_buf_ptr++ = yytext[1];
 
      <str>[^\\\n\"]+        {
              char *yptr = yytext;
@@ -216,6 +228,6 @@ false								{yylval.boolean = false; return (BOOL_CONST); }
  /*
  	* If it does not start any token and is not a special notation then throw error
  	*/
-[^+/\-*=<>.~,;:\(\)@{}]       {yylval.error_msg = yytext; return (ERROR);};
+[^+/\-*=.~,;:\(\)@{}<]       {yylval.error_msg = yytext; return (ERROR);};
 
 %%
