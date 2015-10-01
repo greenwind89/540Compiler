@@ -1,0 +1,12 @@
+#name "./test/testcases/test3.cl"
+#1 OBJECTID a
+#1 ASSIGN
+#1 STR_CONST "afd 0"
+#1 ';'
+#3 OBJECTID b
+#3 ASSIGN
+#3 ERROR "\\"
+#3 INT_CONST 0
+#5 OBJECTID c
+#5 ASSIGN
+#6 ERROR "Unterminated string constant"

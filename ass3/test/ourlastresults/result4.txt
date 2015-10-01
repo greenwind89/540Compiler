@@ -1,0 +1,398 @@
+#name "./test/testcases/test4.cl"
+#3 CLASS
+#4 ELSE
+#5 FI
+#6 IF
+#7 IN
+#8 INHERITS
+#9 ISVOID
+#10 LET
+#11 LOOP
+#12 POOL
+#13 THEN
+#14 WHILE
+#15 CASE
+#16 ESAC
+#17 NEW
+#18 OF
+#19 NOT
+#20 BOOL_CONST true
+#21 BOOL_CONST false
+#30 '+'
+#31 '/'
+#32 '-'
+#33 '*'
+#34 '='
+#35 '<'
+#36 '.'
+#37 '~'
+#38 ','
+#39 ';'
+#40 ':'
+#41 '('
+#42 ')'
+#43 '@'
+#44 '{'
+#45 '}'
+#47 DARROW
+#48 ASSIGN
+#58 STR_CONST "This is a tring"
+#60 STR_CONST "This is another string \nwith multiple lines"
+#62 STR_CONST "This is a string with escaped symbols \n \t \b \f 0 a \b c d this should work "
+#64 STR_CONST "this is a stirng with comment inside (* *)"
+#66 STR_CONST "two string "
+#66 STR_CONST "one string"
+#69 STR_CONST "This is another string \nwith multiple lines"
+#69 STR_CONST "two string"
+#72 STR_CONST "mutiple escape \\\nThis shoudl valid"
+#75 INT_CONST 1234567890
+#107 ERROR "&"
+#108 ERROR "^"
+#109 ERROR "%"
+#110 ERROR "$"
+#111 ERROR ">"
+#119 CLASS
+#119 TYPEID CellularAutomaton
+#119 INHERITS
+#119 TYPEID IO
+#119 '{'
+#120 OBJECTID population_map
+#120 ':'
+#120 TYPEID String
+#120 ';'
+#122 OBJECTID init
+#122 '('
+#122 OBJECTID map
+#122 ':'
+#122 TYPEID String
+#122 ')'
+#122 ':'
+#122 TYPEID SELF_TYPE
+#122 '{'
+#123 '{'
+#124 OBJECTID population_map
+#124 ASSIGN
+#124 OBJECTID map
+#124 ';'
+#125 OBJECTID self
+#125 ';'
+#126 '}'
+#127 '}'
+#127 ';'
+#129 OBJECTID print
+#129 '('
+#129 ')'
+#129 ':'
+#129 TYPEID SELF_TYPE
+#129 '{'
+#130 '{'
+#131 OBJECTID out_string
+#131 '('
+#131 OBJECTID population_map
+#131 '.'
+#131 OBJECTID concat
+#131 '('
+#131 STR_CONST "\n"
+#131 ')'
+#131 ')'
+#131 ';'
+#132 OBJECTID self
+#132 ';'
+#133 '}'
+#134 '}'
+#134 ';'
+#136 OBJECTID num_cells
+#136 '('
+#136 ')'
+#136 ':'
+#136 TYPEID Int
+#136 '{'
+#137 OBJECTID population_map
+#137 '.'
+#137 OBJECTID length
+#137 '('
+#137 ')'
+#138 '}'
+#138 ';'
+#140 OBJECTID cell
+#140 '('
+#140 OBJECTID position
+#140 ':'
+#140 TYPEID Int
+#140 ')'
+#140 ':'
+#140 TYPEID String
+#140 '{'
+#141 OBJECTID population_map
+#141 '.'
+#141 OBJECTID substr
+#141 '('
+#141 OBJECTID position
+#141 ','
+#141 INT_CONST 1
+#141 ')'
+#142 '}'
+#142 ';'
+#144 OBJECTID cell_left_neighbor
+#144 '('
+#144 OBJECTID position
+#144 ':'
+#144 TYPEID Int
+#144 ')'
+#144 ':'
+#144 TYPEID String
+#144 '{'
+#145 IF
+#145 OBJECTID position
+#145 '='
+#145 INT_CONST 0
+#145 THEN
+#146 OBJECTID cell
+#146 '('
+#146 OBJECTID num_cells
+#146 '('
+#146 ')'
+#146 '-'
+#146 INT_CONST 1
+#146 ')'
+#147 ELSE
+#148 OBJECTID cell
+#148 '('
+#148 OBJECTID position
+#148 '-'
+#148 INT_CONST 1
+#148 ')'
+#149 FI
+#150 '}'
+#150 ';'
+#152 OBJECTID cell_right_neighbor
+#152 '('
+#152 OBJECTID position
+#152 ':'
+#152 TYPEID Int
+#152 ')'
+#152 ':'
+#152 TYPEID String
+#152 '{'
+#153 IF
+#153 OBJECTID position
+#153 '='
+#153 OBJECTID num_cells
+#153 '('
+#153 ')'
+#153 '-'
+#153 INT_CONST 1
+#153 THEN
+#154 OBJECTID cell
+#154 '('
+#154 INT_CONST 0
+#154 ')'
+#155 ELSE
+#156 OBJECTID cell
+#156 '('
+#156 OBJECTID position
+#156 '+'
+#156 INT_CONST 1
+#156 ')'
+#157 FI
+#158 '}'
+#158 ';'
+#162 OBJECTID cell_at_next_evolution
+#162 '('
+#162 OBJECTID position
+#162 ':'
+#162 TYPEID Int
+#162 ')'
+#162 ':'
+#162 TYPEID String
+#162 '{'
+#163 IF
+#163 '('
+#163 IF
+#163 OBJECTID cell
+#163 '('
+#163 OBJECTID position
+#163 ')'
+#163 '='
+#163 STR_CONST "X"
+#163 THEN
+#163 INT_CONST 1
+#163 ELSE
+#163 INT_CONST 0
+#163 FI
+#164 '+'
+#164 IF
+#164 OBJECTID cell_left_neighbor
+#164 '('
+#164 OBJECTID position
+#164 ')'
+#164 '='
+#164 STR_CONST "X"
+#164 THEN
+#164 INT_CONST 1
+#164 ELSE
+#164 INT_CONST 0
+#164 FI
+#165 '+'
+#165 IF
+#165 OBJECTID cell_right_neighbor
+#165 '('
+#165 OBJECTID position
+#165 ')'
+#165 '='
+#165 STR_CONST "X"
+#165 THEN
+#165 INT_CONST 1
+#165 ELSE
+#165 INT_CONST 0
+#165 FI
+#166 '='
+#166 INT_CONST 1
+#166 ')'
+#167 THEN
+#168 STR_CONST "X"
+#169 ELSE
+#170 ERROR "'"
+#170 '.'
+#170 ERROR "'"
+#171 FI
+#172 '}'
+#172 ';'
+#174 OBJECTID evolve
+#174 '('
+#174 ')'
+#174 ':'
+#174 TYPEID SELF_TYPE
+#174 '{'
+#175 '('
+#175 LET
+#175 OBJECTID position
+#175 ':'
+#175 TYPEID Int
+#175 IN
+#176 '('
+#176 LET
+#176 OBJECTID num
+#176 ':'
+#176 TYPEID Int
+#176 ASSIGN
+#176 OBJECTID num_cells
+#176 ERROR "["
+#176 ERROR "]"
+#176 IN
+#177 '('
+#177 LET
+#177 OBJECTID temp
+#177 ':'
+#177 TYPEID String
+#177 IN
+#178 '{'
+#179 WHILE
+#179 OBJECTID position
+#179 '<'
+#179 OBJECTID num
+#179 LOOP
+#180 '{'
+#181 OBJECTID temp
+#181 ASSIGN
+#181 OBJECTID temp
+#181 '.'
+#181 OBJECTID concat
+#181 '('
+#181 OBJECTID cell_at_next_evolution
+#181 '('
+#181 OBJECTID position
+#181 ')'
+#181 ')'
+#181 ';'
+#182 OBJECTID position
+#182 ASSIGN
+#182 OBJECTID position
+#182 '+'
+#182 INT_CONST 1
+#182 ';'
+#183 '}'
+#184 POOL
+#184 ';'
+#185 OBJECTID population_map
+#185 ASSIGN
+#185 OBJECTID temp
+#185 ';'
+#186 OBJECTID self
+#186 ';'
+#187 '}'
+#188 ')'
+#188 ')'
+#188 ')'
+#189 '}'
+#189 ';'
+#190 '}'
+#190 ';'
+#192 CLASS
+#192 TYPEID Main
+#192 '{'
+#193 OBJECTID cells
+#193 ':'
+#193 TYPEID CellularAutomaton
+#193 ';'
+#195 OBJECTID main
+#195 '('
+#195 ')'
+#195 ':'
+#195 TYPEID SELF_TYPE
+#195 '{'
+#196 '{'
+#197 OBJECTID cells
+#197 ASSIGN
+#197 '('
+#197 NEW
+#197 TYPEID CellularAutomaton
+#197 ')'
+#197 '.'
+#197 OBJECTID init
+#197 '('
+#197 STR_CONST "         X         "
+#197 ')'
+#197 ';'
+#198 OBJECTID cells
+#198 '.'
+#198 OBJECTID print
+#198 '('
+#198 ')'
+#198 ';'
+#199 '('
+#199 LET
+#199 OBJECTID countdown
+#199 ':'
+#199 TYPEID Int
+#199 ASSIGN
+#199 INT_CONST 20
+#199 IN
+#200 WHILE
+#200 OBJECTID countdown
+#200 ERROR ">"
+#200 INT_CONST 0
+#200 LOOP
+#201 '{'
+#202 OBJECTID cells
+#202 '.'
+#202 OBJECTID evolve
+#202 '('
+#202 ')'
+#202 ';'
+#203 OBJECTID cells
+#203 '.'
+#203 OBJECTID print
+#203 '('
+#203 ')'
+#203 ';'
+#204 OBJECTID countdown
+#204 ASSIGN
+#204 OBJECTID countdown
+#204 '-'
+#204 INT_CONST 1
+#204 ';'
+#206 POOL
+#207 ')'
+#207 ';'
+#212 ERROR "EOF in comment"
