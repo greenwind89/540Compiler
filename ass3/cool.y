@@ -93,6 +93,7 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 %type <feature> feature
 
 %type <expressions> expr_list
+%type <expressions> expr_list_comma
 %type <expression> expr
 
 %type <formals> formal_list
@@ -161,28 +162,117 @@ feature:
       $$ = method($1, $3, $6, $8);
     }
 
-    | OBJECTID ':' TYPEID expr ';'{
-      $$ = attr($1, $3, $4);
+    | OBJECTID ':' TYPEID ';'{
+      $$ = attr($1, $3, no_expr());
+    }
+
+    | OBJECTID ':' TYPEID ASSIGN expr ';'{
+      $$ = attr($1, $3, $5);
     }
 
  ;
 
 formal_list:
+    formal {
+      $$ = single_Formals($1);
+    }
+
+    | formal ',' formal_list {
+      $$ = append_Formals($3,single_Formals($1));
+    }
+
+    |
     /* empty */ {
       $$ = nil_Formals();
     }
   ;
 
 formal:
+    OBJECTID ':' TYPEID {
+      $$ = formal($1, $3);
+    }
   ;
 
 expr_list:
-    /* empty */ {
+    expr ';' {
+      $$ = single_Expressions($1);
+    }
+
+    | expr_list expr ';' {
+      $$ = append_Expressions($1, single_Expressions($2));
+    }
+  ;
+
+expr_list_comma:
+    expr {
+      $$ = single_Expressions($1);
+    }
+
+	  | expr_list_comma ',' expr {
+      $$ = append_Expressions($1, single_Expressions($3));
+    }
+
+    | /* empty */ {
       $$ = nil_Expressions();
     }
   ;
 
 expr:
+    OBJECTID ASSIGN expr {
+      $$ = assign($1, $3);
+    }
+
+    | expr '.' OBJECTID '(' expr_list_comma ')' {
+      $$ = dispatch($1, $3, $5);
+    }
+
+    | expr '@' TYPEID '.' OBJECTID '(' expr_list_comma ')' {
+      $$ = static_dispatch($1, $3, $5, $7);
+    }
+
+    | OBJECTID '(' expr_list_comma ')' {
+      $$ = dispatch(object(idtable.add_string("self")), $1, $3);
+    }
+
+    | IF expr THEN expr ELSE expr FI {
+      $$ = cond($2, $4, $6);
+    }
+
+    | WHILE expr LOOP expr POOL {
+      $$ = loop($2, $4);
+    }
+
+    | '{' expr_list '}' {
+      $$ = block($2);
+    }
+
+    | NEW TYPEID {
+      $$ = new_($2);
+    }
+
+    | ISVOID expr {
+      $$ = isvoid($2);
+    }
+
+    | expr '+' expr {
+      $$ = plus($1, $3);
+    }
+
+    | OBJECTID {
+      $$ = object($1);
+    }
+
+    | INT_CONST {
+      $$ = int_const($1);
+    }
+
+    | STR_CONST {
+      $$ = string_const($1);
+    }
+
+    | BOOL_CONST {
+      $$ = bool_const($1);
+    }
  ;
 /* end of grammar */
 

@@ -10,4 +10,209 @@ _program
     _attr
       test
       String
-Segmentation fault (core dumped)
+      #2
+      _no_expr
+      : _no_type
+    )
+  #6
+  _class
+    B
+    Object
+    "./test/testcases/test1.cl"
+    (
+    )
+  #10
+  _class
+    Main
+    IO
+    "./test/testcases/test1.cl"
+    (
+    #12
+    _method
+      main
+      Object
+      #13
+      _block
+        #14
+        _assign
+          abc
+          #14
+          _bool
+            1
+          : _no_type
+        : _no_type
+        #15
+        _assign
+          strCtr
+          #15
+          _string
+            "abc"
+          : _no_type
+        : _no_type
+        #16
+        _assign
+          intCtr
+          #16
+          _int
+            123
+          : _no_type
+        : _no_type
+        #17
+        _dispatch
+          #17
+          _object
+            abc
+          : _no_type
+          doSomething
+          (
+          )
+        : _no_type
+        #18
+        _dispatch
+          #18
+          _object
+            abc
+          : _no_type
+          doSomething
+          (
+          #18
+          _object
+            a
+          : _no_type
+          #18
+          _object
+            b
+          : _no_type
+          #18
+          _object
+            c
+          : _no_type
+          )
+        : _no_type
+        #19
+        _static_dispatch
+          #19
+          _object
+            abc
+          : _no_type
+          Fdafd
+          doSomthing
+          (
+          )
+        : _no_type
+        #20
+        _static_dispatch
+          #20
+          _object
+            abc
+          : _no_type
+          Fdafd
+          doSomthing
+          (
+          #20
+          _object
+            a
+          : _no_type
+          #20
+          _object
+            b
+          : _no_type
+          #20
+          _object
+            c
+          : _no_type
+          )
+        : _no_type
+        #22
+        _dispatch
+          #22
+          _object
+            self
+          : _no_type
+          doSomthing
+          (
+          )
+        : _no_type
+        #24
+        _cond
+          #24
+          _bool
+            1
+          : _no_type
+          #25
+          _dispatch
+            #25
+            _object
+              self
+            : _no_type
+            doSmethong
+            (
+            )
+          : _no_type
+          #27
+          _dispatch
+            #27
+            _object
+              self
+            : _no_type
+            doStLes
+            (
+            )
+          : _no_type
+        : _no_type
+        #30
+        _loop
+          #30
+          _bool
+            0
+          : _no_type
+          #31
+          _dispatch
+            #31
+            _object
+              self
+            : _no_type
+            sing
+            (
+            )
+          : _no_type
+        : _no_type
+        #34
+        _assign
+          b
+          #34
+          _new
+            Aa
+          : _no_type
+        : _no_type
+        #36
+        _isvoid
+          #36
+          _object
+            abc
+          : _no_type
+        : _no_type
+        #38
+        _assign
+          c
+          #38
+          _plus
+            #38
+            _object
+              a
+            : _no_type
+            #38
+            _plus
+              #38
+              _object
+                b
+              : _no_type
+              #38
+              _object
+                c
+              : _no_type
+            : _no_type
+          : _no_type
+        : _no_type
+      : _no_type
+    )
