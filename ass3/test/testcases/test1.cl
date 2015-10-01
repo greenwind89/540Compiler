@@ -1,4 +1,5 @@
 class A {
+  test: String;
 
 };
 
@@ -9,9 +10,7 @@ Class B {
 class Main inherits IO {
 
   main() : Object {
-    {
-      (new StackMachine).run();
-    }
+    self
   };
 
 };

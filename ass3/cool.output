@@ -1,3 +1,9 @@
+Nonterminals useless in grammar
+
+   formal
+   expr_list
+
+
 Terminals unused in grammar
 
    ELSE
@@ -18,11 +24,17 @@ Terminals unused in grammar
    STR_CONST
    INT_CONST
    BOOL_CONST
-   OBJECTID
    ASSIGN
    NOT
    LE
    ERROR
+
+
+Rules useless in grammar
+
+   14 formal: %empty
+
+   15 expr_list: %empty
 
 
 Grammar
@@ -35,18 +47,31 @@ Grammar
     3 class_list: class
     4           | class_list class
 
-    5 class: CLASS TYPEID '{' dummy_feature_list '}' ';'
-    6      | CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list '}' ';'
+    5 class: CLASS TYPEID '{' feature_list '}' ';'
+    6      | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
 
-    7 dummy_feature_list: %empty
+    7 feature_list: feature
+    8             | feature ',' feature_list
+    9             | %empty
+
+   10 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expr '}' ';'
+   11        | OBJECTID ':' TYPEID expr ';'
+
+   12 formal_list: %empty
+
+   13 expr: %empty
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-';' (59) 5 6
-'{' (123) 5 6
-'}' (125) 5 6
+'(' (40) 10
+')' (41) 10
+',' (44) 8
+':' (58) 10 11
+';' (59) 5 6 10 11
+'{' (123) 5 6 10
+'}' (125) 5 6 10
 error (256) 2
 CLASS (258) 5 6
 ELSE (259)
@@ -68,8 +93,8 @@ ISVOID (274)
 STR_CONST (275)
 INT_CONST (276)
 BOOL_CONST (277)
-TYPEID (278) 5 6
-OBJECTID (279)
+TYPEID (278) 5 6 10 11
+OBJECTID (279) 10 11
 ASSIGN (280)
 NOT (281)
 LE (282)
@@ -78,16 +103,22 @@ ERROR (283)
 
 Nonterminals, with rules where they appear
 
-$accept (32)
+$accept (36)
     on left: 0
-program (33)
+program (37)
     on left: 1 2, on right: 0
-class_list (34)
+class_list (38)
     on left: 3 4, on right: 1 4
-class (35)
+class (39)
     on left: 5 6, on right: 3 4
-dummy_feature_list (36)
-    on left: 7, on right: 5 6
+feature_list (40)
+    on left: 7 8 9, on right: 5 6 8
+feature (41)
+    on left: 10 11, on right: 7 8
+formal_list (42)
+    on left: 12, on right: 10
+expr (43)
+    on left: 13, on right: 10 11
 
 
 State 0
@@ -111,8 +142,8 @@ State 1
 
 State 2
 
-    5 class: CLASS . TYPEID '{' dummy_feature_list '}' ';'
-    6      | CLASS . TYPEID INHERITS TYPEID '{' dummy_feature_list '}' ';'
+    5 class: CLASS . TYPEID '{' feature_list '}' ';'
+    6      | CLASS . TYPEID INHERITS TYPEID '{' feature_list '}' ';'
 
     TYPEID  shift, and go to state 6
 
@@ -145,8 +176,8 @@ State 5
 
 State 6
 
-    5 class: CLASS TYPEID . '{' dummy_feature_list '}' ';'
-    6      | CLASS TYPEID . INHERITS TYPEID '{' dummy_feature_list '}' ';'
+    5 class: CLASS TYPEID . '{' feature_list '}' ';'
+    6      | CLASS TYPEID . INHERITS TYPEID '{' feature_list '}' ';'
 
     INHERITS  shift, and go to state 9
     '{'       shift, and go to state 10
@@ -168,73 +199,214 @@ State 8
 
 State 9
 
-    6 class: CLASS TYPEID INHERITS . TYPEID '{' dummy_feature_list '}' ';'
+    6 class: CLASS TYPEID INHERITS . TYPEID '{' feature_list '}' ';'
 
     TYPEID  shift, and go to state 11
 
 
 State 10
 
-    5 class: CLASS TYPEID '{' . dummy_feature_list '}' ';'
+    5 class: CLASS TYPEID '{' . feature_list '}' ';'
 
-    $default  reduce using rule 7 (dummy_feature_list)
+    OBJECTID  shift, and go to state 12
 
-    dummy_feature_list  go to state 12
+    $default  reduce using rule 9 (feature_list)
+
+    feature_list  go to state 13
+    feature       go to state 14
 
 
 State 11
 
-    6 class: CLASS TYPEID INHERITS TYPEID . '{' dummy_feature_list '}' ';'
+    6 class: CLASS TYPEID INHERITS TYPEID . '{' feature_list '}' ';'
 
-    '{'  shift, and go to state 13
+    '{'  shift, and go to state 15
 
 
 State 12
 
-    5 class: CLASS TYPEID '{' dummy_feature_list . '}' ';'
+   10 feature: OBJECTID . '(' formal_list ')' ':' TYPEID '{' expr '}' ';'
+   11        | OBJECTID . ':' TYPEID expr ';'
 
-    '}'  shift, and go to state 14
+    '('  shift, and go to state 16
+    ':'  shift, and go to state 17
 
 
 State 13
 
-    6 class: CLASS TYPEID INHERITS TYPEID '{' . dummy_feature_list '}' ';'
+    5 class: CLASS TYPEID '{' feature_list . '}' ';'
 
-    $default  reduce using rule 7 (dummy_feature_list)
-
-    dummy_feature_list  go to state 15
+    '}'  shift, and go to state 18
 
 
 State 14
 
-    5 class: CLASS TYPEID '{' dummy_feature_list '}' . ';'
+    7 feature_list: feature .
+    8             | feature . ',' feature_list
 
-    ';'  shift, and go to state 16
+    ','  shift, and go to state 19
+
+    $default  reduce using rule 7 (feature_list)
 
 
 State 15
 
-    6 class: CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list . '}' ';'
+    6 class: CLASS TYPEID INHERITS TYPEID '{' . feature_list '}' ';'
 
-    '}'  shift, and go to state 17
+    OBJECTID  shift, and go to state 12
+
+    $default  reduce using rule 9 (feature_list)
+
+    feature_list  go to state 20
+    feature       go to state 14
 
 
 State 16
 
-    5 class: CLASS TYPEID '{' dummy_feature_list '}' ';' .
+   10 feature: OBJECTID '(' . formal_list ')' ':' TYPEID '{' expr '}' ';'
 
-    $default  reduce using rule 5 (class)
+    $default  reduce using rule 12 (formal_list)
+
+    formal_list  go to state 21
 
 
 State 17
 
-    6 class: CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list '}' . ';'
+   11 feature: OBJECTID ':' . TYPEID expr ';'
 
-    ';'  shift, and go to state 18
+    TYPEID  shift, and go to state 22
 
 
 State 18
 
-    6 class: CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list '}' ';' .
+    5 class: CLASS TYPEID '{' feature_list '}' . ';'
+
+    ';'  shift, and go to state 23
+
+
+State 19
+
+    8 feature_list: feature ',' . feature_list
+
+    OBJECTID  shift, and go to state 12
+
+    $default  reduce using rule 9 (feature_list)
+
+    feature_list  go to state 24
+    feature       go to state 14
+
+
+State 20
+
+    6 class: CLASS TYPEID INHERITS TYPEID '{' feature_list . '}' ';'
+
+    '}'  shift, and go to state 25
+
+
+State 21
+
+   10 feature: OBJECTID '(' formal_list . ')' ':' TYPEID '{' expr '}' ';'
+
+    ')'  shift, and go to state 26
+
+
+State 22
+
+   11 feature: OBJECTID ':' TYPEID . expr ';'
+
+    $default  reduce using rule 13 (expr)
+
+    expr  go to state 27
+
+
+State 23
+
+    5 class: CLASS TYPEID '{' feature_list '}' ';' .
+
+    $default  reduce using rule 5 (class)
+
+
+State 24
+
+    8 feature_list: feature ',' feature_list .
+
+    $default  reduce using rule 8 (feature_list)
+
+
+State 25
+
+    6 class: CLASS TYPEID INHERITS TYPEID '{' feature_list '}' . ';'
+
+    ';'  shift, and go to state 28
+
+
+State 26
+
+   10 feature: OBJECTID '(' formal_list ')' . ':' TYPEID '{' expr '}' ';'
+
+    ':'  shift, and go to state 29
+
+
+State 27
+
+   11 feature: OBJECTID ':' TYPEID expr . ';'
+
+    ';'  shift, and go to state 30
+
+
+State 28
+
+    6 class: CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';' .
 
     $default  reduce using rule 6 (class)
+
+
+State 29
+
+   10 feature: OBJECTID '(' formal_list ')' ':' . TYPEID '{' expr '}' ';'
+
+    TYPEID  shift, and go to state 31
+
+
+State 30
+
+   11 feature: OBJECTID ':' TYPEID expr ';' .
+
+    $default  reduce using rule 11 (feature)
+
+
+State 31
+
+   10 feature: OBJECTID '(' formal_list ')' ':' TYPEID . '{' expr '}' ';'
+
+    '{'  shift, and go to state 32
+
+
+State 32
+
+   10 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' . expr '}' ';'
+
+    $default  reduce using rule 13 (expr)
+
+    expr  go to state 33
+
+
+State 33
+
+   10 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expr . '}' ';'
+
+    '}'  shift, and go to state 34
+
+
+State 34
+
+   10 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expr '}' . ';'
+
+    ';'  shift, and go to state 35
+
+
+State 35
+
+   10 feature: OBJECTID '(' formal_list ')' ':' TYPEID '{' expr '}' ';' .
+
+    $default  reduce using rule 10 (feature)

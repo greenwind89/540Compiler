@@ -1,0 +1,13 @@
+#1
+_program
+  #1
+  _class
+    A
+    Object
+    "./test/testcases/test1.cl"
+    (
+    #2
+    _attr
+      test
+      String
+Segmentation fault (core dumped)
