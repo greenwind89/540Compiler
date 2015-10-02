@@ -1,8 +1,1043 @@
-#name "./test/testcases/test2.cl"
-#1 OBJECTID longStr
-#1 ASSIGN
-#1 ERROR "String constant too long"
-#1 ';'
-#2 OBJECTID str2
-#2 ASSIGN
-#2 STR_CONST "abcd\n abc"
+#11
+_program
+  #11
+  _class
+    StackMachine
+    IO
+    "./test/testcases/test2.cl"
+    (
+    #12
+    _method
+      run
+      Object
+      #13
+      _let
+        shouldExit
+        Bool
+        #13
+        _bool
+          0
+        : _no_type
+        #14
+        _let
+          commandStack
+          HeadList
+          #14
+          _new
+            HeadList
+          : _no_type
+          #15
+          _let
+            currentStr
+            String
+            #0
+            _no_expr
+            : _no_type
+            #16
+            _block
+              #17
+              _loop
+                #17
+                _comp
+                  #17
+                  _object
+                    shouldExit
+                  : _no_type
+                : _no_type
+                #18
+                _block
+                  #19
+                  _assign
+                    currentStr
+                    #19
+                    _dispatch
+                      #19
+                      _object
+                        self
+                      : _no_type
+                      in_string
+                      (
+                      )
+                    : _no_type
+                  : _no_type
+                  #22
+                  _let
+                    command
+                    StackCommand
+                    #22
+                    _dispatch
+                      #22
+                      _new
+                        StackCommandFactory
+                      : _no_type
+                      getCommandObject
+                      (
+                      #22
+                      _object
+                        currentStr
+                      : _no_type
+                      )
+                    : _no_type
+                    #23
+                    _assign
+                      shouldExit
+                      #23
+                      _dispatch
+                        #23
+                        _object
+                          command
+                        : _no_type
+                        initExecute
+                        (
+                        #23
+                        _object
+                          commandStack
+                        : _no_type
+                        )
+                      : _no_type
+                    : _no_type
+                  : _no_type
+                : _no_type
+              : _no_type
+            : _no_type
+          : _no_type
+        : _no_type
+      : _no_type
+    )
+  #33
+  _class
+    StackCommandFactory
+    Object
+    "./test/testcases/test2.cl"
+    (
+    #34
+    _method
+      getCommandObject
+      #34
+      _formal
+        str
+        String
+      StackCommand
+      #35
+      _cond
+        #35
+        _eq
+          #35
+          _object
+            str
+          : _no_type
+          #35
+          _string
+            "x"
+          : _no_type
+        : _no_type
+        #36
+        _dispatch
+          #36
+          _new
+            StopStackCommand
+          : _no_type
+          init
+          (
+          #36
+          _object
+            str
+          : _no_type
+          )
+        : _no_type
+        #37
+        _cond
+          #37
+          _eq
+            #37
+            _object
+              str
+            : _no_type
+            #37
+            _string
+              "d"
+            : _no_type
+          : _no_type
+          #38
+          _dispatch
+            #38
+            _new
+              DisplayStackCommand
+            : _no_type
+            init
+            (
+            #38
+            _object
+              str
+            : _no_type
+            )
+          : _no_type
+          #39
+          _cond
+            #39
+            _eq
+              #39
+              _object
+                str
+              : _no_type
+              #39
+              _string
+                "e"
+              : _no_type
+            : _no_type
+            #40
+            _dispatch
+              #40
+              _new
+                ExecuteStackCommand
+              : _no_type
+              init
+              (
+              #40
+              _object
+                str
+              : _no_type
+              )
+            : _no_type
+            #41
+            _cond
+              #41
+              _eq
+                #41
+                _object
+                  str
+                : _no_type
+                #41
+                _string
+                  "s"
+                : _no_type
+              : _no_type
+              #42
+              _dispatch
+                #42
+                _new
+                  SwapStackCommand
+                : _no_type
+                init
+                (
+                #42
+                _object
+                  str
+                : _no_type
+                )
+              : _no_type
+              #43
+              _cond
+                #43
+                _eq
+                  #43
+                  _object
+                    str
+                  : _no_type
+                  #43
+                  _string
+                    "+"
+                  : _no_type
+                : _no_type
+                #44
+                _dispatch
+                  #44
+                  _new
+                    PlusStackCommand
+                  : _no_type
+                  init
+                  (
+                  #44
+                  _object
+                    str
+                  : _no_type
+                  )
+                : _no_type
+                #45
+                _dispatch
+                  #45
+                  _new
+                    IntegerStackCommand
+                  : _no_type
+                  init
+                  (
+                  #45
+                  _object
+                    str
+                  : _no_type
+                  )
+                : _no_type
+              : _no_type
+            : _no_type
+          : _no_type
+        : _no_type
+      : _no_type
+    )
+  #51
+  _class
+    StackCommand
+    Object
+    "./test/testcases/test2.cl"
+    (
+    #52
+    _attr
+      cmdStr
+      String
+      #0
+      _no_expr
+      : _no_type
+    #53
+    _method
+      initExecute
+      #53
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #54
+      _block
+        #55
+        _dispatch
+          #55
+          _object
+            scl
+          : _no_type
+          push
+          (
+          #55
+          _object
+            self
+          : _no_type
+          )
+        : _no_type
+        #56
+        _bool
+          0
+        : _no_type
+      : _no_type
+    #61
+    _method
+      execute
+      #61
+      _formal
+        scl
+        StackCommandList
+      Object
+      #63
+      _object
+        self
+      : _no_type
+    #66
+    _method
+      init
+      #66
+      _formal
+        str
+        String
+      StackCommand
+      #67
+      _block
+        #68
+        _assign
+          cmdStr
+          #68
+          _object
+            str
+          : _no_type
+        : _no_type
+        #69
+        _object
+          self
+        : _no_type
+      : _no_type
+    #73
+    _method
+      getCommandString
+      String
+      #74
+      _object
+        cmdStr
+      : _no_type
+    )
+  #78
+  _class
+    StopStackCommand
+    StackCommand
+    "./test/testcases/test2.cl"
+    (
+    #79
+    _method
+      initExecute
+      #79
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #80
+      _bool
+        1
+      : _no_type
+    )
+  #85
+  _class
+    IntegerStackCommand
+    StackCommand
+    "./test/testcases/test2.cl"
+    (
+    #86
+    _method
+      execute
+      #86
+      _formal
+        scl
+        StackCommandList
+      Object
+      #88
+      _dispatch
+        #88
+        _object
+          scl
+        : _no_type
+        push
+        (
+        #88
+        _object
+          self
+        : _no_type
+        )
+      : _no_type
+    )
+  #93
+  _class
+    PlusStackCommand
+    StackCommand
+    "./test/testcases/test2.cl"
+    (
+    #94
+    _method
+      execute
+      #94
+      _formal
+        scl
+        StackCommandList
+      Object
+      #95
+      _block
+        #96
+        _let
+          com1
+          StackCommand
+          #96
+          _dispatch
+            #96
+            _object
+              scl
+            : _no_type
+            pop
+            (
+            )
+          : _no_type
+          #97
+          _let
+            com2
+            StackCommand
+            #97
+            _dispatch
+              #97
+              _object
+                scl
+              : _no_type
+              pop
+              (
+              )
+            : _no_type
+            #98
+            _block
+              #99
+              _let
+                int1
+                Int
+                #99
+                _dispatch
+                  #99
+                  _new
+                    A2I
+                  : _no_type
+                  a2i
+                  (
+                  #99
+                  _dispatch
+                    #99
+                    _object
+                      com1
+                    : _no_type
+                    getCommandString
+                    (
+                    )
+                  : _no_type
+                  )
+                : _no_type
+                #100
+                _let
+                  int2
+                  Int
+                  #100
+                  _dispatch
+                    #100
+                    _new
+                      A2I
+                    : _no_type
+                    a2i
+                    (
+                    #100
+                    _dispatch
+                      #100
+                      _object
+                        com2
+                      : _no_type
+                      getCommandString
+                      (
+                      )
+                    : _no_type
+                    )
+                  : _no_type
+                  #101
+                  _let
+                    int3
+                    Int
+                    #101
+                    _plus
+                      #101
+                      _object
+                        int1
+                      : _no_type
+                      #101
+                      _object
+                        int2
+                      : _no_type
+                    : _no_type
+                    #102
+                    _block
+                      #103
+                      _dispatch
+                        #103
+                        _object
+                          scl
+                        : _no_type
+                        push
+                        (
+                        #103
+                        _dispatch
+                          #103
+                          _new
+                            IntegerStackCommand
+                          : _no_type
+                          init
+                          (
+                          #103
+                          _dispatch
+                            #103
+                            _new
+                              A2I
+                            : _no_type
+                            i2a
+                            (
+                            #103
+                            _object
+                              int3
+                            : _no_type
+                            )
+                          : _no_type
+                          )
+                        : _no_type
+                        )
+                      : _no_type
+                    : _no_type
+                  : _no_type
+                : _no_type
+              : _no_type
+            : _no_type
+          : _no_type
+        : _no_type
+        #107
+        _object
+          self
+        : _no_type
+      : _no_type
+    )
+  #114
+  _class
+    SwapStackCommand
+    StackCommand
+    "./test/testcases/test2.cl"
+    (
+    #115
+    _method
+      execute
+      #115
+      _formal
+        scl
+        StackCommandList
+      Object
+      #116
+      _block
+        #117
+        _let
+          com1
+          StackCommand
+          #117
+          _dispatch
+            #117
+            _object
+              scl
+            : _no_type
+            pop
+            (
+            )
+          : _no_type
+          #118
+          _let
+            com2
+            StackCommand
+            #118
+            _dispatch
+              #118
+              _object
+                scl
+              : _no_type
+              pop
+              (
+              )
+            : _no_type
+            #119
+            _block
+              #120
+              _dispatch
+                #120
+                _object
+                  scl
+                : _no_type
+                push
+                (
+                #120
+                _object
+                  com1
+                : _no_type
+                )
+              : _no_type
+              #121
+              _dispatch
+                #121
+                _object
+                  scl
+                : _no_type
+                push
+                (
+                #121
+                _object
+                  com2
+                : _no_type
+                )
+              : _no_type
+            : _no_type
+          : _no_type
+        : _no_type
+        #124
+        _object
+          self
+        : _no_type
+      : _no_type
+    )
+  #130
+  _class
+    ExecuteStackCommand
+    StackCommand
+    "./test/testcases/test2.cl"
+    (
+    #131
+    _method
+      initExecute
+      #131
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #132
+      _block
+        #133
+        _cond
+          #133
+          _comp
+            #133
+            _dispatch
+              #133
+              _object
+                scl
+              : _no_type
+              isEmpty
+              (
+              )
+            : _no_type
+          : _no_type
+          #134
+          _let
+            currentCommand
+            StackCommand
+            #134
+            _dispatch
+              #134
+              _object
+                scl
+              : _no_type
+              pop
+              (
+              )
+            : _no_type
+            #135
+            _block
+              #136
+              _dispatch
+                #136
+                _object
+                  currentCommand
+                : _no_type
+                execute
+                (
+                #136
+                _object
+                  scl
+                : _no_type
+                )
+              : _no_type
+              #137
+              _bool
+                0
+              : _no_type
+            : _no_type
+          : _no_type
+          #140
+          _bool
+            0
+          : _no_type
+        : _no_type
+      : _no_type
+    )
+  #148
+  _class
+    DisplayStackCommand
+    StackCommand
+    "./test/testcases/test2.cl"
+    (
+    #149
+    _method
+      initExecute
+      #149
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #150
+      _block
+        #151
+        _dispatch
+          #151
+          _object
+            scl
+          : _no_type
+          print
+          (
+          )
+        : _no_type
+        #152
+        _bool
+          0
+        : _no_type
+      : _no_type
+    )
+  #158
+  _class
+    StackCommandList
+    Object
+    "./test/testcases/test2.cl"
+    (
+    #160
+    _attr
+      command
+      StackCommand
+      #0
+      _no_expr
+      : _no_type
+    #161
+    _attr
+      commandList
+      StackCommandList
+      #0
+      _no_expr
+      : _no_type
+    #163
+    _method
+      isHead
+      Bool
+      #163
+      _bool
+        0
+      : _no_type
+    #165
+    _method
+      push
+      #165
+      _formal
+        sc
+        StackCommand
+      Object
+      #166
+      _block
+        #167
+        _assign
+          commandList
+          #167
+          _dispatch
+            #167
+            _new
+              StackCommandList
+            : _no_type
+            init
+            (
+            #167
+            _object
+              sc
+            : _no_type
+            #167
+            _object
+              commandList
+            : _no_type
+            )
+          : _no_type
+        : _no_type
+      : _no_type
+    #171
+    _method
+      pop
+      StackCommand
+      #172
+      _let
+        com
+        StackCommand
+        #172
+        _dispatch
+          #172
+          _object
+            commandList
+          : _no_type
+          getCommand
+          (
+          )
+        : _no_type
+        #173
+        _block
+          #174
+          _assign
+            commandList
+            #174
+            _dispatch
+              #174
+              _object
+                commandList
+              : _no_type
+              getCommandList
+              (
+              )
+            : _no_type
+          : _no_type
+          #175
+          _object
+            com
+          : _no_type
+        : _no_type
+      : _no_type
+    #179
+    _method
+      isEmpty
+      Bool
+      #180
+      _cond
+        #180
+        _comp
+          #180
+          _isvoid
+            #180
+            _object
+              commandList
+            : _no_type
+          : _no_type
+        : _no_type
+        #180
+        _bool
+          0
+        : _no_type
+        #180
+        _bool
+          1
+        : _no_type
+      : _no_type
+    #183
+    _method
+      init
+      #183
+      _formal
+        sc
+        StackCommand
+      #183
+      _formal
+        sl
+        StackCommandList
+      StackCommandList
+      #184
+      _block
+        #185
+        _assign
+          command
+          #185
+          _object
+            sc
+          : _no_type
+        : _no_type
+        #186
+        _assign
+          commandList
+          #186
+          _object
+            sl
+          : _no_type
+        : _no_type
+        #187
+        _object
+          self
+        : _no_type
+      : _no_type
+    #191
+    _method
+      getCommand
+      StackCommand
+      #192
+      _object
+        command
+      : _no_type
+    #195
+    _method
+      getCommandList
+      StackCommandList
+      #196
+      _object
+        commandList
+      : _no_type
+    #199
+    _method
+      print
+      Object
+      #200
+      _cond
+        #200
+        _comp
+          #200
+          _isvoid
+            #200
+            _object
+              commandList
+            : _no_type
+          : _no_type
+        : _no_type
+        #202
+        _block
+          #203
+          _dispatch
+            #203
+            _new
+              IO
+            : _no_type
+            out_string
+            (
+            #203
+            _dispatch
+              #203
+              _dispatch
+                #203
+                _dispatch
+                  #203
+                  _object
+                    commandList
+                  : _no_type
+                  getCommand
+                  (
+                  )
+                : _no_type
+                getCommandString
+                (
+                )
+              : _no_type
+              concat
+              (
+              #203
+              _string
+                "\n"
+              : _no_type
+              )
+            : _no_type
+            )
+          : _no_type
+          #204
+          _dispatch
+            #204
+            _object
+              commandList
+            : _no_type
+            print
+            (
+            )
+          : _no_type
+        : _no_type
+        #207
+        _object
+          self
+        : _no_type
+      : _no_type
+    )
+  #213
+  _class
+    HeadList
+    StackCommandList
+    "./test/testcases/test2.cl"
+    (
+    #214
+    _method
+      isHead
+      Bool
+      #214
+      _bool
+        1
+      : _no_type
+    )
+  #217
+  _class
+    Main
+    IO
+    "./test/testcases/test2.cl"
+    (
+    #219
+    _method
+      main
+      Object
+      #220
+      _block
+        #221
+        _dispatch
+          #221
+          _new
+            StackMachine
+          : _no_type
+          run
+          (
+          )
+        : _no_type
+      : _no_type
+    )

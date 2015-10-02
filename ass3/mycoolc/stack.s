@@ -1584,7 +1584,7 @@ label82:
 	lw	$t1 12($s1)
 	lw	$t2 12($s3)
 	la	$a0 bool_const1
-	ble	$t1 $t2 label84
+	blt	$t1 $t2 label84
 	la	$a0 bool_const0
 label84:
 	lw	$t1 12($a0)
@@ -1675,7 +1675,7 @@ label87:
 	lw	$t1 12($s1)
 	lw	$t2 12($a0)
 	la	$a0 bool_const1
-	ble	$t1 $t2 label92
+	blt	$t1 $t2 label92
 	la	$a0 bool_const0
 label92:
 	lw	$t1 12($a0)

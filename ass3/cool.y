@@ -98,7 +98,20 @@ int omerrs = 0;               /* number of errors in lexing and parsing */
 
 %type <formals> formal_list
 %type <formal> formal
+
+%type <cases> case_list
+%type <case_> case
+
+%type <expression> let_list
+%type <expression> let_item
 /* Precedence declarations go here. */
+%nonassoc '<' '=' LE
+%precedence NOT
+%left '+' '-'
+%left '*' '/'
+%precedence ISVOID
+%precedence '~'
+
 
 
 %%
@@ -148,8 +161,8 @@ feature_list:
       $$ = single_Features($1);
     }
 
-	  | feature ',' feature_list {
-      $$ = append_Features($3,single_Features($1));
+	  |  feature_list feature {
+      $$ = append_Features($1,single_Features($2));
     }
 
     | /* empty */ {
@@ -177,8 +190,8 @@ formal_list:
       $$ = single_Formals($1);
     }
 
-    | formal ',' formal_list {
-      $$ = append_Formals($3,single_Formals($1));
+    | formal_list ',' formal {
+      $$ = append_Formals($1,single_Formals($3));
     }
 
     |
@@ -246,6 +259,14 @@ expr:
       $$ = block($2);
     }
 
+    | LET let_list {
+      $$ = $2;
+    }
+
+    | CASE expr OF case_list ESAC {
+      $$ = typcase($2, $4);
+    }
+
     | NEW TYPEID {
       $$ = new_($2);
     }
@@ -256,6 +277,42 @@ expr:
 
     | expr '+' expr {
       $$ = plus($1, $3);
+    }
+
+    | expr '-' expr {
+      $$ = sub($1, $3);
+    }
+
+    | expr '*' expr {
+      $$ = mul($1, $3);
+    }
+
+    | expr '/' expr {
+      $$ = divide($1, $3);
+    }
+
+    | '~' expr {
+      $$ = neg($2);
+    }
+
+    | expr '<' expr {
+      $$ = lt($1, $3);
+    }
+
+    | expr LE expr {
+      $$ = leq($1, $3);
+    }
+
+    | expr '=' expr {
+      $$ = eq($1, $3);
+    }
+
+    | NOT expr {
+      $$ = comp($2);
+    }
+
+    | '(' expr ')' {
+      $$ = $2;
     }
 
     | OBJECTID {
@@ -274,6 +331,44 @@ expr:
       $$ = bool_const($1);
     }
  ;
+
+
+let_list:
+    OBJECTID ':' TYPEID ',' let_list {
+      $$ = let($1, $3, no_expr(), $5);
+    }
+
+
+    | OBJECTID ':' TYPEID ASSIGN expr ',' let_list{
+      $$ = let($1, $3, $5, $7);
+    }
+
+    | OBJECTID ':' TYPEID IN expr {
+      $$ = let($1, $3, no_expr(), $5);
+    }
+
+    | OBJECTID ':' TYPEID ASSIGN expr IN expr {
+      $$ = let($1, $3, $5, $7);
+    }
+  ;
+
+case_list:
+
+    case {
+      $$ = single_Cases($1);
+    }
+
+    | case_list case {
+      $$ = append_Cases($1, single_Cases($2));
+    }
+  ;
+
+case:
+
+    OBJECTID ':' TYPEID DARROW expr ';'{
+      $$ = branch($1, $3, $5);
+    }
+  ;
 /* end of grammar */
 
 %%

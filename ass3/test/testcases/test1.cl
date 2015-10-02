@@ -1,6 +1,9 @@
 class A {
-  test: String;
+  test: String <- "abc";
 
+  test(list: Abc) : Des {
+    abc
+  };
 };
 
 Class B {
@@ -35,8 +38,54 @@ class Main inherits IO {
 
       isvoid abc;
 
+      c <- a + b;
       c <- a + b + c;
+
+      c <- a * b;
+      c <- a * b * c;
+
+      c <- a - b;
+      c <- a - b - c;
+
+      c <- a / b;
+      c <- a / b / c;
+
+      d <- a * b + c/d -f;
+
+      d <- ~a;
+
+      d <- a < b;
+      
+      d <- a <= b;
+
+      d <- not abc;
+      d <- abc = def;
+
+      e <- (abc);
+      
+      a <- a + a.b() - d *e - a@B.fds() * c;
+
+      a <- a + ~b + d;
+
+      a <- a + isvoid bcd + d;
+
+      a <- a <= 0 + 1;
+      a <- a < 0 + 1;
+      a <- a = 0 + 1;
+
+      b <- not a + d + c;
+      case abc = 0 of 
+        a: A => a <= "ac";
+        b: B => b <= 123;
+      esac;
+
+      let a:Int <- 5, b:Int <- 10, c:String <- "abc" in a = b+c;
+      
+      d <- ~a;
+      d <- not a;
     }
+
+
   };
 
 };
