@@ -38,7 +38,7 @@ _program
               #17
               _loop
                 #17
-                _comp
+                _neg
                   #17
                   _object
                     shouldExit
@@ -667,7 +667,7 @@ _program
         #133
         _cond
           #133
-          _comp
+          _neg
             #133
             _dispatch
               #133
@@ -862,7 +862,7 @@ _program
       #180
       _cond
         #180
-        _comp
+        _neg
           #180
           _isvoid
             #180
@@ -938,7 +938,7 @@ _program
       #200
       _cond
         #200
-        _comp
+        _neg
           #200
           _isvoid
             #200

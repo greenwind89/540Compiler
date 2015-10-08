@@ -1,0 +1,26 @@
+# 540Compiler
+Minh Truong
+Hung Phan
+
+
+In this assignment, we implement the grammar by going through each grammar given in Figure 1 of Cool manual from top to bottom. The implementation of most of the rules is straightforward except for list of expressions in a block expression, list of expressions as parameters in function call and let expression.
+
+We handle let expression using another nonterminal called let_list which specifically handle four possible cases of a let statement and right recursive with let_list itself. We do not use any additional feature to implement precedence of let statement but under our test cases, it seems to work fine.  
+
+There are two kinds of expression list in our parser, one is for expressions separated by comma and allows empty, we call it expr_list_comma, another one is for expressions separated by semicolon, it does not allow empty and we call it expr_list.
+
+In case of complement and negation operation, parser supposes to assign comp and neg type for "~" and "NOT" respectively but as we checked in the given parser, "~" is assigned with "neg" and "NOT" is assigned with "comp" which is not correct. In our source code, we implement it in correct way, so our parser will yield different result from give parser in this case.
+
+good.cl includes 2 parts, first part covers as much valid expression as possible and second part is stack.cl program which we created as first assignment to serve as a real world test for our parser.
+
+We only handle to resume error cases given in assignment specification which are error in a class definition but it is still terminated correctly, error in features of class, error in expressions of blocks and error in let statement. Those cases are demonstrated in bad.cl.
+
+One notice is the case
+Class A inherits B {
+;
+;
+
+Our parser will show 2 errors at each of semicolon, since it detects "Class ... ;"" is the first group which has wrong syntax and there cannot be any structure with an empty statement before the second semicolon it is also an syntax error. The given parse only gives 1 error in this case which is at the first semicolon. We think it is justified keep our parser our way so it will produce 2 errors in this case.
+
+* Since rules in bison are very similar to CFG notation, and we do not use special features of Bison, we do not put many verbose comments in our source code.
+

@@ -1,4 +1,4 @@
-for i in {1..2}
+for i in {1..3}
 do
   echo 'Executing test' $i
   gmake parser && ./myparser ./test/testcases/test$i.cl  > ./test/ourlastresults/result$i.txt;

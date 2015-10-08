@@ -4,7 +4,7 @@ _program
   _class
     A
     Object
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #2
     _attr
@@ -31,14 +31,14 @@ _program
   _class
     B
     Object
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     )
   #13
   _class
     Main
     IO
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #15
     _method
@@ -794,7 +794,7 @@ _program
   _class
     StackMachine
     IO
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #104
     _method
@@ -898,7 +898,7 @@ _program
   _class
     StackCommandFactory
     Object
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #126
     _method
@@ -1067,7 +1067,7 @@ _program
   _class
     StackCommand
     Object
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #144
     _attr
@@ -1153,7 +1153,7 @@ _program
   _class
     StopStackCommand
     StackCommand
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #171
     _method
@@ -1172,7 +1172,7 @@ _program
   _class
     IntegerStackCommand
     StackCommand
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #178
     _method
@@ -1201,7 +1201,7 @@ _program
   _class
     PlusStackCommand
     StackCommand
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #186
     _method
@@ -1359,7 +1359,7 @@ _program
   _class
     SwapStackCommand
     StackCommand
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #207
     _method
@@ -1442,7 +1442,7 @@ _program
   _class
     ExecuteStackCommand
     StackCommand
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #223
     _method
@@ -1516,7 +1516,7 @@ _program
   _class
     DisplayStackCommand
     StackCommand
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #241
     _method
@@ -1548,7 +1548,7 @@ _program
   _class
     StackCommandList
     Object
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #252
     _attr
@@ -1796,7 +1796,7 @@ _program
   _class
     HeadList
     StackCommandList
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #306
     _method
@@ -1811,7 +1811,7 @@ _program
   _class
     Main
     IO
-    "./test/testcases/test1.cl"
+    "good.cl"
     (
     #311
     _method

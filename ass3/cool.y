@@ -150,8 +150,11 @@ class:
       $$ = class_($2,idtable.add_string("Object"),$4, stringtable.add_string(curr_filename));
     }
 
-	  | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';' {
+	 | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';' {
       $$ = class_($2,$4,$6,stringtable.add_string(curr_filename));
+    }
+    | CLASS error ';'{
+        yyerrok;
     }
 	;
 
@@ -161,7 +164,7 @@ feature_list:
       $$ = single_Features($1);
     }
 
-	  |  feature_list feature {
+	 |  feature_list feature {
       $$ = append_Features($1,single_Features($2));
     }
 
@@ -181,6 +184,10 @@ feature:
 
     | OBJECTID ':' TYPEID ASSIGN expr ';'{
       $$ = attr($1, $3, $5);
+    }
+
+    | OBJECTID error ';' {
+      yyerrok;
     }
 
  ;
@@ -214,6 +221,10 @@ expr_list:
     | expr_list expr ';' {
       $$ = append_Expressions($1, single_Expressions($2));
     }
+
+    | error ';' {
+      yyerrok;
+   }
   ;
 
 expr_list_comma:
@@ -292,7 +303,7 @@ expr:
     }
 
     | '~' expr {
-      $$ = neg($2);
+      $$ = comp($2);
     }
 
     | expr '<' expr {
@@ -308,7 +319,7 @@ expr:
     }
 
     | NOT expr {
-      $$ = comp($2);
+      $$ = neg($2);
     }
 
     | '(' expr ')' {
@@ -349,6 +360,14 @@ let_list:
 
     | OBJECTID ':' TYPEID ASSIGN expr IN expr {
       $$ = let($1, $3, $5, $7);
+    }
+
+    | OBJECTID error ',' let_list {
+      yyerrok;
+    }
+
+    | OBJECTID  error IN expr {
+      yyerrok;
     }
   ;
 

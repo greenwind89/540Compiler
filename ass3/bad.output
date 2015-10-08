@@ -1,0 +1,12 @@
+"bad.cl", line 15: syntax error at or near OBJECTID = b
+"bad.cl", line 19: syntax error at or near OBJECTID = a
+"bad.cl", line 23: syntax error at or near OBJECTID = inherts
+"bad.cl", line 27: syntax error at or near '}'
+"bad.cl", line 32: syntax error at or near TYPEID = Int
+"bad.cl", line 38: syntax error at or near ':'
+"bad.cl", line 40: syntax error at or near ':'
+"bad.cl", line 41: syntax error at or near '-'
+"bad.cl", line 41: syntax error at or near TYPEID = Int
+"bad.cl", line 48: syntax error at or near OBJECTID = e
+"bad.cl", line 50: syntax error at or near ';'
+Compilation halted due to lex and parse errors
