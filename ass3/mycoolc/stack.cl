@@ -17,13 +17,16 @@ class StackMachine inherits IO {
         while not shouldExit loop
         {
           currentStr <- in_string();
-          -- (new IO).out_string("currentStr:");
-          -- (new IO).out_string(currentStr);
-          let command : StackCommand <- (new StackCommandFactory).getCommandObject(currentStr) in
+          let command : StackCommand <- (new StackCommandFactory).getCommandObject(currentStr) in {
             shouldExit <- command.initExecute(commandStack);
+            if (shouldExit = true) then
+              (new IO).out_string("Exiting ...");
+            else
+              (new IO).out_string("Executing next command")
+            fi;
+          };
         }
         pool;
-        -- (new IO).out_string("\n");
 
      }
     )
