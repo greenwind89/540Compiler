@@ -156,5 +156,15 @@ Instructions
 Write-up for PA4
 ----------------
 
-In the good.cl and bad.cl, we input 3 classes with inheritance structure. In each class, it will have expressions.
-If the expression coverage 100% correct in a .cl file, it regarded as correct structure. If not, out AST will annotate the incorrect expression.
+In this assignment, we check the validation of AST nodes created by the parser using our traversing 
+method. We look at all classes and build an inheritance graph. By the inheritance graph, we checked 
+the graph is well-formed or not. For each class, all visible declarations is gathered in a 
+symbol table. Its information is checked by Type rule checking. In this check, we focus on the 
+validation of assignments, initialize attributes, if-then-else, case. Each error in type checking is 
+described by an annotation on related AST node.
+
+In the good.cl and bad.cl, we input 3 classes with inheritance structure. In these file, all of type 
+rules and inheritance relation we mentioned above is included
+
+If the expression coverage 100% correct in a .cl file, it regarded as correct structure. If not, 
+our AST will annotate the incorrect expression.
