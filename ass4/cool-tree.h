@@ -147,19 +147,26 @@ public:
 
 // define constructor - class_
 class class__class : public Class__class {
-protected:
+public:
    Symbol name;
    Symbol parent;
    Features features;
    Symbol filename;
-public:
+  //Features f2;
    class__class(Symbol a1, Symbol a2, Features a3, Symbol a4) {
       name = a1;
       parent = a2;
       features = a3;
       filename = a4;
+      //f2=a2;
+    //  cout<<"Printed "<<filename<<" "<<name<<" "<<parent<<" "<<features<<endl;
+      // for(int i = features->first(); features->more(i); i = features->next(i))
+      // {
+      //   cout<<features->nth(i)<<endl;
+      // }
    }
    Class_ copy_Class_();
+   bool check_class(void* ct);
    void dump(ostream& stream, int n);
 
 #ifdef Class__SHARED_EXTRAS
@@ -184,7 +191,9 @@ public:
       formals = a2;
       return_type = a3;
       expr = a4;
+  //    cout<<"I surrended "<<formals<<" "<<name<<" "<<expr<<" "<<return_type<<endl;
    }
+
    Feature copy_Feature();
    void dump(ostream& stream, int n);
 
@@ -208,6 +217,7 @@ public:
       name = a1;
       type_decl = a2;
       init = a3;
+
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
