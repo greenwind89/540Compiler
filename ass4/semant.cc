@@ -243,6 +243,9 @@ void program_class::semant()
 
     /* ClassTable constructor may do some semantic analysis */
     ClassTable *classtable = new ClassTable(classes);
+    // for(int i = l->first(); l->more(i); i = l->next(i))
+    // { l->nth(i) 
+    // }
 
     /* some semantic analysis code may go here */
 

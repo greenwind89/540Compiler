@@ -1,6 +1,6 @@
--- cannot redefine IO
+-- cannot inhertis Bool
 
-class IO {
+class C inherits Bool {
 };
 
 Class Main {

@@ -1,6 +1,6 @@
--- cannot redefine IO
+-- cannot inhertis String
 
-class IO {
+class C inherits String {
 };
 
 Class Main {

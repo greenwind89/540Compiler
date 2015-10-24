@@ -1,17 +1,10 @@
-class C {
-	a : Int;
-	b : Bool;
-	init(x : Int, y : Bool) : C {
-           {
-		a <- x;
-		b <- y;
-		self;
-           }
-	};
+-- inherits from undefined class
+
+class C inherits Undefined {
 };
 
 Class Main {
-	main():C {
-	  (new C).init(1,true)
+	main(): Object {
+    1 + 1
 	};
 };

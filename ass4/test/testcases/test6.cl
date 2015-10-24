@@ -1,6 +1,6 @@
--- cannot redefine IO
+-- cannot redefine String
 
-class IO {
+class String {
 };
 
 Class Main {
