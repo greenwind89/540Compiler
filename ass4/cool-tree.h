@@ -161,6 +161,13 @@ public:
    }
    Class_ copy_Class_();
    void dump(ostream& stream, int n);
+   bool check_class(void* ct);
+   Symbol getName();
+   Symbol getParent();
+   Features getFeatures();
+   Symbol getFilename();
+
+
 
 #ifdef Class__SHARED_EXTRAS
    Class__SHARED_EXTRAS

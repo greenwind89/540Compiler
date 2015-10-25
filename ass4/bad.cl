@@ -1,4 +1,4 @@
-class C {
+class C inherits A{
 	a : Int;
 	b : Bool;
 	init(x : Int, y : Bool) : C {
@@ -9,6 +9,11 @@ class C {
            }
 	};
 };
+class B inherits C{
+};
+class A inherits B{
+};
+
 
 Class Main {
 	main():C {
