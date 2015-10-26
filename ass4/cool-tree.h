@@ -165,6 +165,7 @@ public:
    bool check_undefined(void* ct);
    bool check_inherit_special_class(void* ct);
    bool check_invalid_name(void* ct);
+   bool check_must_have_main_class(void* ct);
 
    Symbol getName();
    Symbol getParent();

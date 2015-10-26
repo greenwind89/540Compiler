@@ -250,7 +250,9 @@ ostream& ClassTable::semant_error()
     bool checkClassRedefined=false;
     bool checkClassUndefined=false;
     bool checkClassInheritSpecialCLass=false;
+  bool checkNotHaveMainClass=false;
     bool checkStaticSemantic=true;
+
     bool needToCheckInherit=true;
  int errorIndex=0;
 // cout<<"call semant here";
@@ -272,6 +274,14 @@ ostream& ClassTable::semant_error()
 //   Class_ c=classItem->copy_Class_();
 //  Program pClass=classes->nth(i)->copy_Program();
 //  list_node<Elem> lstNode= classes->nth(i)->copy()->copy_list();
+checkNotHaveMainClass=classItem->check_must_have_main_class((void*)classes);
+if(checkNotHaveMainClass){
+  cout<<"Class Main is not defined."<<endl;
+    checkStaticSemantic=false;
+    needToCheckInherit=false;
+    break;
+}
+
 checkClassRedefined=classItem->check_invalid_name((void*)classes);
 if(checkClassRedefined){
   cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Redefinition of basic class "<<classItem->getName()<<"."<<endl;
@@ -439,6 +449,33 @@ for(int i=0;i<rClassLength;i++){
         }
     return checkInvalid;
  }
+
+ bool class__class::check_must_have_main_class(void* ct){
+   Classes classes=(Classes)ct;
+   //  cout<<"handle method here"<<endl;
+   Symbol xFatherClass;
+   bool checkNotHaveMain;
+   xFatherClass=this->parent;
+   char* xCurrentName=(char*)this->name->get_string();
+   char* xChar=(char*)xFatherClass->get_string();
+   char* xClassName=NULL;
+   checkNotHaveMain=true;
+   class__class *classF=NULL;
+   classF=NULL;
+   for(int i = classes->first(); classes->more(i); i = classes->next(i))
+   {
+     tree_node *tree=classes->nth(i);
+     class__class *classItem=(class__class*)tree;
+     xClassName=classItem->name->get_string();
+
+     if(strcmp("Main",xClassName)==0){
+       checkNotHaveMain=false;
+       break;
+     }
+   }
+    return checkNotHaveMain;
+ }
+
 
  Symbol class__class::getName(){
    return this->name;
