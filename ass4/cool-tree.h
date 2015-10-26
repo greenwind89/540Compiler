@@ -35,6 +35,7 @@ class Class__class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Class_(); }
    virtual Class_ copy_Class_() = 0;
+   virtual void traverseScope(void* ct, void *tbl, int round) = 0;
 
 #ifdef Class__EXTRAS
    Class__EXTRAS
@@ -49,7 +50,7 @@ class Feature_class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Feature(); }
    virtual Feature copy_Feature() = 0;
-   virtual void traverseScope(void* ct, void *tbl) = 0;
+   virtual void traverseScope(void* ct, void *tbl, int round) = 0;
 
 #ifdef Feature_EXTRAS
    Feature_EXTRAS
@@ -176,7 +177,7 @@ public:
    Symbol getParent();
    Features getFeatures();
    Symbol getFilename();
-   void traverseScope(void* ct, void *tbl);
+   void traverseScope(void* ct, void *tbl, int round);
 
 
 
@@ -205,7 +206,7 @@ public:
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
-   void traverseScope(void *ct, void *tbl);
+   void traverseScope(void *ct, void *tbl, int round);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
@@ -230,7 +231,7 @@ public:
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
-   void traverseScope(void* ct, void *tbl);
+   void traverseScope(void* ct, void *tbl, int round);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS

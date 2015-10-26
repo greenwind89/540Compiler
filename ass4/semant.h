@@ -28,6 +28,8 @@ private:
 
   SymbolTable<Symbol, Entry> *parentsTbl;
   SymbolTable<Symbol, SymbolTable<Symbol, tree_node> > *classScopeTbl;
+  SymbolTable<Symbol, SymbolTable<Symbol, tree_node> > *classMethodTbl;
+
   void install_basic_classes();
 
 
@@ -43,6 +45,10 @@ public:
   bool isSubTypeOf(char* t1, char* t2);
 
   Class_ getCurrentClass();
+
+  void traverseClass(class__class *c);
+  void addMethodSignature(Symbol m, tree_node * n);
+  tree_node* lookupVariable(Symbol name, SymbolTable<Symbol, tree_node> *currentTbl);
 };
 
 

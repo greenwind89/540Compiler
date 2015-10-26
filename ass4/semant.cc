@@ -93,37 +93,88 @@ unsigned int hash(char *p);
 ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) {
   this->parentsTbl = new SymbolTable<Symbol,  Entry>(); // look for parent of a class
   this->classScopeTbl = new SymbolTable<Symbol, SymbolTable< Symbol, tree_node> >(); // look for scope of a class
+
+  this->classMethodTbl = new SymbolTable<Symbol, SymbolTable< Symbol, tree_node> >();
+
+
   this->parentsTbl->enterscope();
   this->classScopeTbl->enterscope();
+  this->classMethodTbl->enterscope();
 
 
   this->install_basic_classes();
 
+  // first traverse to build up classes atributes and methods
   for(int i = classes->first(); classes->more(i); i = classes->next(i))
   {
     this->addClass((class__class *) classes->nth(i));
   }
 
-  this->parentsTbl->dump();
-  this->classScopeTbl->dump();
+  // second traverse to go through method expression of each class
+  for(int i = classes->first(); classes->more(i); i = classes->next(i))
+  {
+    this->traverseClass((class__class *) classes->nth(i));
+  }
 
+  //this->parentsTbl->dump();
+  //this->classScopeTbl->dump();
+  //this->classMethodTbl->dump();
+}
+
+void ClassTable::traverseClass(class__class *c) {
+  SymbolTable<Symbol, tree_node> *tbl = this->classScopeTbl->lookup((Entry *) c->getName());
+  this->currentClass = c;
+  c->traverseScope(this, tbl, 2);
 }
 
 void ClassTable::addClass(class__class *c) {
   SymbolTable<Symbol, tree_node> *tbl = new SymbolTable<Symbol, tree_node>();
+  SymbolTable<Symbol, tree_node> *methodTbl = new SymbolTable<Symbol, tree_node>();
 
   this->parentsTbl->addid( (Entry *) c->getName(), c->getParent());
   this->classScopeTbl->addid((Entry *) c->getName(), tbl);
 
+  this->classMethodTbl->addid((Entry *) c->getName(), methodTbl);
+  methodTbl->enterscope();
+
   this->currentClass = c;
-  c->traverseScope(this, tbl);
+  c->traverseScope(this, tbl, 1);
+
   // tbl->dump();
+}
+
+void ClassTable::addMethodSignature(Symbol m, tree_node * n) {
+
+  SymbolTable<Symbol, tree_node> * table = this->classMethodTbl->lookup(((class__class*) this->currentClass)->getName());
+
+  if(table != NULL)
+  table->addid((Entry *) m, n);
 }
 
 Class_ ClassTable::getCurrentClass() {
   return this->currentClass;
 }
 
+tree_node* ClassTable::lookupVariable(Symbol name, SymbolTable<Symbol, tree_node>* currentTbl) {
+  if(currentTbl->lookup(name) != NULL) {
+    return currentTbl->lookup(name);
+  }
+
+  Symbol parent = this->parentsTbl->lookup(((class__class*) this->currentClass)->getName());
+
+  SymbolTable<Symbol, tree_node> *parentTbl;
+
+  while(parent != NULL && No_class != parent) {
+    cout<<"child:"<<((class__class*) this->currentClass)->getName()<<", parent name: "<<*parent<<"\n";
+    parentTbl = this->classScopeTbl->lookup(parent);
+    if(parentTbl->lookup(name) != NULL) {
+      return parentTbl->lookup(name);
+    }
+    parent = this->parentsTbl->lookup(parent);
+  }
+
+  return NULL;
+}
 
 // this function check if t1 is subtype of t2 based on parents table
 bool ClassTable::isSubTypeOf(char* t1, char* t2) {
@@ -250,27 +301,37 @@ void ClassTable::install_basic_classes() {
 }
 
 // tree traversal to build symbol table
-void class__class::traverseScope(void *ct, void *tbl) {
+void class__class::traverseScope(void *ct, void *tbl, int round) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
   table->enterscope();
   for(int i = features->first(); features->more(i); i = features->next(i))
-     features->nth(i)->traverseScope(ct, table);
-  table->exitscope();
+     features->nth(i)->traverseScope(ct, table, round);
+  if(round == 2)
+    table->exitscope();
 }
 
-void method_class::traverseScope(void *ct, void *tbl) {
+void method_class::traverseScope(void *ct, void *tbl, int round) {
+  ClassTable *classTable = (ClassTable *) ct;
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-  table->enterscope();
-  for(int i = formals->first(); formals->more(i); i = formals->next(i))
-    formals->nth(i)->traverseScope(ct, table);
 
-  expr->traverseScope(ct, table);
+  if(round == 1)
+    classTable->addMethodSignature(name, this);
 
-  table->dump();
-  table->exitscope();
+  if(round == 2) {
+    table->enterscope();
+    for(int i = formals->first(); formals->more(i); i = formals->next(i))
+      formals->nth(i)->traverseScope(ct, table);
+
+    // classTable->addExpression(expr);
+    expr->traverseScope(ct, table);
+
+    table->dump();
+    table->exitscope();
+  }
+
 }
 
-void attr_class::traverseScope(void *ct, void *tbl) {
+void attr_class::traverseScope(void *ct, void *tbl, int round) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
   table->addid(name, this);
 }
@@ -283,7 +344,7 @@ void formal_class::traverseScope(void *ct, void *tbl) {
 void assign_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
 
-  cout << "assign class";
+  // cout << "assign class";
   expr->traverseScope(ct, table);
 }
 
@@ -338,16 +399,22 @@ void plus_class::traverseScope(void *ct, void *tbl) {
 
 void sub_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  e1->traverseScope(ct, table);
+  e2->traverseScope(ct, table);
 
 }
 
 void mul_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  e1->traverseScope(ct, table);
+  e2->traverseScope(ct, table);
 
 }
 
 void divide_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  e1->traverseScope(ct, table);
+  e2->traverseScope(ct, table);
 
 }
 
@@ -410,9 +477,9 @@ void object_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
   ClassTable *classTable = (ClassTable *) ct;
 
-  if(table->lookup(name) == NULL) {
+  if(classTable->lookupVariable(name, table) == NULL) {
     // cerr << ":" << this->get_line_number() << ": ";
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << " Undeclared identifier " << name << ".";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << " Undeclared identifier " << name << ".\n";
   }
 
 }
