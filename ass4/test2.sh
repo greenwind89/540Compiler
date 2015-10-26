@@ -1,3 +1,3 @@
 make semant
-./mysemant bad.cl
-./isemant bad.cl
+./mysemant test/testcases/test2.cl
+./isemant test/testcases/test2.cl

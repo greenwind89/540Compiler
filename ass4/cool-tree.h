@@ -161,7 +161,10 @@ public:
    }
    Class_ copy_Class_();
    void dump(ostream& stream, int n);
-   bool check_class(void* ct);
+   bool check_cycle_inherit(void* ct);
+   bool check_undefined(void* ct);
+   bool check_invalid_name(void* ct);
+
    Symbol getName();
    Symbol getParent();
    Features getFeatures();

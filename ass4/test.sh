@@ -1,7 +1,8 @@
-for i in {1..1}
+make semant 
+for i in {1..5}
 do
   echo 'Executing test' $i
-  gmake semant && ./mysemant ./test/testcases/test$i.cl  > ./test/ourlastresults/result$i.txt;
+  ./mysemant ./test/testcases/test$i.cl  > ./test/ourlastresults/result$i.txt;
 
   ./isemant ./test/testcases/test$i.cl  > ./test/results/result$i.txt;
 

@@ -79,6 +79,7 @@ static void initialize_constants(void)
     substr      = idtable.add_string("substr");
     type_name   = idtable.add_string("type_name");
     val         = idtable.add_string("_val");
+
 }
 
 
@@ -245,41 +246,52 @@ ostream& ClassTable::semant_error()
 
    //  dump_line(stream,n,this);
 
- bool checkDependentGraph=false;
+   bool checkDependentGraph=false;
+    bool checkClassRedefined=false;
+    bool checkClassUndefined=false;
+    bool checkStaticSemantic=true;
  int errorIndex=0;
- cout<<"call semant here";
- cout<<endl;
+// cout<<"call semant here";
+// cout<<endl;
  int length=classes->len();
  for(int i = classes->first(); classes->more(i); i = classes->next(i))
  {
-   //classes->nth(i);
-   tree_node *tree=classes->nth(length-i-1);
-   class__class *classItem=(class__class*)tree;
- //   Class_ c=classItem->copy_Class_();
- //  Program pClass=classes->nth(i)->copy_Program();
- //  list_node<Elem> lstNode= classes->nth(i)->copy()->copy_list();
- checkDependentGraph=classItem->check_class((void*)classes);
- if(!checkDependentGraph){
-   errorIndex=length-i-1;
-   tree_node *tree=classes->nth(errorIndex);
-   class__class *classItem=(class__class*)tree;
-   cout<<classItem->getFilename()<<": "<<tree->get_line_number()<<": Class "<<classItem->getName()<<", or an ancestor of "<<classItem->getName()<<", is involved in an inheritance cycle."<<endl;
-   //break;
- }
- // for(int i = features->first(); features->more(i); i = features->next(i))
- // {
- //   cout<<"ssss"<<endl;
- // }
- //  cout<<"traversing class "<<i<<" "<<c<<endl;
-   //cout<<"node "<<tree->copy_list()<<endl;
- //  cout<<"node "<<lstNode<<endl;
- }
- if(!checkDependentGraph){
-//   cout<<"Inheritance graph error in class "<<classItem->getName()<<endl;
- }
+  int travelIndex=length-i-1;
+  //classes->nth(i);
+  tree_node *tree=classes->nth(length-i-1);
+  class__class *classItem=(class__class*)tree;
+//   Class_ c=classItem->copy_Class_();
+//  Program pClass=classes->nth(i)->copy_Program();
+//  list_node<Elem> lstNode= classes->nth(i)->copy()->copy_list();
+checkClassRedefined=classItem->check_invalid_name((void*)classes);
+if(checkClassRedefined){
+  cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Redefinition of basic class "<<classItem->getName()<<"."<<endl;
+    checkStaticSemantic=false;
+}
+checkClassUndefined=classItem->check_undefined((void*)classes);
+if(checkClassUndefined){
+  cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
+  checkStaticSemantic=false;
+}
+if(!checkClassUndefined&&!checkClassRedefined){
+  checkDependentGraph=classItem->check_cycle_inherit((void*)classes);
+  if(checkDependentGraph){
+    errorIndex=length-i-1;
+    tree_node *tree=classes->nth(errorIndex);
+    class__class *classItem=(class__class*)tree;
+    cout<<classItem->getFilename()<<": "<<tree->get_line_number()<<": Class "<<classItem->getName()<<", or an ancestor of "<<classItem->getName()<<", is involved in an inheritance cycle."<<endl;
+    //break;
+    checkStaticSemantic=false;
+  }
+
+}
+
+}
+
+ //cout<<"end of our semant"<<endl;
  /* some semantic analysis code may go here */
- if (classtable->errors()) {
- cerr << "Compilation halted due to static semantic errors." << endl;
+ if (classtable->errors()||!checkStaticSemantic) {
+ cout << "Compilation halted due to static semantic errors." << endl;
  exit(1);
  }
 
@@ -289,7 +301,7 @@ ostream& ClassTable::semant_error()
  //   cout<<"feature call"<<endl;
  // }
 
- bool class__class::check_class(void* ct)
+ bool class__class::check_cycle_inherit(void* ct)
  {
  Classes classes=(Classes)ct;
  //  cout<<"handle method here"<<endl;
@@ -299,7 +311,7 @@ ostream& ClassTable::semant_error()
  char* xCurrentName=(char*)this->name->get_string();
  char* xChar=(char*)xFatherClass->get_string();
  char* xClassName=NULL;
- checkInheritance=true;
+ checkInheritance=false;
  class__class *classF=NULL;
  while(strcmp(xChar,"Object")!=0){
  classF=NULL;
@@ -316,41 +328,88 @@ ostream& ClassTable::semant_error()
  if(classF!=NULL){
    xFatherClass=classF->parent;
    xChar=(char*)xFatherClass->get_string();
+ } else{
+   checkInheritance=false;
+   break;
  }
  if(strcmp(xCurrentName,xChar)==0){
-   checkInheritance=false;
+   checkInheritance=true;
    break;
  }
 
  };
- //cout<<xChar<<endl;
- //  if(strcmp(xChar,"Object")==0){
- //    cout<<"father"<<endl;
- //  }
-
- // let
- // xFatherClass:class__class<-this->parent;
- // checkInheritance:bool<-true;
- // in
- // {
- //
- //
- // while(xFatherClass!=Object) loop{
- //   xFatherClass=xFatherClass->parent;
- //   if(xFatherClass=this){
- //     checkInheritance=false;
- //     break;
- //   }
- // } pool;
- // }
  return checkInheritance;
- // for(int i = features->first(); features->more(i); i = features->next(i))
- // {
- //   cout<<"ssss"<<endl;
- // }
 
  }
+ bool class__class::check_undefined(void* ct)
+ {
+ Classes classes=(Classes)ct;
+ //  cout<<"handle method here"<<endl;
+ Symbol xFatherClass;
+ bool checkUndefined;
+ xFatherClass=this->parent;
+ char* xCurrentName=(char*)this->name->get_string();
+ char* xChar=(char*)xFatherClass->get_string();
+ char* xClassName=NULL;
+ checkUndefined=false;
+ class__class *classF=NULL;
+ if(strcmp(xChar,"Object")!=0){
+  checkUndefined=true;
+   classF=NULL;
+   for(int i = classes->first(); classes->more(i); i = classes->next(i))
+   {
+     tree_node *tree=classes->nth(i);
+     class__class *classItem=(class__class*)tree;
+     xClassName=classItem->name->get_string();
+     if(strcmp(xChar,xClassName)==0){
+       classF=classItem;
+       checkUndefined=false;
+       break;
+     }
+   }
+ };
+ return checkUndefined;
+ }
 
+ bool class__class::check_invalid_name(void* ct)
+ {
+  // list<const char*> listNotRedefClasses = {};
+  //  assign("Bool", listNotRedefClasses);
+  //  assign("Int", listNotRedefClasses);
+  //  assign("IO", listNotRedefClasses);
+  //  assign("String", listNotRedefClasses);
+ char* arrRClass[]={"Bool","Int","IO","String","Object"};
+ int  rClassLength=5;
+ Classes classes=(Classes)ct;
+ //  cout<<"handle method here"<<endl;
+ Symbol xFatherClass;
+ bool checkInvalid;
+ xFatherClass=this->parent;
+ char* xCurrentName=(char*)this->name->get_string();
+ char* xChar=(char*)xFatherClass->get_string();
+ char* xClassName=NULL;
+ checkInvalid=false;
+ class__class *classF=NULL;
+ if(strcmp(xCurrentName,"Main")!=0){
+//  checkInvalid=false;
+   classF=NULL;
+for(int i=0;i<rClassLength;i++){
+        if(strcmp(xCurrentName,arrRClass[i])==0){
+          checkInvalid=true;
+          break;
+        }
+}
+  //  list<const char*>::const_iterator iterator;
+  //   for (iterator = listNotRedefClasses.begin(); iterator != listNotRedefClasses.end(); ++iterator) {
+  //       std::cout << *iterator;
+  //       if(strcmp(xCurrentName,*iterator)==0){
+  //         checkInvalid=true;
+  //         break;
+  //       }
+  //   }
+ };
+ return checkInvalid;
+ }
  Symbol class__class::getName(){
    return this->name;
  };
