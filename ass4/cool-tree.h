@@ -163,6 +163,7 @@ public:
    void dump(ostream& stream, int n);
    bool check_cycle_inherit(void* ct);
    bool check_undefined(void* ct);
+   bool check_inherit_special_class(void* ct);
    bool check_invalid_name(void* ct);
 
    Symbol getName();

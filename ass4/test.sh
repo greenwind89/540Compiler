@@ -1,5 +1,5 @@
 make semant 
-for i in {1..5}
+for i in {1..10}
 do
   echo 'Executing test' $i
   ./mysemant ./test/testcases/test$i.cl  > ./test/ourlastresults/result$i.txt;

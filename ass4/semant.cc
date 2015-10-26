@@ -249,13 +249,22 @@ ostream& ClassTable::semant_error()
    bool checkDependentGraph=false;
     bool checkClassRedefined=false;
     bool checkClassUndefined=false;
+    bool checkClassInheritSpecialCLass=false;
     bool checkStaticSemantic=true;
+    bool needToCheckInherit=true;
  int errorIndex=0;
 // cout<<"call semant here";
 // cout<<endl;
  int length=classes->len();
+
  for(int i = classes->first(); classes->more(i); i = classes->next(i))
  {
+
+    // checkDependentGraph=false;
+    // checkClassRedefined=false;
+    // checkClassUndefined=false;
+    // checkClassInheritSpecialCLass=false;
+
   int travelIndex=length-i-1;
   //classes->nth(i);
   tree_node *tree=classes->nth(length-i-1);
@@ -268,12 +277,23 @@ if(checkClassRedefined){
   cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Redefinition of basic class "<<classItem->getName()<<"."<<endl;
     checkStaticSemantic=false;
 }
-checkClassUndefined=classItem->check_undefined((void*)classes);
-if(checkClassUndefined){
-  cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
+
+checkClassInheritSpecialCLass=classItem->check_inherit_special_class((void*)classes);
+if(checkClassInheritSpecialCLass){
+  cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" cannot inherit class "<<classItem->getParent()<<"."<<endl;
   checkStaticSemantic=false;
+  needToCheckInherit=false;
+}else{
+  checkClassUndefined=classItem->check_undefined((void*)classes);
+  if(checkClassUndefined){
+    cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
+    checkStaticSemantic=false;
+    needToCheckInherit=false;
+  }
 }
-if(!checkClassUndefined&&!checkClassRedefined){
+
+if(needToCheckInherit){
+//if(!checkClassInheritSpecialCLass){
   checkDependentGraph=classItem->check_cycle_inherit((void*)classes);
   if(checkDependentGraph){
     errorIndex=length-i-1;
@@ -373,11 +393,6 @@ if(!checkClassUndefined&&!checkClassRedefined){
 
  bool class__class::check_invalid_name(void* ct)
  {
-  // list<const char*> listNotRedefClasses = {};
-  //  assign("Bool", listNotRedefClasses);
-  //  assign("Int", listNotRedefClasses);
-  //  assign("IO", listNotRedefClasses);
-  //  assign("String", listNotRedefClasses);
  char* arrRClass[]={"Bool","Int","IO","String","Object"};
  int  rClassLength=5;
  Classes classes=(Classes)ct;
@@ -399,17 +414,32 @@ for(int i=0;i<rClassLength;i++){
           break;
         }
 }
-  //  list<const char*>::const_iterator iterator;
-  //   for (iterator = listNotRedefClasses.begin(); iterator != listNotRedefClasses.end(); ++iterator) {
-  //       std::cout << *iterator;
-  //       if(strcmp(xCurrentName,*iterator)==0){
-  //         checkInvalid=true;
-  //         break;
-  //       }
-  //   }
  };
  return checkInvalid;
  }
+ bool class__class::check_inherit_special_class(void* ct){
+   char* arrRClass[]={"Bool","Int","IO","String"};
+   int  rClassLength=5;
+   Classes classes=(Classes)ct;
+   //  cout<<"handle method here"<<endl;
+   Symbol xFatherClass;
+   bool checkInvalid;
+   xFatherClass=this->parent;
+   char* xCurrentName=(char*)this->name->get_string();
+   char* xChar=(char*)xFatherClass->get_string();
+   char* xClassName=NULL;
+   checkInvalid=false;
+   class__class *classF=NULL;
+       classF=NULL;
+  for(int i=0;i<rClassLength;i++){
+          if(strcmp(xChar,arrRClass[i])==0){
+            checkInvalid=true;
+            break;
+          }
+        }
+    return checkInvalid;
+ }
+
  Symbol class__class::getName(){
    return this->name;
  };
