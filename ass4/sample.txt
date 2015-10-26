@@ -1,0 +1,162 @@
+call semant here
+#4
+_program
+  #4
+  _class
+    C
+    Object
+    "./test/testcases/test14.cl"
+    (
+    #5
+    _attr
+      a
+      Int
+      #0
+      _no_expr
+      : _no_type
+    #6
+    _attr
+      d
+      D
+      #0
+      _no_expr
+      : _no_type
+    #8
+    _method
+      test
+      #8
+      _formal
+        b
+        Int
+      Int
+      #9
+      _let
+        c
+        Int
+        #0
+        _no_expr
+        : _no_type
+        #9
+        _assign
+          c
+          #9
+          _plus
+            #9
+            _object
+              a
+            : _no_type
+            #9
+            _object
+              b
+            : _no_type
+          : _no_type
+        : _no_type
+      : _no_type
+    #12
+    _method
+      test2
+      #12
+      _formal
+        e
+        D
+      D
+      #14
+      _typcase
+        #14
+        _object
+          e
+        : _no_type
+        #15
+        _branch
+          x
+          E
+          #15
+          _object
+            e
+          : _no_type
+        #16
+        _branch
+          y
+          F
+          #16
+          _object
+            y
+          : _no_type
+      : _no_type
+    #20
+    _method
+      test3
+      #20
+      _formal
+        e
+        E
+      Object
+      #21
+      _dispatch
+        #21
+        _object
+          e
+        : _no_type
+        shout
+        (
+        )
+      : _no_type
+    )
+  #25
+  _class
+    D
+    Object
+    "./test/testcases/test14.cl"
+    (
+    )
+  #29
+  _class
+    E
+    D
+    "./test/testcases/test14.cl"
+    (
+    #30
+    _method
+      shout
+      Object
+      #31
+      _plus
+        #31
+        _int
+          2
+        : _no_type
+        #31
+        _int
+          2
+        : _no_type
+      : _no_type
+    )
+  #35
+  _class
+    F
+    E
+    "./test/testcases/test14.cl"
+    (
+    )
+  #39
+  _class
+    Main
+    Object
+    "./test/testcases/test14.cl"
+    (
+    #40
+    _method
+      main
+      Object
+      #41
+      _plus
+        #41
+        _int
+          1
+        : _no_type
+        #41
+        _int
+          1
+        : _no_type
+      : _no_type
+    )

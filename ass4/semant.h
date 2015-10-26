@@ -2,7 +2,7 @@
 #define SEMANT_H_
 
 #include <assert.h>
-#include <iostream>  
+#include <iostream>
 #include "cool-tree.h"
 #include "stringtab.h"
 #include "symtab.h"
@@ -22,8 +22,14 @@ typedef ClassTable *ClassTableP;
 class ClassTable {
 private:
   int semant_errors;
-  void install_basic_classes();
+  Class_ currentClass;
+
   ostream& error_stream;
+
+  SymbolTable<Symbol, Entry> *parentsTbl;
+  SymbolTable<Symbol, SymbolTable<Symbol, tree_node> > *classScopeTbl;
+  void install_basic_classes();
+
 
 public:
   ClassTable(Classes);
@@ -31,8 +37,13 @@ public:
   ostream& semant_error();
   ostream& semant_error(Class_ c);
   ostream& semant_error(Symbol filename, tree_node *t);
+
+  void addClass(class__class *c);
+
+  bool isSubTypeOf(char* t1, char* t2);
+
+  Class_ getCurrentClass();
 };
 
 
 #endif
-

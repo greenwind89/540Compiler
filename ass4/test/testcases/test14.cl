@@ -6,7 +6,7 @@ class C {
   d: D;
 
   test(b: Int): Int {
-    let c: Int in c <- a + b
+    let c: Int, aString:String <- "a12" in c <- a + b + f
   };
 
   test2(e: D): D {
@@ -26,13 +26,13 @@ class D {
 
 };
 
-class E inhertis D {
+class E inherits D {
   shout(): Object {
     2 + 2 
   };
 };
 
-class F inhertis E {
+class F inherits E {
 
 };
 

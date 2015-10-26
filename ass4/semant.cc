@@ -7,8 +7,12 @@
 #include "utilities.h"
 
 
+#define NHASH  32452867
+#define MULT 31
+
 extern int semant_debug;
 extern char *curr_filename;
+
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -83,10 +87,59 @@ static void initialize_constants(void)
 }
 
 
+// convenience functions declaration
+unsigned int hash(char *p);
 
 ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) {
+  this->parentsTbl = new SymbolTable<Symbol,  Entry>(); // look for parent of a class
+  this->classScopeTbl = new SymbolTable<Symbol, SymbolTable< Symbol, tree_node> >(); // look for scope of a class
+  this->parentsTbl->enterscope();
+  this->classScopeTbl->enterscope();
 
-    /* Fill this in */
+
+  this->install_basic_classes();
+
+  for(int i = classes->first(); classes->more(i); i = classes->next(i))
+  {
+    this->addClass((class__class *) classes->nth(i));
+  }
+
+  this->parentsTbl->dump();
+  this->classScopeTbl->dump();
+
+}
+
+void ClassTable::addClass(class__class *c) {
+  SymbolTable<Symbol, tree_node> *tbl = new SymbolTable<Symbol, tree_node>();
+
+  this->parentsTbl->addid( (Entry *) c->getName(), c->getParent());
+  this->classScopeTbl->addid((Entry *) c->getName(), tbl);
+
+  this->currentClass = c;
+  c->traverseScope(this, tbl);
+  // tbl->dump();
+}
+
+Class_ ClassTable::getCurrentClass() {
+  return this->currentClass;
+}
+
+
+// this function check if t1 is subtype of t2 based on parents table
+bool ClassTable::isSubTypeOf(char* t1, char* t2) {
+  if(strcmp(t1, t2)) { // t1 is parent of itself
+    return true;
+  }
+
+  // char *parentOfT1 = this->parentsTbl->probe(hash(t1));
+  //
+  // while(parentOfT1 != NULL) {
+  //   if(strcmp(parentOfT1, t2)) {
+  //     return true;
+  //   }
+  // }
+
+  return false;
 
 }
 
@@ -189,8 +242,180 @@ void ClassTable::install_basic_classes() {
 						      Str,
 						      no_expr()))),
 	       filename);
+         this->addClass((class__class *) Object_class);
+         this->addClass((class__class *) IO_class);
+         this->addClass((class__class *) Int_class);
+         this->addClass((class__class *) Bool_class);
+         this->addClass((class__class *) Str_class);
 }
 
+// tree traversal to build symbol table
+void class__class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  table->enterscope();
+  for(int i = features->first(); features->more(i); i = features->next(i))
+     features->nth(i)->traverseScope(ct, table);
+  table->exitscope();
+}
+
+void method_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  table->enterscope();
+  for(int i = formals->first(); formals->more(i); i = formals->next(i))
+    formals->nth(i)->traverseScope(ct, table);
+
+  expr->traverseScope(ct, table);
+
+  table->dump();
+  table->exitscope();
+}
+
+void attr_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  table->addid(name, this);
+}
+
+void formal_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  table->addid(name, this);
+}
+
+void assign_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+  cout << "assign class";
+  expr->traverseScope(ct, table);
+}
+
+void static_dispatch_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void dispatch_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void cond_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+
+void loop_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void typcase_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void block_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void let_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+  table->enterscope();
+
+  table->addid(identifier, this);
+  init->traverseScope(ct, table);
+  body->traverseScope(ct, table);
+
+  table->exitscope();
+}
+
+void plus_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  e1->traverseScope(ct, table);
+  e2->traverseScope(ct, table);
+}
+
+void sub_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void mul_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void divide_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void neg_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void lt_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void eq_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void leq_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void comp_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void int_const_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void bool_const_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void string_const_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void new__class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void isvoid_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void no_expr_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+
+}
+
+void object_class::traverseScope(void *ct, void *tbl) {
+  SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+
+  if(table->lookup(name) == NULL) {
+    // cerr << ":" << this->get_line_number() << ": ";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << " Undeclared identifier " << name << ".";
+  }
+
+}
 ////////////////////////////////////////////////////////////////////
 //
 // semant_error is an overloaded function for reporting errors
@@ -238,194 +463,102 @@ ostream& ClassTable::semant_error()
      errors. Part 2) can be done in a second stage, when you want
      to build mycoolc.
  */
- void program_class::semant()
- {
-     initialize_constants();
-     /* ClassTable constructor may do some semantic analysis */
-     ClassTable *classtable = new ClassTable(classes);
-
-   //  dump_line(stream,n,this);
-
-   bool checkDependentGraph=false;
-    bool checkClassRedefined=false;
-    bool checkClassUndefined=false;
-    bool checkClassInheritSpecialCLass=false;
-  bool checkNotHaveMainClass=false;
-    bool checkStaticSemantic=true;
-
-    bool needToCheckInherit=true;
- int errorIndex=0;
-// cout<<"call semant here";
-// cout<<endl;
- int length=classes->len();
-
- for(int i = classes->first(); classes->more(i); i = classes->next(i))
- {
-
-    // checkDependentGraph=false;
-    // checkClassRedefined=false;
-    // checkClassUndefined=false;
-    // checkClassInheritSpecialCLass=false;
-
-  int travelIndex=length-i-1;
-  //classes->nth(i);
-  tree_node *tree=classes->nth(length-i-1);
-  class__class *classItem=(class__class*)tree;
-//   Class_ c=classItem->copy_Class_();
-//  Program pClass=classes->nth(i)->copy_Program();
-//  list_node<Elem> lstNode= classes->nth(i)->copy()->copy_list();
-checkNotHaveMainClass=classItem->check_must_have_main_class((void*)classes);
-if(checkNotHaveMainClass){
-  cout<<"Class Main is not defined."<<endl;
-    checkStaticSemantic=false;
-    needToCheckInherit=false;
-    break;
-}
-
-checkClassRedefined=classItem->check_invalid_name((void*)classes);
-if(checkClassRedefined){
-  cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Redefinition of basic class "<<classItem->getName()<<"."<<endl;
-    checkStaticSemantic=false;
-}
-
-checkClassInheritSpecialCLass=classItem->check_inherit_special_class((void*)classes);
-if(checkClassInheritSpecialCLass){
-  cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" cannot inherit class "<<classItem->getParent()<<"."<<endl;
-  checkStaticSemantic=false;
-  needToCheckInherit=false;
-}else{
-  checkClassUndefined=classItem->check_undefined((void*)classes);
-  if(checkClassUndefined){
-    cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
-    checkStaticSemantic=false;
-    needToCheckInherit=false;
-  }
-}
-
-if(needToCheckInherit){
-//if(!checkClassInheritSpecialCLass){
-  checkDependentGraph=classItem->check_cycle_inherit((void*)classes);
-  if(checkDependentGraph){
-    errorIndex=length-i-1;
-    tree_node *tree=classes->nth(errorIndex);
-    class__class *classItem=(class__class*)tree;
-    cout<<classItem->getFilename()<<": "<<tree->get_line_number()<<": Class "<<classItem->getName()<<", or an ancestor of "<<classItem->getName()<<", is involved in an inheritance cycle."<<endl;
-    //break;
-    checkStaticSemantic=false;
-  }
-
-}
-
-}
-
- //cout<<"end of our semant"<<endl;
- /* some semantic analysis code may go here */
- if (classtable->errors()||!checkStaticSemantic) {
- cout << "Compilation halted due to static semantic errors." << endl;
- exit(1);
- }
-
- }
- // void Feature_class::semant()
- // {
- //   cout<<"feature call"<<endl;
- // }
 
  bool class__class::check_cycle_inherit(void* ct)
  {
- Classes classes=(Classes)ct;
- //  cout<<"handle method here"<<endl;
- Symbol xFatherClass;
- bool checkInheritance;
- xFatherClass=this->parent;
- char* xCurrentName=(char*)this->name->get_string();
- char* xChar=(char*)xFatherClass->get_string();
- char* xClassName=NULL;
- checkInheritance=false;
- class__class *classF=NULL;
- while(strcmp(xChar,"Object")!=0){
- classF=NULL;
- for(int i = classes->first(); classes->more(i); i = classes->next(i))
- {
-   tree_node *tree=classes->nth(i)->copy();
-   class__class *classItem=(class__class*)tree;
-   xClassName=classItem->name->get_string();
-   if(strcmp(xChar,xClassName)==0){
-     classF=classItem;
-     break;
-   }
- }
- if(classF!=NULL){
-   xFatherClass=classF->parent;
-   xChar=(char*)xFatherClass->get_string();
- } else{
+   Classes classes=(Classes)ct;
+   //  cout<<"handle method here"<<endl;
+   Symbol xFatherClass;
+   bool checkInheritance;
+   xFatherClass=this->parent;
+   char* xCurrentName=(char*)this->name->get_string();
+   char* xChar=(char*)xFatherClass->get_string();
+   char* xClassName=NULL;
    checkInheritance=false;
-   break;
- }
- if(strcmp(xCurrentName,xChar)==0){
-   checkInheritance=true;
-   break;
- }
+   class__class *classF=NULL;
+   while(strcmp(xChar,"Object")!=0){
+     classF=NULL;
+     for(int i = classes->first(); classes->more(i); i = classes->next(i))
+     {
+       tree_node *tree=classes->nth(i)->copy();
+       class__class *classItem=(class__class*)tree;
+       xClassName=classItem->name->get_string();
+       if(strcmp(xChar,xClassName)==0){
+         classF=classItem;
+         break;
+       }
+     }
+     if(classF!=NULL){
+       xFatherClass=classF->parent;
+       xChar=(char*)xFatherClass->get_string();
+     } else{
+       checkInheritance=false;
+       break;
+     }
+     if(strcmp(xCurrentName,xChar)==0){
+       checkInheritance=true;
+       break;
+     }
 
- };
- return checkInheritance;
+   };
+   return checkInheritance;
 
  }
  bool class__class::check_undefined(void* ct)
  {
- Classes classes=(Classes)ct;
- //  cout<<"handle method here"<<endl;
- Symbol xFatherClass;
- bool checkUndefined;
- xFatherClass=this->parent;
- char* xCurrentName=(char*)this->name->get_string();
- char* xChar=(char*)xFatherClass->get_string();
- char* xClassName=NULL;
- checkUndefined=false;
- class__class *classF=NULL;
- if(strcmp(xChar,"Object")!=0){
-  checkUndefined=true;
-   classF=NULL;
-   for(int i = classes->first(); classes->more(i); i = classes->next(i))
-   {
-     tree_node *tree=classes->nth(i);
-     class__class *classItem=(class__class*)tree;
-     xClassName=classItem->name->get_string();
-     if(strcmp(xChar,xClassName)==0){
-       classF=classItem;
-       checkUndefined=false;
-       break;
+   Classes classes=(Classes)ct;
+   //  cout<<"handle method here"<<endl;
+   Symbol xFatherClass;
+   bool checkUndefined;
+   xFatherClass=this->parent;
+   char* xCurrentName=(char*)this->name->get_string();
+   char* xChar=(char*)xFatherClass->get_string();
+   char* xClassName=NULL;
+   checkUndefined=false;
+   class__class *classF=NULL;
+   if(strcmp(xChar,"Object")!=0){
+     checkUndefined=true;
+     classF=NULL;
+     for(int i = classes->first(); classes->more(i); i = classes->next(i))
+     {
+       tree_node *tree=classes->nth(i);
+       class__class *classItem=(class__class*)tree;
+       xClassName=classItem->name->get_string();
+       if(strcmp(xChar,xClassName)==0){
+         classF=classItem;
+         checkUndefined=false;
+         break;
+       }
      }
-   }
- };
- return checkUndefined;
+   };
+   return checkUndefined;
  }
 
  bool class__class::check_invalid_name(void* ct)
  {
- char* arrRClass[]={"Bool","Int","IO","String","Object"};
- int  rClassLength=5;
- Classes classes=(Classes)ct;
- //  cout<<"handle method here"<<endl;
- Symbol xFatherClass;
- bool checkInvalid;
- xFatherClass=this->parent;
- char* xCurrentName=(char*)this->name->get_string();
- char* xChar=(char*)xFatherClass->get_string();
- char* xClassName=NULL;
- checkInvalid=false;
- class__class *classF=NULL;
- if(strcmp(xCurrentName,"Main")!=0){
-//  checkInvalid=false;
-   classF=NULL;
-for(int i=0;i<rClassLength;i++){
-        if(strcmp(xCurrentName,arrRClass[i])==0){
-          checkInvalid=true;
-          break;
-        }
-}
- };
- return checkInvalid;
+   char* arrRClass[]={"Bool","Int","IO","String","Object"};
+   int  rClassLength=5;
+   Classes classes=(Classes)ct;
+   //  cout<<"handle method here"<<endl;
+   Symbol xFatherClass;
+   bool checkInvalid;
+   xFatherClass=this->parent;
+   char* xCurrentName=(char*)this->name->get_string();
+   char* xChar=(char*)xFatherClass->get_string();
+   char* xClassName=NULL;
+   checkInvalid=false;
+   class__class *classF=NULL;
+   if(strcmp(xCurrentName,"Main")!=0){
+     //  checkInvalid=false;
+     classF=NULL;
+     for(int i=0;i<rClassLength;i++){
+       if(strcmp(xCurrentName,arrRClass[i])==0){
+         checkInvalid=true;
+         break;
+       }
+     }
+   };
+   return checkInvalid;
  }
  bool class__class::check_inherit_special_class(void* ct){
    char* arrRClass[]={"Bool","Int","IO","String"};
@@ -440,14 +573,14 @@ for(int i=0;i<rClassLength;i++){
    char* xClassName=NULL;
    checkInvalid=false;
    class__class *classF=NULL;
-       classF=NULL;
-  for(int i=0;i<rClassLength;i++){
-          if(strcmp(xChar,arrRClass[i])==0){
-            checkInvalid=true;
-            break;
-          }
-        }
-    return checkInvalid;
+   classF=NULL;
+   for(int i=0;i<rClassLength;i++){
+     if(strcmp(xChar,arrRClass[i])==0){
+       checkInvalid=true;
+       break;
+     }
+   }
+   return checkInvalid;
  }
 
  bool class__class::check_must_have_main_class(void* ct){
@@ -473,7 +606,7 @@ for(int i=0;i<rClassLength;i++){
        break;
      }
    }
-    return checkNotHaveMain;
+   return checkNotHaveMain;
  }
 
 
@@ -489,3 +622,117 @@ for(int i=0;i<rClassLength;i++){
  Symbol class__class::getFilename(){
    return this->filename;
  };
+
+ void program_class::semant()
+ {
+   initialize_constants();
+   /* ClassTable constructor may do some semantic analysis */
+   ClassTable *classtable = new ClassTable(classes);
+
+   this->checkClassDeclarations();
+   //  dump_line(stream,n,this);
+
+
+   /* some semantic analysis code may go here */
+   if (classtable->errors()) {
+     cerr << "Compilation halted due to static semantic errors." << endl;
+     exit(1);
+   }
+
+ }
+
+ void program_class::checkClassDeclarations() {
+
+   bool checkDependentGraph=false;
+   bool checkClassRedefined=false;
+   bool checkClassUndefined=false;
+   bool checkClassInheritSpecialCLass=false;
+   bool checkNotHaveMainClass=false;
+   bool checkStaticSemantic=true;
+
+   bool needToCheckInherit=true;
+   int errorIndex=0;
+   // cout<<"call semant here";
+   // cout<<endl;
+   int length=classes->len();
+
+   for(int i = classes->first(); classes->more(i); i = classes->next(i))
+   {
+
+     // checkDependentGraph=false;
+     // checkClassRedefined=false;
+     // checkClassUndefined=false;
+     // checkClassInheritSpecialCLass=false;
+
+     int travelIndex=length-i-1;
+     //classes->nth(i);
+     tree_node *tree=classes->nth(length-i-1);
+     class__class *classItem=(class__class*)tree;
+     //   Class_ c=classItem->copy_Class_();
+     //  Program pClass=classes->nth(i)->copy_Program();
+     //  list_node<Elem> lstNode= classes->nth(i)->copy()->copy_list();
+     checkNotHaveMainClass=classItem->check_must_have_main_class((void*)classes);
+     if(checkNotHaveMainClass){
+       cout<<"Class Main is not defined."<<endl;
+       checkStaticSemantic=false;
+       needToCheckInherit=false;
+       break;
+     }
+
+     checkClassRedefined=classItem->check_invalid_name((void*)classes);
+     if(checkClassRedefined){
+       cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Redefinition of basic class "<<classItem->getName()<<"."<<endl;
+       checkStaticSemantic=false;
+     }
+
+     checkClassInheritSpecialCLass=classItem->check_inherit_special_class((void*)classes);
+     if(checkClassInheritSpecialCLass){
+       cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" cannot inherit class "<<classItem->getParent()<<"."<<endl;
+       checkStaticSemantic=false;
+       needToCheckInherit=false;
+     }else{
+       checkClassUndefined=classItem->check_undefined((void*)classes);
+       if(checkClassUndefined){
+         cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
+         checkStaticSemantic=false;
+         needToCheckInherit=false;
+       }
+     }
+
+     if(needToCheckInherit){
+       checkDependentGraph=classItem->check_cycle_inherit((void*)classes);
+       if(checkDependentGraph){
+         errorIndex=length-i-1;
+         tree_node *tree=classes->nth(errorIndex);
+         class__class *classItem=(class__class*)tree;
+         cout<<classItem->getFilename()<<": "<<tree->get_line_number()<<": Class "<<classItem->getName()<<", or an ancestor of "<<classItem->getName()<<", is involved in an inheritance cycle."<<endl;
+         //break;
+         checkStaticSemantic=false;
+       }
+
+     }
+
+   }
+ }
+
+ Symbol class__class::getName(){
+   return this->name;
+ };
+ Symbol class__class::getParent(){
+   return this->parent;
+ };
+ Features class__class::getFeatures(){
+   return this->features;
+ };
+ Symbol class__class::getFilename(){
+   return this->filename;
+ };
+
+ // implementation of convenient function
+ unsigned int hash(char *p) {
+   unsigned int h = 0;
+   for (; *p; p++)
+   h = MULT * h + (*p);
+
+   return h % NHASH;
+ }

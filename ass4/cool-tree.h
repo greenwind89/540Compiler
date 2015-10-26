@@ -49,6 +49,7 @@ class Feature_class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Feature(); }
    virtual Feature copy_Feature() = 0;
+   virtual void traverseScope(void* ct, void *tbl) = 0;
 
 #ifdef Feature_EXTRAS
    Feature_EXTRAS
@@ -63,6 +64,7 @@ class Formal_class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Formal(); }
    virtual Formal copy_Formal() = 0;
+   virtual void traverseScope(void *ct, void *tbl) = 0 ;
 
 #ifdef Formal_EXTRAS
    Formal_EXTRAS
@@ -77,6 +79,7 @@ class Expression_class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Expression(); }
    virtual Expression copy_Expression() = 0;
+   virtual void traverseScope(void *ct, void *tbl) = 0 ;
 
 #ifdef Expression_EXTRAS
    Expression_EXTRAS
@@ -136,6 +139,8 @@ public:
    Program copy_Program();
    void dump(ostream& stream, int n);
 
+   void checkClassDeclarations();
+
 #ifdef Program_SHARED_EXTRAS
    Program_SHARED_EXTRAS
 #endif
@@ -171,6 +176,7 @@ public:
    Symbol getParent();
    Features getFeatures();
    Symbol getFilename();
+   void traverseScope(void* ct, void *tbl);
 
 
 
@@ -199,6 +205,7 @@ public:
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
+   void traverseScope(void *ct, void *tbl);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
@@ -223,6 +230,7 @@ public:
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
@@ -245,6 +253,7 @@ public:
    }
    Formal copy_Formal();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Formal_SHARED_EXTRAS
    Formal_SHARED_EXTRAS
@@ -291,6 +300,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -317,6 +327,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -341,6 +352,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -365,6 +377,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -387,6 +400,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -409,6 +423,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -429,6 +444,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -455,6 +471,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -477,6 +494,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -499,6 +517,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -521,6 +540,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -543,6 +563,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -563,6 +584,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -585,6 +607,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -607,6 +630,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -629,6 +653,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -649,6 +674,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -669,6 +695,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -689,6 +716,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -709,6 +737,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -729,6 +758,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -749,6 +779,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -767,6 +798,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
@@ -787,6 +819,7 @@ public:
    }
    Expression copy_Expression();
    void dump(ostream& stream, int n);
+   void traverseScope(void* ct, void *tbl);
 
 #ifdef Expression_SHARED_EXTRAS
    Expression_SHARED_EXTRAS
