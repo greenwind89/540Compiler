@@ -168,7 +168,7 @@ Symbol ClassTable::lookupVariable(Symbol name, SymbolTable<Symbol, Symbol>* curr
   SymbolTable<Symbol, Symbol> *parentTbl;
 
   while(parent != NULL && No_class != parent) {
-    cout<<"child:"<<((class__class*) this->currentClass)->getName()<<", parent name: "<<*parent<<"\n";
+    // cout<<"child:"<<((class__class*) this->currentClass)->getName()<<", parent name: "<<*parent<<"\n";
     parentTbl = this->classScopeTbl->lookup(parent);
     if(parentTbl->lookup(name) != NULL) {
       return *(parentTbl->lookup(name));
@@ -176,6 +176,46 @@ Symbol ClassTable::lookupVariable(Symbol name, SymbolTable<Symbol, Symbol>* curr
     parent = this->parentsTbl->lookup(parent);
   }
 
+  return NULL;
+}
+
+method_class* ClassTable::lookupMethod(Symbol name, Symbol callingType) {
+
+  if(callingType == SELF_TYPE) { // change into current class
+    callingType = ((class__class*) this->currentClass)->getName();
+  }
+
+  SymbolTable<Symbol, tree_node> *currentTbl = this->classMethodTbl->lookup(callingType);
+
+  if(currentTbl->lookup(name) != NULL) {
+    return (method_class *) currentTbl->lookup(name);
+  }
+
+  Symbol parent = this->parentsTbl->lookup(callingType);
+
+  SymbolTable<Symbol, tree_node> *parentTbl;
+
+  while(parent != NULL && No_class != parent) {
+    // cout<<"child:"<<((class__class*) this->currentClass)->getName()<<", parent name: "<<*parent<<"\n";
+    parentTbl = this->classMethodTbl->lookup(parent);
+    if(parentTbl->lookup(name) != NULL) {
+      return (method_class *) parentTbl->lookup(name);
+    }
+    parent = this->parentsTbl->lookup(parent);
+  }
+
+  return NULL;
+}
+
+Symbol ClassTable::getLUB(Symbol t1, Symbol t2) {
+  Symbol parentOfT1 = t1;
+
+  while(parentOfT1 != NULL) {
+    if(this->isSubTypeOf(t2, parentOfT1)) return parentOfT1;
+    parentOfT1 = this->parentsTbl->lookup(parentOfT1);
+  }
+
+  // never happen since we always have Object which is parent of all things
   return NULL;
 }
 
@@ -351,6 +391,14 @@ void method_class::traverseScope(void *ct, void *tbl, int round) {
 
 }
 
+Symbol method_class::getReturnType() {
+  return return_type;
+}
+
+Formals method_class::getFormals() {
+  return formals;
+}
+
 void attr_class::traverseScope(void *ct, void *tbl, int round) {
   ClassTable *classTable = (ClassTable *) ct;
   SymbolTable<Symbol, Symbol> *table = (SymbolTable<Symbol, Symbol> *) tbl;
@@ -368,6 +416,14 @@ void attr_class::traverseScope(void *ct, void *tbl, int round) {
 void formal_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, Symbol> *table = (SymbolTable<Symbol, Symbol> *) tbl;
   table->addid(name, &type_decl);
+}
+
+Symbol formal_class::getTypeDeclaration() {
+  return type_decl;
+}
+
+Symbol formal_class::getName() {
+  return name;
 }
 
 Symbol assign_class::traverseScope(void *ct, void *tbl) {
@@ -389,17 +445,141 @@ Symbol assign_class::traverseScope(void *ct, void *tbl) {
 
 Symbol static_dispatch_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol exprType = expr->traverseScope(ct, table);
+  method_class *signature;
+
+  if(!classTable->isSubTypeOf(exprType, type_name)) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Expression type " << exprType <<" does not conform to declared static dispatch type " << type_name << ".\n";
+    this->set_type(Object);
+    return Object;
+
+  }
+
+  // cout <<"method: "<<name << " " <<exprType;
+  signature = classTable->lookupMethod(name, type_name);
+
+  if(signature == NULL) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Dispatch to undefined method " << name << ".\n";
+    this->set_type(Object);
+    return Object;
+  }
+
+  Symbol returnType = signature->getReturnType();
+  if(signature->getFormals()->len() != actual->len()) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Method " << name << " called with wrong number of arguments.\n";
+    this->set_type(Object);
+    return Object;
+
+  }
+
+  Formals formals = signature->getFormals();
+
+  for(int i = actual->first(); actual->more(i); i = actual->next(i)) {
+    Symbol actualType = actual->nth(i)->traverseScope(ct, table);
+    formal_class* currentFormal = (formal_class*) (formals->nth(i));
+    if(!classTable->isSubTypeOf(actualType, currentFormal->getTypeDeclaration())) {
+      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "In call of method " << name <<", type " << actualType <<" of parameter " << currentFormal->getName() <<" does not conform to declared type " << currentFormal->getTypeDeclaration() << ".\n";
+      this->set_type(Object);
+      return Object;
+
+    }
+  }
+
+  Symbol finalType;
+
+  if(returnType == SELF_TYPE) {
+    if(exprType == SELF_TYPE) {
+      finalType = ((class__class*) classTable->getCurrentClass())->getName();
+    } else {
+      finalType = exprType;
+    }
+  } else {
+    finalType = returnType;
+  }
+
+  this->set_type(finalType);
+
+  return finalType;
 
 }
 
 Symbol dispatch_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol exprType = expr->traverseScope(ct, table);
+  method_class *signature;
+  if(exprType == No_type)
+    exprType = SELF_TYPE;
+
+  // cout <<"method: "<<name << " " <<exprType;
+  signature = classTable->lookupMethod(name, exprType);
+
+  if(signature == NULL) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Dispatch to undefined method " << name << ".\n";
+    this->set_type(Object);
+    return Object;
+  }
+
+  Symbol returnType = signature->getReturnType();
+  if(signature->getFormals()->len() != actual->len()) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Method " << name << " called with wrong number of arguments.\n";
+    this->set_type(Object);
+    return Object;
+
+  }
+
+  Formals formals = signature->getFormals();
+
+  for(int i = actual->first(); actual->more(i); i = actual->next(i)) {
+    Symbol actualType = actual->nth(i)->traverseScope(ct, table);
+    formal_class* currentFormal = (formal_class*) (formals->nth(i));
+    if(!classTable->isSubTypeOf(actualType, currentFormal->getTypeDeclaration())) {
+      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "In call of method " << name <<", type " << actualType <<" of parameter " << currentFormal->getName() <<" does not conform to declared type " << currentFormal->getTypeDeclaration() << ".\n";
+      this->set_type(Object);
+      return Object;
+
+    }
+  }
+
+  Symbol finalType;
+
+  if(returnType == SELF_TYPE) {
+    if(exprType == SELF_TYPE) {
+      finalType = ((class__class*) classTable->getCurrentClass())->getName();
+    } else {
+      finalType = exprType;
+    }
+  } else {
+    finalType = returnType;
+  }
+
+  this->set_type(finalType);
+
+  return finalType;
 
 }
 
 Symbol cond_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
 
+  Symbol predType = pred->traverseScope(ct, table);
+
+  if(predType != Bool) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Predicate of 'if' does not have type Bool.\n";
+    this->set_type(Object);
+    return Object;
+
+  }
+
+  Symbol thenType = then_exp->traverseScope(ct, table);
+  Symbol elseType = else_exp->traverseScope(ct, table);
+
+  Symbol finalType = classTable->getLUB(thenType, elseType);
+
+  this->set_type(finalType);
+  return finalType;
 }
 
 
@@ -431,7 +611,7 @@ Symbol let_class::traverseScope(void *ct, void *tbl) {
   Symbol initType = init->traverseScope(ct, table);
   Symbol bodyType = body->traverseScope(ct, table);
 
-  if(!classTable->isSubTypeOf(initType, type_decl)) {
+  if(initType != No_type && !classTable->isSubTypeOf(initType, type_decl)) {
     classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Inferred type "<< initType<< " of initialization of a does not conform to identifier's declared type " << type_decl<< ".\n";
     this->set_type(Object);
     table->exitscope();
@@ -636,12 +816,13 @@ Symbol isvoid_class::traverseScope(void *ct, void *tbl) {
 
 Symbol no_expr_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, Symbol> *table = (SymbolTable<Symbol, Symbol> *) tbl;
-
+  return No_type;
 }
 
 Symbol object_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, Symbol> *table = (SymbolTable<Symbol, Symbol> *) tbl;
   ClassTable *classTable = (ClassTable *) ct;
+  if(name == self) return SELF_TYPE;
   Symbol n = classTable->lookupVariable(name, table);
   if(n == NULL) {
     // cerr << ":" << this->get_line_number() << ": ";

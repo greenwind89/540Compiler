@@ -50,6 +50,9 @@ public:
   void addMethodSignature(Symbol m, tree_node * n);
   Symbol lookupVariable(Symbol name, SymbolTable<Symbol, Symbol> *currentTbl);
   SymbolTable<Symbol, SymbolTable<Symbol, tree_node> > *getClassMethodTable();
+  method_class* lookupMethod(Symbol name, Symbol callingType);
+
+  Symbol getLUB(Symbol t1, Symbol t2);
 
 };
 

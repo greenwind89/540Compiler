@@ -6,4 +6,6 @@ If the expression coverage 100% correct in a .cl file, it regarded as correct st
 
 SELF_TYPE in case of new, if it is correct with the parent case it will always be correct with children case so we only need to check SELF_TYPE in this case with parent type
 
-Due to the mismatch between Complement and Negation derived from parser, in this assignment, we follow the erro by implement checking of neg in comp_classa and vice versa. 
+Due to the mismatch between Complement and Negation derived from parser, in this assignment, we follow the erro by implement checking of neg in comp_classa and vice versa.
+
+We can go sloppy when checking method signature of the static dispatch by using the same routine as normal dispatch thanks to the rule of COOL which does not allow overriding method to have different signature so we can check the signature at any where among descendants. 

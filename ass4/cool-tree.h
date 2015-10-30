@@ -207,6 +207,8 @@ public:
    Feature copy_Feature();
    void dump(ostream& stream, int n);
    void traverseScope(void *ct, void *tbl, int round);
+   Symbol getReturnType();
+   Formals getFormals();
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
@@ -255,6 +257,8 @@ public:
    Formal copy_Formal();
    void dump(ostream& stream, int n);
    void traverseScope(void* ct, void *tbl);
+   Symbol getTypeDeclaration();
+   Symbol getName();
 
 #ifdef Formal_SHARED_EXTRAS
    Formal_SHARED_EXTRAS
