@@ -182,6 +182,15 @@ Symbol ClassTable::lookupVariable(Symbol name, SymbolTable<Symbol, Symbol>* curr
 // this function check if t1 is subtype of t2 based on parents table
 bool ClassTable::isSubTypeOf(Symbol t1, Symbol t2) {
 
+
+  if(t2 == SELF_TYPE) { // change into current class
+    t2 = ((class__class*) this->currentClass)->getName();
+  }
+
+  if(t1 == SELF_TYPE) { // change into current class
+    t1 = ((class__class*) this->currentClass)->getName();
+  }
+
   if(t1 == t2) return true;
 
   // we go through all parents of T1 until we find t2, if we cannot find t2 then return false
@@ -375,7 +384,6 @@ Symbol assign_class::traverseScope(void *ct, void *tbl) {
     classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Type "<< exprType<< " of assigned expression does not conform to declared type " << type <<" of identifier " << name << ".\n";
     this->set_type(Object);
     return Object;
-    // error
   }
 }
 
@@ -407,96 +415,223 @@ Symbol typcase_class::traverseScope(void *ct, void *tbl) {
 
 Symbol block_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-
+  Symbol lastType = Object;
+  for(int i = body->first(); body->more(i); i = body->next(i))
+     lastType = body->nth(i)->traverseScope(ct, table);
+  this->set_type(lastType);
+  return lastType;
 }
 
 Symbol let_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, Symbol> *table = (SymbolTable<Symbol, Symbol> *) tbl;
-
+  ClassTable *classTable = (ClassTable *) ct;
   table->enterscope();
 
   table->addid(identifier, &type_decl);
-  init->traverseScope(ct, table);
-  body->traverseScope(ct, table);
+  Symbol initType = init->traverseScope(ct, table);
+  Symbol bodyType = body->traverseScope(ct, table);
+
+  if(!classTable->isSubTypeOf(initType, type_decl)) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Inferred type "<< initType<< " of initialization of a does not conform to identifier's declared type " << type_decl<< ".\n";
+    this->set_type(Object);
+    table->exitscope();
+    return Object;
+  }
 
   table->exitscope();
+
+  return bodyType;
 }
 
 Symbol plus_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-  e1->traverseScope(ct, table);
-  e2->traverseScope(ct, table);
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
+
+  if(e1Type != Int || e2Type != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" + " <<e2Type <<".\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Int);
+    return Int;
+
+  }
 }
 
 Symbol sub_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-  e1->traverseScope(ct, table);
-  e2->traverseScope(ct, table);
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
 
+  if(e1Type != Int || e2Type != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" - " <<e2Type <<".\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Int);
+    return Int;
+
+  }
 }
 
 Symbol mul_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-  e1->traverseScope(ct, table);
-  e2->traverseScope(ct, table);
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
 
+  if(e1Type != Int || e2Type != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" * " <<e2Type <<".\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Int);
+    return Int;
+
+  }
 }
 
 Symbol divide_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-  e1->traverseScope(ct, table);
-  e2->traverseScope(ct, table);
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
 
+  if(e1Type != Int || e2Type != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" / " <<e2Type <<".\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Int);
+    return Int;
+
+  }
 }
 
 Symbol neg_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol exprType = e1->traverseScope(ct, table);
+  if(exprType != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Argument of '~' has type " << exprType <<" instead of Int.\n";
+    this->set_type(Object);
+    return Object;
 
+  } else {
+    this->set_type(Int);
+    return Int;
+  }
 }
 
 Symbol lt_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
 
+  if(e1Type != Int || e2Type != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" < " <<e2Type <<".\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Bool);
+    return Bool;
+
+  }
 }
 
 Symbol eq_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
 
+  if((e1Type == Int || e2Type == Int ||
+      e1Type == Str || e2Type == Str ||
+      e1Type == Bool || e2Type == Bool) && (e2Type != e1Type)) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Illegal comparison with a basic type.\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Bool);
+    return Bool;
+
+  }
 }
 
 Symbol leq_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol e1Type = e1->traverseScope(ct, table);
+  Symbol e2Type = e2->traverseScope(ct, table);
 
+  if(e1Type != Int || e2Type != Int) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" <= " <<e2Type <<".\n";
+    this->set_type(Object);
+    return Object;
+  } else {
+    this->set_type(Bool);
+    return Bool;
+
+  }
 }
 
 Symbol comp_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol exprType = e1->traverseScope(ct, table);
+  if(exprType != Bool) {
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Argument of 'not' has type " << exprType <<" instead of Bool.\n";
+    this->set_type(Object);
+    return Object;
+
+  } else {
+    this->set_type(Bool);
+    return Bool;
+  }
 
 }
 
 Symbol int_const_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-
+  this->set_type(Int);
+  return Int;
 }
 
 Symbol bool_const_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-
+  this->set_type(Bool);
+  return Bool;
 }
 
 Symbol string_const_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-
+  this->set_type(Str);
+  return Str;
 }
 
 Symbol new__class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-
+  ClassTable *classTable = (ClassTable *) ct;
+  if(type_name == SELF_TYPE) {
+    this->set_type(SELF_TYPE);
+    // check type conformation
+    return SELF_TYPE;
+  } else {
+    this->set_type(type_name);
+    return type_name;
+  }
 }
 
 Symbol isvoid_class::traverseScope(void *ct, void *tbl) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
-
+  ClassTable *classTable = (ClassTable *) ct;
+  Symbol exprType = e1->traverseScope(ct, table);
+  this->set_type(Bool);
+  return Bool;
 }
 
 Symbol no_expr_class::traverseScope(void *ct, void *tbl) {
@@ -713,18 +848,6 @@ ostream& ClassTable::semant_error()
  }
 
 
- Symbol class__class::getName(){
-   return this->name;
- };
- Symbol class__class::getParent(){
-   return this->parent;
- };
- Features class__class::getFeatures(){
-   return this->features;
- };
- Symbol class__class::getFilename(){
-   return this->filename;
- };
 
  void program_class::semant()
  {
@@ -732,7 +855,7 @@ ostream& ClassTable::semant_error()
    /* ClassTable constructor may do some semantic analysis */
    ClassTable *classtable = new ClassTable(classes);
 
-   this->checkClassDeclarations();
+  //  this->checkClassDeclarations();
    //  dump_line(stream,n,this);
 
 
