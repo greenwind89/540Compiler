@@ -1,0 +1,2 @@
+./test/testcases/test23.cl:8: Inferred type SELF_TYPE of initialization of a does not conform to identifier's declared type D.
+Compilation halted due to static semantic errors.

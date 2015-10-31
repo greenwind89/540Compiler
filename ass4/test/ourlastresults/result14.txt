@@ -1,0 +1,6 @@
+./test/testcases/test14.cl:9: Undeclared identifier f.
+./test/testcases/test14.cl:9: non-Int arguments: Int + Object
+./test/testcases/test14.cl:9: non-Int arguments: Object + Int
+./test/testcases/test14.cl:9: Type Object of assigned expression does not conform to declared type Int of identifier c.
+./test/testcases/test14.cl:8: Inferred return type Object of method test does not conform to declared return type Int.
+Compilation halted due to static semantic errors.

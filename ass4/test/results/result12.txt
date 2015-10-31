@@ -1,0 +1,2 @@
+./test/testcases/test12.cl:6: No 'main' method in class Main.
+Compilation halted due to static semantic errors.

@@ -1,0 +1,2 @@
+./test/testcases/test18.cl:5: Attribute a is multiply defined in class.
+Compilation halted due to static semantic errors.

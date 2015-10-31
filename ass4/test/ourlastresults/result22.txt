@@ -1,0 +1,76 @@
+#3
+_program
+  #3
+  _class
+    C
+    Object
+    "./test/testcases/test22.cl"
+    (
+    #4
+    _attr
+      a
+      Int
+      #0
+      _no_expr
+      : _no_type
+    #5
+    _attr
+      b
+      String
+      #0
+      _no_expr
+      : _no_type
+    #6
+    _attr
+      d
+      Bool
+      #0
+      _no_expr
+      : _no_type
+    #8
+    _method
+      method1
+      Object
+      #9
+      _block
+        #10
+        _assign
+          a
+          #10
+          _int
+            1
+          : Int
+        : Int
+        #11
+        _assign
+          b
+          #11
+          _string
+            "String abc"
+          : String
+        : String
+        #12
+        _assign
+          d
+          #12
+          _bool
+            0
+          : Bool
+        : Bool
+      : Bool
+    )
+  #20
+  _class
+    Main
+    Object
+    "./test/testcases/test22.cl"
+    (
+    #21
+    _method
+      main
+      Object
+      #22
+      _int
+        1
+      : Int
+    )

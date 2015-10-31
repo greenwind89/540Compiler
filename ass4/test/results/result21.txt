@@ -1,0 +1,2 @@
+./test/testcases/test21.cl:9: Type D of assigned expression does not conform to declared type A of identifier a.
+Compilation halted due to static semantic errors.

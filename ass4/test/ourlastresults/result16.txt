@@ -1,0 +1,2 @@
+./test/testcases/test16.cl:11: Dispatch to undefined method yell.
+Compilation halted due to static semantic errors.

@@ -1,0 +1,4 @@
+./test/testcases/test36.cl:6: Undeclared identifier x.
+./test/testcases/test36.cl:6: non-Int arguments: Object + Int
+./test/testcases/test36.cl:6: Inferred type Object of initialization of a does not conform to identifier's declared type Int.
+Compilation halted due to static semantic errors.

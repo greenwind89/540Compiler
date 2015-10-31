@@ -1,0 +1,2 @@
+./test/testcases/test1.cl:3: Class C inherits from an undefined class Undefined.
+Compilation halted due to static semantic errors.

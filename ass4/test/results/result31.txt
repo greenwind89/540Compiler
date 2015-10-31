@@ -1,0 +1,111 @@
+#3
+_program
+  #3
+  _class
+    C
+    Object
+    "./test/testcases/test31.cl"
+    (
+    #4
+    _attr
+      e
+      E
+      #0
+      _no_expr
+      : _no_type
+    #5
+    _attr
+      f
+      F
+      #0
+      _no_expr
+      : _no_type
+    #6
+    _attr
+      h
+      H
+      #0
+      _no_expr
+      : _no_type
+    #8
+    _method
+      method1
+      Object
+      #9
+      _block
+        #10
+        _typcase
+          #10
+          _object
+            e
+          : E
+          #11
+          _branch
+            e1
+            E
+            #11
+            _object
+              e1
+            : E
+          #12
+          _branch
+            e2
+            F
+            #12
+            _object
+              e2
+            : F
+          #13
+          _branch
+            e3
+            H
+            #13
+            _object
+              e3
+            : H
+        : G
+      : G
+    )
+  #22
+  _class
+    E
+    F
+    "./test/testcases/test31.cl"
+    (
+    )
+  #27
+  _class
+    F
+    G
+    "./test/testcases/test31.cl"
+    (
+    )
+  #31
+  _class
+    H
+    G
+    "./test/testcases/test31.cl"
+    (
+    )
+  #36
+  _class
+    G
+    Object
+    "./test/testcases/test31.cl"
+    (
+    )
+  #42
+  _class
+    Main
+    Object
+    "./test/testcases/test31.cl"
+    (
+    #43
+    _method
+      main
+      Object
+      #44
+      _int
+        1
+      : Int
+    )

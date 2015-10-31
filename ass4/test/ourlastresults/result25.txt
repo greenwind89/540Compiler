@@ -1,0 +1,11 @@
+./test/testcases/test25.cl:7: non-Int arguments: Int + String
+./test/testcases/test25.cl:8: non-Int arguments: Int * String
+./test/testcases/test25.cl:9: non-Int arguments: Int / String
+./test/testcases/test25.cl:10: non-Int arguments: Int - String
+./test/testcases/test25.cl:11: Argument of 'not' has type String instead of Bool.
+./test/testcases/test25.cl:12: Argument of '~' has type String instead of Int.
+./test/testcases/test25.cl:13: non-Int arguments: String < Int
+./test/testcases/test25.cl:14: non-Int arguments: String <= Int
+./test/testcases/test25.cl:15: Illegal comparison with a basic type.
+./test/testcases/test25.cl:16: Illegal comparison with a basic type.
+Compilation halted due to static semantic errors.

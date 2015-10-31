@@ -390,7 +390,7 @@ Symbol method_class::traverseScope(void *ct, void *tbl, int round) {
 
 
     if(cmt->lookup(name) != NULL) {
-      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Method "<< name<< " is multiply defined in class.\n";
+      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Method "<< name<< " is multiply defined.\n";
       return Object;
     } else {
       classTable->addMethodSignature(name, this);
@@ -408,7 +408,7 @@ Symbol method_class::traverseScope(void *ct, void *tbl, int round) {
       } else {
         for(int i = formals->first(); formals->more(i); i = formals->next(i)) {
           if(formals->nth(i)->getTypeDeclaration() != sameMethod->getFormals()->nth(i)->getTypeDeclaration()) {
-            classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "In redefined method " << name << ", parameter type " << formals->nth(i)->getTypeDeclaration() << " is different from original type "<< sameMethod->getFormals()->nth(i)->getTypeDeclaration() << ".\n";
+            classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "In redefined method " << name << ", parameter type " << formals->nth(i)->getTypeDeclaration() << " is different from original type "<< sameMethod->getFormals()->nth(i)->getTypeDeclaration() << "\n";
             return Object;
 
           }
@@ -452,7 +452,7 @@ Symbol attr_class::traverseScope(void *ct, void *tbl, int round) {
 
   if(round == 1) {
     if(table->lookup(name) != NULL) {
-      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Attribute "<< name<< " is multiply defined.\n";
+      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Attribute "<< name<< " is multiply defined in class.\n";
     } else {
       table->addid(name, &type_decl);
     }
@@ -520,7 +520,7 @@ Symbol static_dispatch_class::traverseScope(void *ct, void *tbl) {
 
   Symbol returnType = signature->getReturnType();
   if(signature->getFormals()->len() != actual->len()) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Method " << name << " called with wrong number of arguments.\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Method " << name << " invoked with wrong number of arguments.\n";
     this->set_type(Object);
     return Object;
 
@@ -664,6 +664,8 @@ Symbol typcase_class::traverseScope(void *ct, void *tbl) {
   typeTable->enterscope();
   Symbol currentCommonParent = NULL;
 
+  expr->traverseScope(ct, table);
+
   for(int i = cases->first(); cases->more(i); i = cases->next(i)) {
     branch_class *branch = (branch_class *) cases->nth(i);
     Symbol caseType = branch->traverseScope(ct, table);
@@ -688,6 +690,8 @@ Symbol typcase_class::traverseScope(void *ct, void *tbl) {
       typeTable->addid((Entry *)caseVarType, &caseVarType);
     }
   }
+
+  // cout <<"Comon parent: " <<currentCommonParent;
   this->set_type(currentCommonParent);
   return currentCommonParent;
 }
@@ -749,7 +753,7 @@ Symbol plus_class::traverseScope(void *ct, void *tbl) {
   Symbol e2Type = e2->traverseScope(ct, table);
 
   if(e1Type != Int || e2Type != Int) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" + " <<e2Type <<".\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" + " <<e2Type <<"\n";
     this->set_type(Object);
     return Object;
   } else {
@@ -766,7 +770,7 @@ Symbol sub_class::traverseScope(void *ct, void *tbl) {
   Symbol e2Type = e2->traverseScope(ct, table);
 
   if(e1Type != Int || e2Type != Int) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" - " <<e2Type <<".\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" - " <<e2Type <<"\n";
     this->set_type(Object);
     return Object;
   } else {
@@ -783,7 +787,7 @@ Symbol mul_class::traverseScope(void *ct, void *tbl) {
   Symbol e2Type = e2->traverseScope(ct, table);
 
   if(e1Type != Int || e2Type != Int) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" * " <<e2Type <<".\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" * " <<e2Type <<"\n";
     this->set_type(Object);
     return Object;
   } else {
@@ -800,7 +804,7 @@ Symbol divide_class::traverseScope(void *ct, void *tbl) {
   Symbol e2Type = e2->traverseScope(ct, table);
 
   if(e1Type != Int || e2Type != Int) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" / " <<e2Type <<".\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" / " <<e2Type <<"\n";
     this->set_type(Object);
     return Object;
   } else {
@@ -832,7 +836,7 @@ Symbol lt_class::traverseScope(void *ct, void *tbl) {
   Symbol e2Type = e2->traverseScope(ct, table);
 
   if(e1Type != Int || e2Type != Int) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" < " <<e2Type <<".\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" < " <<e2Type <<"\n";
     this->set_type(Object);
     return Object;
   } else {
@@ -868,7 +872,7 @@ Symbol leq_class::traverseScope(void *ct, void *tbl) {
   Symbol e2Type = e2->traverseScope(ct, table);
 
   if(e1Type != Int || e2Type != Int) {
-    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" <= " <<e2Type <<".\n";
+    classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "non-Int arguments: " << e1Type <<" <= " <<e2Type <<"\n";
     this->set_type(Object);
     return Object;
   } else {

@@ -1,0 +1,88 @@
+#3
+_program
+  #3
+  _class
+    C
+    Object
+    "./test/testcases/test33.cl"
+    (
+    #4
+    _attr
+      e
+      Int
+      #4
+      _int
+        2
+      : Int
+    #5
+    _attr
+      f
+      Int
+      #5
+      _plus
+        #5
+        _object
+          e
+        : Int
+        #5
+        _int
+          2
+        : Int
+      : Int
+    #6
+    _attr
+      c
+      C
+      #6
+      _new
+        SELF_TYPE
+      : SELF_TYPE
+    #7
+    _attr
+      k
+      C
+      #7
+      _new
+        F
+      : F
+    #9
+    _method
+      method1
+      Object
+      #10
+      _block
+        #11
+        _plus
+          #11
+          _int
+            1
+          : Int
+          #11
+          _int
+            1
+          : Int
+        : Int
+      : Int
+    )
+  #18
+  _class
+    F
+    C
+    "./test/testcases/test33.cl"
+    (
+    )
+  #23
+  _class
+    Main
+    Object
+    "./test/testcases/test33.cl"
+    (
+    #24
+    _method
+      main
+      Object
+      #25
+      _int
+        1
+      : Int
+    )

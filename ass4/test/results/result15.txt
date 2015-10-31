@@ -1,0 +1,3 @@
+./test/testcases/test15.cl:8: Undeclared identifier b.
+./test/testcases/test15.cl:8: non-Int arguments: Int + Object
+Compilation halted due to static semantic errors.

@@ -1,0 +1,4 @@
+./test/testcases/test26.cl:11: In call of method method2, type F of parameter e does not conform to declared type E.
+./test/testcases/test26.cl:12: Dispatch to undefined method method3.
+./test/testcases/test26.cl:13: Method method2 called with wrong number of arguments.
+Compilation halted due to static semantic errors.

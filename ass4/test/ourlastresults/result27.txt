@@ -1,0 +1,3 @@
+./test/testcases/test27.cl:9: Expression type F does not conform to declared static dispatch type E.
+./test/testcases/test27.cl:11: Method method4 invoked with wrong number of arguments.
+Compilation halted due to static semantic errors.

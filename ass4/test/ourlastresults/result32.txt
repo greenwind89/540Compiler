@@ -1,0 +1,2 @@
+./test/testcases/test32.cl:10: Duplicate branch E in case statement.
+Compilation halted due to static semantic errors.

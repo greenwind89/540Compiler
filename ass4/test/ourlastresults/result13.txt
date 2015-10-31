@@ -3,19 +3,23 @@ _program
   #3
   _class
     C
-    Undefined
-    "./test/testcases/test1.cl"
+    Object
+    "./test/testcases/test13.cl"
     (
     )
   #6
   _class
     Main
     Object
-    "./test/testcases/test1.cl"
+    "./test/testcases/test13.cl"
     (
     #7
     _method
       main
+      #7
+      _formal
+        a
+        Int
       Object
       #8
       _plus

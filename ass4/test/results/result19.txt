@@ -1,0 +1,2 @@
+./test/testcases/test19.cl:10: Method method1 is multiply defined.
+Compilation halted due to static semantic errors.
