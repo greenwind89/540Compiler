@@ -50,7 +50,7 @@ class Feature_class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Feature(); }
    virtual Feature copy_Feature() = 0;
-   virtual void traverseScope(void* ct, void *tbl, int round) = 0;
+   virtual Symbol traverseScope(void* ct, void *tbl, int round) = 0;
 
 #ifdef Feature_EXTRAS
    Feature_EXTRAS
@@ -66,6 +66,7 @@ public:
    tree_node *copy()		 { return copy_Formal(); }
    virtual Formal copy_Formal() = 0;
    virtual void traverseScope(void *ct, void *tbl) = 0 ;
+   virtual Symbol getTypeDeclaration() = 0;
 
 #ifdef Formal_EXTRAS
    Formal_EXTRAS
@@ -95,6 +96,7 @@ class Case_class : public tree_node {
 public:
    tree_node *copy()		 { return copy_Case(); }
    virtual Case copy_Case() = 0;
+   virtual Symbol traverseScope(void *ct, void *tbl) = 0 ;
 
 #ifdef Case_EXTRAS
    Case_EXTRAS
@@ -206,7 +208,7 @@ public:
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
-   void traverseScope(void *ct, void *tbl, int round);
+   Symbol traverseScope(void *ct, void *tbl, int round);
    Symbol getReturnType();
    Formals getFormals();
 
@@ -233,7 +235,7 @@ public:
    }
    Feature copy_Feature();
    void dump(ostream& stream, int n);
-   void traverseScope(void* ct, void *tbl, int round);
+   Symbol traverseScope(void* ct, void *tbl, int round);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
@@ -283,6 +285,9 @@ public:
    }
    Case copy_Case();
    void dump(ostream& stream, int n);
+   Symbol traverseScope(void* ct, void *tbl);
+
+   Symbol getTypeDeclaration();
 
 #ifdef Case_SHARED_EXTRAS
    Case_SHARED_EXTRAS

@@ -52,6 +52,8 @@ public:
   SymbolTable<Symbol, SymbolTable<Symbol, tree_node> > *getClassMethodTable();
   method_class* lookupMethod(Symbol name, Symbol callingType);
 
+  method_class* getMethodWithSameNameFromParents(Symbol name);
+
   Symbol getLUB(Symbol t1, Symbol t2);
 
 };

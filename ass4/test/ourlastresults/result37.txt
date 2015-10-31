@@ -1,0 +1,1996 @@
+#15
+_program
+  #15
+  _class
+    A2I
+    Object
+    "./test/testcases/test37.cl"
+    (
+    #17
+    _method
+      c2i
+      #17
+      _formal
+        char
+        String
+      Int
+      #18
+      _cond
+        #18
+        _eq
+          #18
+          _object
+            char
+          : String
+          #18
+          _string
+            "0"
+          : String
+        : Bool
+        #18
+        _int
+          0
+        : Int
+        #19
+        _cond
+          #19
+          _eq
+            #19
+            _object
+              char
+            : String
+            #19
+            _string
+              "1"
+            : String
+          : Bool
+          #19
+          _int
+            1
+          : Int
+          #20
+          _cond
+            #20
+            _eq
+              #20
+              _object
+                char
+              : String
+              #20
+              _string
+                "2"
+              : String
+            : Bool
+            #20
+            _int
+              2
+            : Int
+            #21
+            _cond
+              #21
+              _eq
+                #21
+                _object
+                  char
+                : String
+                #21
+                _string
+                  "3"
+                : String
+              : Bool
+              #21
+              _int
+                3
+              : Int
+              #22
+              _cond
+                #22
+                _eq
+                  #22
+                  _object
+                    char
+                  : String
+                  #22
+                  _string
+                    "4"
+                  : String
+                : Bool
+                #22
+                _int
+                  4
+                : Int
+                #23
+                _cond
+                  #23
+                  _eq
+                    #23
+                    _object
+                      char
+                    : String
+                    #23
+                    _string
+                      "5"
+                    : String
+                  : Bool
+                  #23
+                  _int
+                    5
+                  : Int
+                  #24
+                  _cond
+                    #24
+                    _eq
+                      #24
+                      _object
+                        char
+                      : String
+                      #24
+                      _string
+                        "6"
+                      : String
+                    : Bool
+                    #24
+                    _int
+                      6
+                    : Int
+                    #25
+                    _cond
+                      #25
+                      _eq
+                        #25
+                        _object
+                          char
+                        : String
+                        #25
+                        _string
+                          "7"
+                        : String
+                      : Bool
+                      #25
+                      _int
+                        7
+                      : Int
+                      #26
+                      _cond
+                        #26
+                        _eq
+                          #26
+                          _object
+                            char
+                          : String
+                          #26
+                          _string
+                            "8"
+                          : String
+                        : Bool
+                        #26
+                        _int
+                          8
+                        : Int
+                        #27
+                        _cond
+                          #27
+                          _eq
+                            #27
+                            _object
+                              char
+                            : String
+                            #27
+                            _string
+                              "9"
+                            : String
+                          : Bool
+                          #27
+                          _int
+                            9
+                          : Int
+                          #28
+                          _block
+                            #28
+                            _dispatch
+                              #28
+                              _object
+                                self
+                              : SELF_TYPE
+                              abort
+                              (
+                              )
+                            : Object
+                            #28
+                            _int
+                              0
+                            : Int
+                          : Int
+                        : Int
+                      : Int
+                    : Int
+                  : Int
+                : Int
+              : Int
+            : Int
+          : Int
+        : Int
+      : Int
+    #35
+    _method
+      i2c
+      #35
+      _formal
+        i
+        Int
+      String
+      #36
+      _cond
+        #36
+        _eq
+          #36
+          _object
+            i
+          : Int
+          #36
+          _int
+            0
+          : Int
+        : Bool
+        #36
+        _string
+          "0"
+        : String
+        #37
+        _cond
+          #37
+          _eq
+            #37
+            _object
+              i
+            : Int
+            #37
+            _int
+              1
+            : Int
+          : Bool
+          #37
+          _string
+            "1"
+          : String
+          #38
+          _cond
+            #38
+            _eq
+              #38
+              _object
+                i
+              : Int
+              #38
+              _int
+                2
+              : Int
+            : Bool
+            #38
+            _string
+              "2"
+            : String
+            #39
+            _cond
+              #39
+              _eq
+                #39
+                _object
+                  i
+                : Int
+                #39
+                _int
+                  3
+                : Int
+              : Bool
+              #39
+              _string
+                "3"
+              : String
+              #40
+              _cond
+                #40
+                _eq
+                  #40
+                  _object
+                    i
+                  : Int
+                  #40
+                  _int
+                    4
+                  : Int
+                : Bool
+                #40
+                _string
+                  "4"
+                : String
+                #41
+                _cond
+                  #41
+                  _eq
+                    #41
+                    _object
+                      i
+                    : Int
+                    #41
+                    _int
+                      5
+                    : Int
+                  : Bool
+                  #41
+                  _string
+                    "5"
+                  : String
+                  #42
+                  _cond
+                    #42
+                    _eq
+                      #42
+                      _object
+                        i
+                      : Int
+                      #42
+                      _int
+                        6
+                      : Int
+                    : Bool
+                    #42
+                    _string
+                      "6"
+                    : String
+                    #43
+                    _cond
+                      #43
+                      _eq
+                        #43
+                        _object
+                          i
+                        : Int
+                        #43
+                        _int
+                          7
+                        : Int
+                      : Bool
+                      #43
+                      _string
+                        "7"
+                      : String
+                      #44
+                      _cond
+                        #44
+                        _eq
+                          #44
+                          _object
+                            i
+                          : Int
+                          #44
+                          _int
+                            8
+                          : Int
+                        : Bool
+                        #44
+                        _string
+                          "8"
+                        : String
+                        #45
+                        _cond
+                          #45
+                          _eq
+                            #45
+                            _object
+                              i
+                            : Int
+                            #45
+                            _int
+                              9
+                            : Int
+                          : Bool
+                          #45
+                          _string
+                            "9"
+                          : String
+                          #46
+                          _block
+                            #46
+                            _dispatch
+                              #46
+                              _object
+                                self
+                              : SELF_TYPE
+                              abort
+                              (
+                              )
+                            : Object
+                            #46
+                            _string
+                              ""
+                            : String
+                          : String
+                        : String
+                      : String
+                    : String
+                  : String
+                : String
+              : String
+            : String
+          : String
+        : String
+      : String
+    #58
+    _method
+      a2i
+      #58
+      _formal
+        s
+        String
+      Int
+      #59
+      _cond
+        #59
+        _eq
+          #59
+          _dispatch
+            #59
+            _object
+              s
+            : String
+            length
+            (
+            )
+          : Int
+          #59
+          _int
+            0
+          : Int
+        : Bool
+        #59
+        _int
+          0
+        : Int
+        #60
+        _cond
+          #60
+          _eq
+            #60
+            _dispatch
+              #60
+              _object
+                s
+              : String
+              substr
+              (
+              #60
+              _int
+                0
+              : Int
+              #60
+              _int
+                1
+              : Int
+              )
+            : String
+            #60
+            _string
+              "-"
+            : String
+          : Bool
+          #60
+          _neg
+            #60
+            _dispatch
+              #60
+              _object
+                self
+              : SELF_TYPE
+              a2i_aux
+              (
+              #60
+              _dispatch
+                #60
+                _object
+                  s
+                : String
+                substr
+                (
+                #60
+                _int
+                  1
+                : Int
+                #60
+                _sub
+                  #60
+                  _dispatch
+                    #60
+                    _object
+                      s
+                    : String
+                    length
+                    (
+                    )
+                  : Int
+                  #60
+                  _int
+                    1
+                  : Int
+                : Int
+                )
+              : String
+              )
+            : Int
+          : Int
+          #61
+          _cond
+            #61
+            _eq
+              #61
+              _dispatch
+                #61
+                _object
+                  s
+                : String
+                substr
+                (
+                #61
+                _int
+                  0
+                : Int
+                #61
+                _int
+                  1
+                : Int
+                )
+              : String
+              #61
+              _string
+                "+"
+              : String
+            : Bool
+            #61
+            _dispatch
+              #61
+              _object
+                self
+              : SELF_TYPE
+              a2i_aux
+              (
+              #61
+              _dispatch
+                #61
+                _object
+                  s
+                : String
+                substr
+                (
+                #61
+                _int
+                  1
+                : Int
+                #61
+                _sub
+                  #61
+                  _dispatch
+                    #61
+                    _object
+                      s
+                    : String
+                    length
+                    (
+                    )
+                  : Int
+                  #61
+                  _int
+                    1
+                  : Int
+                : Int
+                )
+              : String
+              )
+            : Int
+            #62
+            _dispatch
+              #62
+              _object
+                self
+              : SELF_TYPE
+              a2i_aux
+              (
+              #62
+              _object
+                s
+              : String
+              )
+            : Int
+          : Int
+        : Int
+      : Int
+    #70
+    _method
+      a2i_aux
+      #70
+      _formal
+        s
+        String
+      Int
+      #71
+      _let
+        int
+        Int
+        #71
+        _int
+          0
+        : Int
+        #72
+        _block
+          #73
+          _let
+            j
+            Int
+            #73
+            _dispatch
+              #73
+              _object
+                s
+              : String
+              length
+              (
+              )
+            : Int
+            #74
+            _let
+              i
+              Int
+              #74
+              _int
+                0
+              : Int
+              #75
+              _loop
+                #75
+                _lt
+                  #75
+                  _object
+                    i
+                  : Int
+                  #75
+                  _object
+                    j
+                  : Int
+                : Bool
+                #76
+                _block
+                  #77
+                  _assign
+                    int
+                    #77
+                    _plus
+                      #77
+                      _mul
+                        #77
+                        _object
+                          int
+                        : Int
+                        #77
+                        _int
+                          10
+                        : Int
+                      : Int
+                      #77
+                      _dispatch
+                        #77
+                        _object
+                          self
+                        : SELF_TYPE
+                        c2i
+                        (
+                        #77
+                        _dispatch
+                          #77
+                          _object
+                            s
+                          : String
+                          substr
+                          (
+                          #77
+                          _object
+                            i
+                          : Int
+                          #77
+                          _int
+                            1
+                          : Int
+                          )
+                        : String
+                        )
+                      : Int
+                    : Int
+                  : Int
+                  #78
+                  _assign
+                    i
+                    #78
+                    _plus
+                      #78
+                      _object
+                        i
+                      : Int
+                      #78
+                      _int
+                        1
+                      : Int
+                    : Int
+                  : Int
+                : Int
+              : Object
+            : Object
+          : Object
+          #83
+          _object
+            int
+          : Int
+        : Int
+      : Int
+    #92
+    _method
+      i2a
+      #92
+      _formal
+        i
+        Int
+      String
+      #93
+      _cond
+        #93
+        _eq
+          #93
+          _object
+            i
+          : Int
+          #93
+          _int
+            0
+          : Int
+        : Bool
+        #93
+        _string
+          "0"
+        : String
+        #94
+        _cond
+          #94
+          _lt
+            #94
+            _int
+              0
+            : Int
+            #94
+            _object
+              i
+            : Int
+          : Bool
+          #94
+          _dispatch
+            #94
+            _object
+              self
+            : SELF_TYPE
+            i2a_aux
+            (
+            #94
+            _object
+              i
+            : Int
+            )
+          : String
+          #95
+          _dispatch
+            #95
+            _string
+              "-"
+            : String
+            concat
+            (
+            #95
+            _dispatch
+              #95
+              _object
+                self
+              : SELF_TYPE
+              i2a_aux
+              (
+              #95
+              _mul
+                #95
+                _object
+                  i
+                : Int
+                #95
+                _neg
+                  #95
+                  _int
+                    1
+                  : Int
+                : Int
+              : Int
+              )
+            : String
+            )
+          : String
+        : String
+      : String
+    #102
+    _method
+      i2a_aux
+      #102
+      _formal
+        i
+        Int
+      String
+      #103
+      _cond
+        #103
+        _eq
+          #103
+          _object
+            i
+          : Int
+          #103
+          _int
+            0
+          : Int
+        : Bool
+        #103
+        _string
+          ""
+        : String
+        #104
+        _let
+          next
+          Int
+          #104
+          _divide
+            #104
+            _object
+              i
+            : Int
+            #104
+            _int
+              10
+            : Int
+          : Int
+          #105
+          _dispatch
+            #105
+            _dispatch
+              #105
+              _object
+                self
+              : SELF_TYPE
+              i2a_aux
+              (
+              #105
+              _object
+                next
+              : Int
+              )
+            : String
+            concat
+            (
+            #105
+            _dispatch
+              #105
+              _object
+                self
+              : SELF_TYPE
+              i2c
+              (
+              #105
+              _sub
+                #105
+                _object
+                  i
+                : Int
+                #105
+                _mul
+                  #105
+                  _object
+                    next
+                  : Int
+                  #105
+                  _int
+                    10
+                  : Int
+                : Int
+              : Int
+              )
+            : String
+            )
+          : String
+        : String
+      : String
+    )
+  #121
+  _class
+    StackMachine
+    IO
+    "./test/testcases/test37.cl"
+    (
+    #122
+    _method
+      run
+      Object
+      #123
+      _let
+        shouldExit
+        Bool
+        #123
+        _bool
+          0
+        : Bool
+        #124
+        _let
+          commandStack
+          HeadList
+          #124
+          _new
+            HeadList
+          : HeadList
+          #125
+          _let
+            currentStr
+            String
+            #0
+            _no_expr
+            : _no_type
+            #126
+            _block
+              #127
+              _loop
+                #127
+                _comp
+                  #127
+                  _object
+                    shouldExit
+                  : Bool
+                : Bool
+                #128
+                _block
+                  #129
+                  _assign
+                    currentStr
+                    #129
+                    _dispatch
+                      #129
+                      _object
+                        self
+                      : SELF_TYPE
+                      in_string
+                      (
+                      )
+                    : String
+                  : String
+                  #130
+                  _let
+                    command
+                    StackCommand
+                    #130
+                    _dispatch
+                      #130
+                      _new
+                        StackCommandFactory
+                      : StackCommandFactory
+                      getCommandObject
+                      (
+                      #130
+                      _object
+                        currentStr
+                      : String
+                      )
+                    : StackCommand
+                    #130
+                    _block
+                      #131
+                      _assign
+                        shouldExit
+                        #131
+                        _dispatch
+                          #131
+                          _object
+                            command
+                          : StackCommand
+                          initExecute
+                          (
+                          #131
+                          _object
+                            commandStack
+                          : HeadList
+                          )
+                        : Bool
+                      : Bool
+                      #132
+                      _cond
+                        #132
+                        _eq
+                          #132
+                          _object
+                            shouldExit
+                          : Bool
+                          #132
+                          _bool
+                            1
+                          : Bool
+                        : Bool
+                        #133
+                        _dispatch
+                          #133
+                          _new
+                            IO
+                          : IO
+                          out_string
+                          (
+                          #133
+                          _string
+                            "Exiting ..."
+                          : String
+                          )
+                        : IO
+                        #135
+                        _dispatch
+                          #135
+                          _new
+                            IO
+                          : IO
+                          out_string
+                          (
+                          #135
+                          _string
+                            "Executing next command"
+                          : String
+                          )
+                        : IO
+                      : IO
+                    : IO
+                  : IO
+                : IO
+              : Object
+            : Object
+          : Object
+        : Object
+      : Object
+    )
+  #146
+  _class
+    StackCommandFactory
+    Object
+    "./test/testcases/test37.cl"
+    (
+    #147
+    _method
+      getCommandObject
+      #147
+      _formal
+        str
+        String
+      StackCommand
+      #148
+      _cond
+        #148
+        _eq
+          #148
+          _object
+            str
+          : String
+          #148
+          _string
+            "x"
+          : String
+        : Bool
+        #149
+        _dispatch
+          #149
+          _new
+            StopStackCommand
+          : StopStackCommand
+          init
+          (
+          #149
+          _object
+            str
+          : String
+          )
+        : StackCommand
+        #150
+        _cond
+          #150
+          _eq
+            #150
+            _object
+              str
+            : String
+            #150
+            _string
+              "d"
+            : String
+          : Bool
+          #151
+          _dispatch
+            #151
+            _new
+              DisplayStackCommand
+            : DisplayStackCommand
+            init
+            (
+            #151
+            _object
+              str
+            : String
+            )
+          : StackCommand
+          #152
+          _cond
+            #152
+            _eq
+              #152
+              _object
+                str
+              : String
+              #152
+              _string
+                "e"
+              : String
+            : Bool
+            #153
+            _dispatch
+              #153
+              _new
+                ExecuteStackCommand
+              : ExecuteStackCommand
+              init
+              (
+              #153
+              _object
+                str
+              : String
+              )
+            : StackCommand
+            #154
+            _cond
+              #154
+              _eq
+                #154
+                _object
+                  str
+                : String
+                #154
+                _string
+                  "s"
+                : String
+              : Bool
+              #155
+              _dispatch
+                #155
+                _new
+                  SwapStackCommand
+                : SwapStackCommand
+                init
+                (
+                #155
+                _object
+                  str
+                : String
+                )
+              : StackCommand
+              #156
+              _cond
+                #156
+                _eq
+                  #156
+                  _object
+                    str
+                  : String
+                  #156
+                  _string
+                    "+"
+                  : String
+                : Bool
+                #157
+                _dispatch
+                  #157
+                  _new
+                    PlusStackCommand
+                  : PlusStackCommand
+                  init
+                  (
+                  #157
+                  _object
+                    str
+                  : String
+                  )
+                : StackCommand
+                #158
+                _dispatch
+                  #158
+                  _new
+                    IntegerStackCommand
+                  : IntegerStackCommand
+                  init
+                  (
+                  #158
+                  _object
+                    str
+                  : String
+                  )
+                : StackCommand
+              : StackCommand
+            : StackCommand
+          : StackCommand
+        : StackCommand
+      : StackCommand
+    )
+  #164
+  _class
+    StackCommand
+    Object
+    "./test/testcases/test37.cl"
+    (
+    #165
+    _attr
+      cmdStr
+      String
+      #0
+      _no_expr
+      : _no_type
+    #166
+    _method
+      initExecute
+      #166
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #167
+      _block
+        #168
+        _dispatch
+          #168
+          _object
+            scl
+          : StackCommandList
+          push
+          (
+          #168
+          _object
+            self
+          : SELF_TYPE
+          )
+        : Object
+        #169
+        _bool
+          0
+        : Bool
+      : Bool
+    #174
+    _method
+      execute
+      #174
+      _formal
+        scl
+        StackCommandList
+      Object
+      #176
+      _object
+        self
+      : SELF_TYPE
+    #179
+    _method
+      init
+      #179
+      _formal
+        str
+        String
+      StackCommand
+      #180
+      _block
+        #181
+        _assign
+          cmdStr
+          #181
+          _object
+            str
+          : String
+        : String
+        #182
+        _object
+          self
+        : SELF_TYPE
+      : SELF_TYPE
+    #186
+    _method
+      getCommandString
+      String
+      #187
+      _object
+        cmdStr
+      : String
+    )
+  #191
+  _class
+    StopStackCommand
+    StackCommand
+    "./test/testcases/test37.cl"
+    (
+    #192
+    _method
+      initExecute
+      #192
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #193
+      _bool
+        1
+      : Bool
+    )
+  #198
+  _class
+    IntegerStackCommand
+    StackCommand
+    "./test/testcases/test37.cl"
+    (
+    #199
+    _method
+      execute
+      #199
+      _formal
+        scl
+        StackCommandList
+      Object
+      #201
+      _dispatch
+        #201
+        _object
+          scl
+        : StackCommandList
+        push
+        (
+        #201
+        _object
+          self
+        : SELF_TYPE
+        )
+      : Object
+    )
+  #206
+  _class
+    PlusStackCommand
+    StackCommand
+    "./test/testcases/test37.cl"
+    (
+    #207
+    _method
+      execute
+      #207
+      _formal
+        scl
+        StackCommandList
+      Object
+      #208
+      _block
+        #209
+        _let
+          com1
+          StackCommand
+          #209
+          _dispatch
+            #209
+            _object
+              scl
+            : StackCommandList
+            pop
+            (
+            )
+          : StackCommand
+          #210
+          _let
+            com2
+            StackCommand
+            #210
+            _dispatch
+              #210
+              _object
+                scl
+              : StackCommandList
+              pop
+              (
+              )
+            : StackCommand
+            #211
+            _block
+              #212
+              _let
+                int1
+                Int
+                #212
+                _dispatch
+                  #212
+                  _new
+                    A2I
+                  : A2I
+                  a2i
+                  (
+                  #212
+                  _dispatch
+                    #212
+                    _object
+                      com1
+                    : StackCommand
+                    getCommandString
+                    (
+                    )
+                  : String
+                  )
+                : Int
+                #213
+                _let
+                  int2
+                  Int
+                  #213
+                  _dispatch
+                    #213
+                    _new
+                      A2I
+                    : A2I
+                    a2i
+                    (
+                    #213
+                    _dispatch
+                      #213
+                      _object
+                        com2
+                      : StackCommand
+                      getCommandString
+                      (
+                      )
+                    : String
+                    )
+                  : Int
+                  #214
+                  _let
+                    int3
+                    Int
+                    #214
+                    _plus
+                      #214
+                      _object
+                        int1
+                      : Int
+                      #214
+                      _object
+                        int2
+                      : Int
+                    : Int
+                    #215
+                    _block
+                      #216
+                      _dispatch
+                        #216
+                        _object
+                          scl
+                        : StackCommandList
+                        push
+                        (
+                        #216
+                        _dispatch
+                          #216
+                          _new
+                            IntegerStackCommand
+                          : IntegerStackCommand
+                          init
+                          (
+                          #216
+                          _dispatch
+                            #216
+                            _new
+                              A2I
+                            : A2I
+                            i2a
+                            (
+                            #216
+                            _object
+                              int3
+                            : Int
+                            )
+                          : String
+                          )
+                        : StackCommand
+                        )
+                      : Object
+                    : Object
+                  : Object
+                : Object
+              : Object
+            : Object
+          : Object
+        : Object
+        #220
+        _object
+          self
+        : SELF_TYPE
+      : SELF_TYPE
+    )
+  #227
+  _class
+    SwapStackCommand
+    StackCommand
+    "./test/testcases/test37.cl"
+    (
+    #228
+    _method
+      execute
+      #228
+      _formal
+        scl
+        StackCommandList
+      Object
+      #229
+      _block
+        #230
+        _let
+          com1
+          StackCommand
+          #230
+          _dispatch
+            #230
+            _object
+              scl
+            : StackCommandList
+            pop
+            (
+            )
+          : StackCommand
+          #231
+          _let
+            com2
+            StackCommand
+            #231
+            _dispatch
+              #231
+              _object
+                scl
+              : StackCommandList
+              pop
+              (
+              )
+            : StackCommand
+            #232
+            _block
+              #233
+              _dispatch
+                #233
+                _object
+                  scl
+                : StackCommandList
+                push
+                (
+                #233
+                _object
+                  com1
+                : StackCommand
+                )
+              : Object
+              #234
+              _dispatch
+                #234
+                _object
+                  scl
+                : StackCommandList
+                push
+                (
+                #234
+                _object
+                  com2
+                : StackCommand
+                )
+              : Object
+            : Object
+          : Object
+        : Object
+        #237
+        _object
+          self
+        : SELF_TYPE
+      : SELF_TYPE
+    )
+  #243
+  _class
+    ExecuteStackCommand
+    StackCommand
+    "./test/testcases/test37.cl"
+    (
+    #244
+    _method
+      initExecute
+      #244
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #245
+      _block
+        #246
+        _cond
+          #246
+          _comp
+            #246
+            _dispatch
+              #246
+              _object
+                scl
+              : StackCommandList
+              isEmpty
+              (
+              )
+            : Bool
+          : Bool
+          #247
+          _let
+            currentCommand
+            StackCommand
+            #247
+            _dispatch
+              #247
+              _object
+                scl
+              : StackCommandList
+              pop
+              (
+              )
+            : StackCommand
+            #248
+            _block
+              #249
+              _dispatch
+                #249
+                _object
+                  currentCommand
+                : StackCommand
+                execute
+                (
+                #249
+                _object
+                  scl
+                : StackCommandList
+                )
+              : Object
+              #250
+              _bool
+                0
+              : Bool
+            : Bool
+          : Bool
+          #253
+          _bool
+            0
+          : Bool
+        : Bool
+      : Bool
+    )
+  #261
+  _class
+    DisplayStackCommand
+    StackCommand
+    "./test/testcases/test37.cl"
+    (
+    #262
+    _method
+      initExecute
+      #262
+      _formal
+        scl
+        StackCommandList
+      Bool
+      #263
+      _block
+        #264
+        _dispatch
+          #264
+          _object
+            scl
+          : StackCommandList
+          print
+          (
+          )
+        : Object
+        #265
+        _bool
+          0
+        : Bool
+      : Bool
+    )
+  #271
+  _class
+    StackCommandList
+    Object
+    "./test/testcases/test37.cl"
+    (
+    #273
+    _attr
+      command
+      StackCommand
+      #0
+      _no_expr
+      : _no_type
+    #274
+    _attr
+      commandList
+      StackCommandList
+      #0
+      _no_expr
+      : _no_type
+    #276
+    _method
+      isHead
+      Bool
+      #276
+      _bool
+        0
+      : Bool
+    #278
+    _method
+      push
+      #278
+      _formal
+        sc
+        StackCommand
+      Object
+      #279
+      _block
+        #280
+        _assign
+          commandList
+          #280
+          _dispatch
+            #280
+            _new
+              StackCommandList
+            : StackCommandList
+            init
+            (
+            #280
+            _object
+              sc
+            : StackCommand
+            #280
+            _object
+              commandList
+            : StackCommandList
+            )
+          : StackCommandList
+        : StackCommandList
+      : StackCommandList
+    #284
+    _method
+      pop
+      StackCommand
+      #285
+      _let
+        com
+        StackCommand
+        #285
+        _dispatch
+          #285
+          _object
+            commandList
+          : StackCommandList
+          getCommand
+          (
+          )
+        : StackCommand
+        #286
+        _block
+          #287
+          _assign
+            commandList
+            #287
+            _dispatch
+              #287
+              _object
+                commandList
+              : StackCommandList
+              getCommandList
+              (
+              )
+            : StackCommandList
+          : StackCommandList
+          #288
+          _object
+            com
+          : StackCommand
+        : StackCommand
+      : StackCommand
+    #292
+    _method
+      isEmpty
+      Bool
+      #293
+      _cond
+        #293
+        _comp
+          #293
+          _isvoid
+            #293
+            _object
+              commandList
+            : StackCommandList
+          : Bool
+        : Bool
+        #293
+        _bool
+          0
+        : Bool
+        #293
+        _bool
+          1
+        : Bool
+      : Bool
+    #296
+    _method
+      init
+      #296
+      _formal
+        sc
+        StackCommand
+      #296
+      _formal
+        sl
+        StackCommandList
+      StackCommandList
+      #297
+      _block
+        #298
+        _assign
+          command
+          #298
+          _object
+            sc
+          : StackCommand
+        : StackCommand
+        #299
+        _assign
+          commandList
+          #299
+          _object
+            sl
+          : StackCommandList
+        : StackCommandList
+        #300
+        _object
+          self
+        : SELF_TYPE
+      : SELF_TYPE
+    #304
+    _method
+      getCommand
+      StackCommand
+      #305
+      _object
+        command
+      : StackCommand
+    #308
+    _method
+      getCommandList
+      StackCommandList
+      #309
+      _object
+        commandList
+      : StackCommandList
+    #312
+    _method
+      print
+      Object
+      #313
+      _cond
+        #313
+        _comp
+          #313
+          _isvoid
+            #313
+            _object
+              commandList
+            : StackCommandList
+          : Bool
+        : Bool
+        #315
+        _block
+          #316
+          _dispatch
+            #316
+            _new
+              IO
+            : IO
+            out_string
+            (
+            #316
+            _dispatch
+              #316
+              _dispatch
+                #316
+                _dispatch
+                  #316
+                  _object
+                    commandList
+                  : StackCommandList
+                  getCommand
+                  (
+                  )
+                : StackCommand
+                getCommandString
+                (
+                )
+              : String
+              concat
+              (
+              #316
+              _string
+                "\n"
+              : String
+              )
+            : String
+            )
+          : IO
+          #317
+          _dispatch
+            #317
+            _object
+              commandList
+            : StackCommandList
+            print
+            (
+            )
+          : Object
+        : Object
+        #320
+        _object
+          self
+        : SELF_TYPE
+      : Object
+    )
+  #326
+  _class
+    HeadList
+    StackCommandList
+    "./test/testcases/test37.cl"
+    (
+    #327
+    _method
+      isHead
+      Bool
+      #327
+      _bool
+        1
+      : Bool
+    )
+  #330
+  _class
+    Main
+    IO
+    "./test/testcases/test37.cl"
+    (
+    #332
+    _method
+      main
+      Object
+      #333
+      _block
+        #334
+        _dispatch
+          #334
+          _new
+            StackMachine
+          : StackMachine
+          run
+          (
+          )
+        : Object
+      : Object
+    )
