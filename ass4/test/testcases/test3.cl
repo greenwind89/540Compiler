@@ -1,6 +1,6 @@
--- cannot redefine Object
+-- cannot redefine Bool
 
-class Object {
+class Bool{
 };
 
 Class Main {

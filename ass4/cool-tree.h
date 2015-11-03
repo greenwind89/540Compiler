@@ -142,7 +142,7 @@ public:
    Program copy_Program();
    void dump(ostream& stream, int n);
 
-   void checkClassDeclarations();
+   bool checkClassDeclarations(void* ct);
 
 #ifdef Program_SHARED_EXTRAS
    Program_SHARED_EXTRAS

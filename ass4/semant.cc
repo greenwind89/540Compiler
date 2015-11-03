@@ -91,6 +91,7 @@ static void initialize_constants(void)
 unsigned int hash(char *p);
 
 ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) {
+
   this->parentsTbl = new SymbolTable<Symbol,  Entry>(); // look for parent of a class
   this->classScopeTbl = new SymbolTable<Symbol, SymbolTable< Symbol, Symbol> >(); // look for scope of a class
 
@@ -100,6 +101,7 @@ ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) 
   this->parentsTbl->enterscope();
   this->classScopeTbl->enterscope();
   this->classMethodTbl->enterscope();
+
 
 
   this->install_basic_classes();
@@ -978,6 +980,7 @@ Symbol object_class::traverseScope(void *ct, void *tbl) {
 
 ostream& ClassTable::semant_error(Class_ c)
 {
+    //cout<<"hate"<<endl;
     return semant_error(c->get_filename(),c);
 }
 
@@ -989,6 +992,7 @@ ostream& ClassTable::semant_error(Symbol filename, tree_node *t)
 
 ostream& ClassTable::semant_error()
 {
+
     semant_errors++;
     return error_stream;
 }
@@ -1069,7 +1073,9 @@ ostream& ClassTable::semant_error()
        tree_node *tree=classes->nth(i);
        class__class *classItem=(class__class*)tree;
        xClassName=classItem->name->get_string();
+      // cout<<xChar<<" move bb "<<xClassName<<endl;
        if(strcmp(xChar,xClassName)==0){
+        // cout<<xChar<<" move yes "<<xClassName<<endl;
          classF=classItem;
          checkUndefined=false;
          break;
@@ -1101,13 +1107,14 @@ ostream& ClassTable::semant_error()
          checkInvalid=true;
          break;
        }
+
      }
    };
    return checkInvalid;
  }
  bool class__class::check_inherit_special_class(void* ct){
    char* arrRClass[]={"Bool","Int","IO","String"};
-   int  rClassLength=5;
+   int  rClassLength=4;
    Classes classes=(Classes)ct;
    //  cout<<"handle method here"<<endl;
    Symbol xFatherClass;
@@ -1159,22 +1166,23 @@ ostream& ClassTable::semant_error()
  void program_class::semant()
  {
    initialize_constants();
+
    /* ClassTable constructor may do some semantic analysis */
    ClassTable *classtable = new ClassTable(classes);
 
-  //  this->checkClassDeclarations();
+   bool checkStaticSemantic=this->checkClassDeclarations(classtable);
    //  dump_line(stream,n,this);
 
 
    /* some semantic analysis code may go here */
-   if (classtable->errors()) {
+   if (classtable->errors()||!checkStaticSemantic) {
      cerr << "Compilation halted due to static semantic errors." << endl;
      exit(1);
    }
 
  }
 
- void program_class::checkClassDeclarations() {
+ bool program_class::checkClassDeclarations(void* ct) {
 
    bool checkDependentGraph=false;
    bool checkClassRedefined=false;
@@ -1185,10 +1193,11 @@ ostream& ClassTable::semant_error()
 
    bool needToCheckInherit=true;
    int errorIndex=0;
+
+   ClassTable *classtable = (ClassTable*)ct;
    // cout<<"call semant here";
    // cout<<endl;
    int length=classes->len();
-
    for(int i = classes->first(); classes->more(i); i = classes->next(i))
    {
 
@@ -1204,6 +1213,7 @@ ostream& ClassTable::semant_error()
      //   Class_ c=classItem->copy_Class_();
      //  Program pClass=classes->nth(i)->copy_Program();
      //  list_node<Elem> lstNode= classes->nth(i)->copy()->copy_list();
+
      checkNotHaveMainClass=classItem->check_must_have_main_class((void*)classes);
      if(checkNotHaveMainClass){
        cout<<"Class Main is not defined."<<endl;
@@ -1211,12 +1221,13 @@ ostream& ClassTable::semant_error()
        needToCheckInherit=false;
        break;
      }
-
      checkClassRedefined=classItem->check_invalid_name((void*)classes);
      if(checkClassRedefined){
        cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Redefinition of basic class "<<classItem->getName()<<"."<<endl;
        checkStaticSemantic=false;
      }
+
+
 
      checkClassInheritSpecialCLass=classItem->check_inherit_special_class((void*)classes);
      if(checkClassInheritSpecialCLass){
@@ -1225,7 +1236,9 @@ ostream& ClassTable::semant_error()
        needToCheckInherit=false;
      }else{
        checkClassUndefined=classItem->check_undefined((void*)classes);
+      // cout<<checkClassUndefined<<" strange"<<endl;
        if(checkClassUndefined){
+        // cout<<checkClassUndefined<<" stranger"<<endl;
          cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
          checkStaticSemantic=false;
          needToCheckInherit=false;
@@ -1238,7 +1251,7 @@ ostream& ClassTable::semant_error()
          errorIndex=length-i-1;
          tree_node *tree=classes->nth(errorIndex);
          class__class *classItem=(class__class*)tree;
-         cout<<classItem->getFilename()<<": "<<tree->get_line_number()<<": Class "<<classItem->getName()<<", or an ancestor of "<<classItem->getName()<<", is involved in an inheritance cycle."<<endl;
+         cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<", or an ancestor of "<<classItem->getName()<<", is involved in an inheritance cycle."<<endl;
          //break;
          checkStaticSemantic=false;
        }
@@ -1246,6 +1259,7 @@ ostream& ClassTable::semant_error()
      }
 
    }
+   return checkStaticSemantic;
  }
 
  Symbol class__class::getName(){
