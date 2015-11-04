@@ -1,18 +1,29 @@
 Write-up for PA4
 ----------------
+Minh Truong
+Hung Phan
+
+The development and test process of this project is guided by COOL manual and semant file provided by instructors. We firstly scan through all cool manual, then we create a list of issues to implement and corresponding test case for that issue. Moreover, thanks to the given semant file, we use it as oracle and write a test script that comparing error and output stream of the oracle with our test cases one by one to make sure everything is correct. As a result of this method, we have 37 test cases both for good and bad cases of COOL. We will use these test cases as replacement for bad.cl and good.cl.
+
+Basically the program runs two passes over the source code. The first passes is to build the class graphs together with attributes and functions for each class. The second passes is to do type inference and type checking. Due to some difference in development method among team member, the actual code runs through parse tree more than two but it can always be refactored into two if necessary.
+
+To maintain the class hierarchy, we use a hash table that map a class symbol to its parent symbol. We also maintain a table to map each class to its own variable scope (which in turns is a list of hash table). We separate variable from method of a class since we need to do some method checking based on the inheritance structure, so we use another table to maintain mapping between a class and its method.
+
+For the above reason, hash table is the most important data structure in this application. We use to symbol table given by instructor as our hash table even though the symbol table implementation is not a real hash table implementation, and suffers bad performance. The reason is because the scope of this project is small, we want to save time and performance is not main objectives of this project.
+
+The tree traversal procedures are implemented in the same way as dump_type, we modify cool-tree.h to include the new traversal method for each type of node in tree and recursively traverse each of them.
+
+After setting up all test cases and noting issues need implementing, the implementation process is straightforward by trying to past test case one by one.
+
+Since we have too many test cases, it is hard to describe one by one. In general, first 14 test cases are about class hierarchy, the next 22 cases are about type checking of each type rule in COOL manual. The test case 37 is a large COOL program collected by merging our stack.cl and atoi.cl to test our decorated parse tree. In case of more detail, you can refer to: https://github.com/greenwind89/540Compiler/issues?q=is%3Aissue+is%3Aclosed  for description of test cases.
 
 
+Some extra notices:
 
++ SELF_TYPE in case of new statement. When we new SELF_TYPE, if type of the statement is correct with the parent case it will always be correct with children case (since we assigning parent to a variable), so we only need to check SELF_TYPE in this case with parent type.
 
-In the good.cl and bad.cl, we input 3 classes with inheritance structure. In each class, it will have expressions.
-If the expression coverage 100% correct in a .cl file, it regarded as correct structure. If not, out AST will annotate the incorrect expression.
++ Due to the mismatch between Complement and Negation from parser, in this assignment, we follow the error by implement checking of neg in comp_class and vice versa to make our test cases pass.
 
++ We can go sloppy when checking method signature of the static dispatch by using the same routine as normal dispatch thanks to the rule of COOL which does not allow overriding method to have different signature so we can check the signature at any where among descendants.
 
-
-SELF_TYPE in case of new, if it is correct with the parent case it will always be correct with children case so we only need to check SELF_TYPE in this case with parent type
-
-Due to the mismatch between Complement and Negation derived from parser, in this assignment, we follow the erro by implement checking of neg in comp_classa and vice versa.
-
-We can go sloppy when checking method signature of the static dispatch by using the same routine as normal dispatch thanks to the rule of COOL which does not allow overriding method to have different signature so we can check the signature at any where among descendants.
-
-Since we use given semant file as oracle for our regression test, we have to adjust to some error in COOL's error messages to make the test pass like removing '.' at the end of error message in *,/, , - , ...
++ Since we use given semant file as oracle for our regression test, we have to adjust to some error in COOL's error messages to make the test pass like removing '.' at the end of error message in *,/, , - , ...
