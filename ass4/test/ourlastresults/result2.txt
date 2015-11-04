@@ -1,45 +1,4 @@
-#3
-_program
-  #3
-  _class
-    C
-    D
-    "./test/testcases/test2.cl"
-    (
-    )
-  #6
-  _class
-    D
-    E
-    "./test/testcases/test2.cl"
-    (
-    )
-  #10
-  _class
-    E
-    C
-    "./test/testcases/test2.cl"
-    (
-    )
-  #14
-  _class
-    Main
-    Object
-    "./test/testcases/test2.cl"
-    (
-    #15
-    _method
-      main
-      Object
-      #16
-      _plus
-        #16
-        _int
-          1
-        : Int
-        #16
-        _int
-          1
-        : Int
-      : Int
-    )
+./test/testcases/test2.cl:10: Class E, or an ancestor of E, is involved in an inheritance cycle.
+./test/testcases/test2.cl:6: Class D, or an ancestor of D, is involved in an inheritance cycle.
+./test/testcases/test2.cl:3: Class C, or an ancestor of C, is involved in an inheritance cycle.
+Compilation halted due to static semantic errors.

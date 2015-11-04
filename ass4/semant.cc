@@ -96,11 +96,13 @@ ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) 
   this->classScopeTbl = new SymbolTable<Symbol, SymbolTable< Symbol, Symbol> >(); // look for scope of a class
 
   this->classMethodTbl = new SymbolTable<Symbol, SymbolTable< Symbol, tree_node> >();
+  this->classInfoTbl = new SymbolTable<Symbol,  tree_node >();
 
 
   this->parentsTbl->enterscope();
   this->classScopeTbl->enterscope();
   this->classMethodTbl->enterscope();
+  this->classInfoTbl->enterscope();
 
 
 
@@ -112,6 +114,7 @@ ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) 
     this->addClass((class__class *) classes->nth(i));
   }
 
+  this->checkMain();
   // second traverse to go through method expression of each class
   for(int i = classes->first(); classes->more(i); i = classes->next(i))
   {
@@ -123,10 +126,37 @@ ClassTable::ClassTable(Classes classes) : semant_errors(0) , error_stream(cerr) 
   //this->classMethodTbl->dump();
 }
 
+bool ClassTable::checkMain() {
+  SymbolTable<Symbol, tree_node> *mainMethodTbl = this->classMethodTbl->lookup(Main);
+  tree_node * mainClassNode = this->classInfoTbl->lookup(Main);
+
+  if(mainMethodTbl != NULL) {
+    method_class *meth = (method_class *) mainMethodTbl->lookup(main_meth);
+    if(meth == NULL) {
+      this->semant_error(this->getCurrentClass()->get_filename(), mainClassNode) << "No 'main' method in class Main.\n";
+      return false;
+    } else {
+      if(meth->getFormals()->len() > 0) {
+        this->semant_error(this->getCurrentClass()->get_filename(), mainClassNode) << "'main' method in class Main should have no arguments.\n";
+        return false;
+      }
+    }
+  }
+
+  return false;
+}
+
 void ClassTable::traverseClass(class__class *c) {
   SymbolTable<Symbol, Symbol> *tbl = this->classScopeTbl->lookup((Entry *) c->getName());
   this->currentClass = c;
   c->traverseScope(this, tbl, 2);
+}
+
+bool ClassTable::checkClassExits(Symbol name) {
+  SymbolTable<Symbol, Symbol> *tbl = this->classScopeTbl->lookup((Entry *) name);
+  if(tbl == NULL) return false;
+
+  return true;
 }
 
 void ClassTable::addClass(class__class *c) {
@@ -141,6 +171,8 @@ void ClassTable::addClass(class__class *c) {
 
   this->currentClass = c;
   c->traverseScope(this, tbl, 1);
+
+  this->classInfoTbl->addid((Entry *) c->getName(), c);
 
   // tbl->dump();
 }
@@ -375,11 +407,21 @@ void ClassTable::install_basic_classes() {
 // tree traversal to build symbol table
 void class__class::traverseScope(void *ct, void *tbl, int round) {
   SymbolTable<Symbol, tree_node> *table = (SymbolTable<Symbol, tree_node> *) tbl;
+  ClassTable *classTable = (ClassTable *) ct;
+  if(round == 2) {
+    if(!classTable->checkClassExits(parent)) {
+
+      classTable->semant_error(classTable->getCurrentClass()->get_filename(), this) << "Class " << name << " inherits from an undefined class " << parent << ".\n";
+    }
+
+  }
   table->enterscope();
   for(int i = features->first(); features->more(i); i = features->next(i))
      features->nth(i)->traverseScope(ct, table, round);
-  if(round == 2)
+  if(round == 2) {
     table->exitscope();
+
+  }
 }
 
 Symbol method_class::traverseScope(void *ct, void *tbl, int round) {
@@ -1113,7 +1155,8 @@ ostream& ClassTable::semant_error()
    return checkInvalid;
  }
  bool class__class::check_inherit_special_class(void* ct){
-   char* arrRClass[]={"Bool","Int","IO","String"};
+  //  char* arrRClass[]={"Bool","Int","IO","String"};
+   char* arrRClass[]={"Bool","Int","String"}; // fix by minhtruong, still can inherit IO
    int  rClassLength=4;
    Classes classes=(Classes)ct;
    //  cout<<"handle method here"<<endl;
@@ -1237,12 +1280,13 @@ ostream& ClassTable::semant_error()
      }else{
        checkClassUndefined=classItem->check_undefined((void*)classes);
       // cout<<checkClassUndefined<<" strange"<<endl;
-       if(checkClassUndefined){
-        // cout<<checkClassUndefined<<" stranger"<<endl;
-         cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
-         checkStaticSemantic=false;
-         needToCheckInherit=false;
-       }
+      // this checking is not correct, I have another routine to check this
+      //  if(checkClassUndefined){
+      //   // cout<<checkClassUndefined<<" stranger"<<endl;
+      //    cout<<classItem->getFilename()<<":"<<tree->get_line_number()<<": Class "<<classItem->getName()<<" inherits from an undefined class "<<classItem->getParent()<<"."<<endl;
+      //    checkStaticSemantic=false;
+      //    needToCheckInherit=false;
+      //  }
      }
 
      if(needToCheckInherit){

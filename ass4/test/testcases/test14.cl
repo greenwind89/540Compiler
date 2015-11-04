@@ -6,7 +6,7 @@ class C inherits A {
   d: D;
 
   test(b: Int): Int {
-    let c: Int, aString:String <- "a12" in c <- a + b + f + fromA
+    let c: Int, aString:String <- "a12" in c <- a + b +  fromA
   };
 
   test2(e: D): D {

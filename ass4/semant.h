@@ -29,7 +29,7 @@ private:
   SymbolTable<Symbol, Entry> *parentsTbl;
   SymbolTable<Symbol, SymbolTable<Symbol, Symbol> > *classScopeTbl;
   SymbolTable<Symbol, SymbolTable<Symbol, tree_node> > *classMethodTbl;
-
+  SymbolTable<Symbol,  tree_node > *classInfoTbl;
   void install_basic_classes();
 
 
@@ -55,6 +55,8 @@ public:
   method_class* getMethodWithSameNameFromParents(Symbol name);
 
   Symbol getLUB(Symbol t1, Symbol t2);
+  bool checkMain();
+  bool checkClassExits(Symbol name);
 
 };
 

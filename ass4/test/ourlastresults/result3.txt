@@ -1,0 +1,2 @@
+./test/testcases/test3.cl:3: Redefinition of basic class Bool.
+Compilation halted due to static semantic errors.
