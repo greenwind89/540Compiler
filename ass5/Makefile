@@ -1,0 +1,60 @@
+SRC= cgen.cc cgen.h cgen_supp.cc cool-tree.h cool-tree.handcode.h emit.h example.cl README
+CSRC= cgen-phase.cc utilities.cc stringtab.cc dumptype.cc tree.cc cool-tree.cc ast-lex.cc ast-parse.cc handle_flags.cc 
+TSRC= mycoolc
+CGEN=
+HGEN= 
+LIBS= lexer parser semant
+CFIL= cgen.cc cgen_supp.cc ${CSRC} ${CGEN}
+LSRC= Makefile
+OBJS= ${CFIL:.cc=.o}
+OUTPUT= good.output bad.output
+
+
+CPPINCLUDE= -I. 
+
+
+FFLAGS = -d8 -ocool-lex.cc
+BFLAGS = -d -v -y -b cool --debug -p cool_yy
+
+CC=g++
+CFLAGS=-g -Wall -Wno-unused ${CPPINCLUDE} -DDEBUG
+FLEX=flex ${FFLAGS}
+BISON= bison ${BFLAGS}
+DEPEND = ${CC} -MM ${CPPINCLUDE}
+
+source: ${SRC} ${TSRC} ${LIBS} lsource
+
+lsource: ${LSRC}
+
+${OUTPUT}:	cgen
+	@rm -f ${OUTPUT}
+	./mycoolc  example.cl >example.output 2>&1 
+
+compile:	cgen change-prot
+
+change-prot:
+	@-chmod 660 ${SRC} ${OUTPUT}
+
+cgen:	${OBJS} parser semant
+	${CC} ${CFLAGS} ${OBJS} -o cgen
+
+.cc.o:
+	${CC} ${CFLAGS} -c $<
+
+dotest:	cgen example.cl
+	@echo "\nRunning code generator on example.cl\n"
+	-./mycoolc example.cl
+
+
+clean :
+	-rm -f ${OUTPUT} *.s core ${OBJS} *~ *.a *.o *.d
+
+clean-compile:
+	@-rm -f core ${OBJS} ${LSRC}
+
+%.d: %.cc ${SRC}
+	${SHELL} -ec '${DEPEND} $< | sed '\''s/\($*\.o\)[ :]*/\1 $@ : /g'\'' > $@'
+
+-include ${CFIL:.cc=.d}
+
+
