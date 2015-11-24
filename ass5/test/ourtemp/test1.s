@@ -26,28 +26,46 @@ _MemMgr_COLLECTOR:
 _MemMgr_TEST:
 	.word	0
 	.word	-1
-str_const12:
+str_const14:
 	.word	0
 	.word	5
-	.word	
+	.word	String_dispTab
 	.word	int_const0
+	.byte	0	
+	.align	2
+	.word	-1
+str_const13:
+	.word	0
+	.word	6
+	.word	String_dispTab
+	.word	int_const1
+	.ascii	"Main"
+	.byte	0	
+	.align	2
+	.word	-1
+str_const12:
+	.word	0
+	.word	7
+	.word	String_dispTab
+	.word	int_const2
+	.ascii	"WaterBender"
 	.byte	0	
 	.align	2
 	.word	-1
 str_const11:
 	.word	0
 	.word	6
-	.word	
-	.word	int_const1
-	.ascii	"Main"
+	.word	String_dispTab
+	.word	int_const3
+	.ascii	"Bender"
 	.byte	0	
 	.align	2
 	.word	-1
 str_const10:
 	.word	0
 	.word	6
-	.word	
-	.word	int_const2
+	.word	String_dispTab
+	.word	int_const3
 	.ascii	"String"
 	.byte	0	
 	.align	2
@@ -55,7 +73,7 @@ str_const10:
 str_const9:
 	.word	0
 	.word	6
-	.word	
+	.word	String_dispTab
 	.word	int_const1
 	.ascii	"Bool"
 	.byte	0	
@@ -64,8 +82,8 @@ str_const9:
 str_const8:
 	.word	0
 	.word	5
-	.word	
-	.word	int_const3
+	.word	String_dispTab
+	.word	int_const4
 	.ascii	"Int"
 	.byte	0	
 	.align	2
@@ -73,8 +91,8 @@ str_const8:
 str_const7:
 	.word	0
 	.word	5
-	.word	
-	.word	int_const4
+	.word	String_dispTab
+	.word	int_const5
 	.ascii	"IO"
 	.byte	0	
 	.align	2
@@ -82,8 +100,8 @@ str_const7:
 str_const6:
 	.word	0
 	.word	6
-	.word	
-	.word	int_const2
+	.word	String_dispTab
+	.word	int_const3
 	.ascii	"Object"
 	.byte	0	
 	.align	2
@@ -91,8 +109,8 @@ str_const6:
 str_const5:
 	.word	0
 	.word	7
-	.word	
-	.word	int_const5
+	.word	String_dispTab
+	.word	int_const6
 	.ascii	"_prim_slot"
 	.byte	0	
 	.align	2
@@ -100,8 +118,8 @@ str_const5:
 str_const4:
 	.word	0
 	.word	7
-	.word	
-	.word	int_const6
+	.word	String_dispTab
+	.word	int_const7
 	.ascii	"SELF_TYPE"
 	.byte	0	
 	.align	2
@@ -109,8 +127,8 @@ str_const4:
 str_const3:
 	.word	0
 	.word	7
-	.word	
-	.word	int_const6
+	.word	String_dispTab
+	.word	int_const7
 	.ascii	"_no_class"
 	.byte	0	
 	.align	2
@@ -118,8 +136,8 @@ str_const3:
 str_const2:
 	.word	0
 	.word	8
-	.word	
-	.word	int_const7
+	.word	String_dispTab
+	.word	int_const8
 	.ascii	"<basic class>"
 	.byte	0	
 	.align	2
@@ -127,8 +145,8 @@ str_const2:
 str_const1:
 	.word	0
 	.word	6
-	.word	
-	.word	int_const8
+	.word	String_dispTab
+	.word	int_const9
 	.ascii	"Hello"
 	.byte	0	
 	.align	2
@@ -136,59 +154,65 @@ str_const1:
 str_const0:
 	.word	0
 	.word	11
-	.word	
-	.word	int_const9
+	.word	String_dispTab
+	.word	int_const10
 	.ascii	"./test/testcases/test1.cl"
 	.byte	0	
 	.align	2
 	.word	-1
-int_const9:
+int_const10:
 	.word	0
 	.word	4
 	.word	
 	.word	25
 	.word	-1
-int_const8:
+int_const9:
 	.word	0
 	.word	4
 	.word	
 	.word	5
 	.word	-1
-int_const7:
+int_const8:
 	.word	0
 	.word	4
 	.word	
 	.word	13
 	.word	-1
-int_const6:
+int_const7:
 	.word	0
 	.word	4
 	.word	
 	.word	9
 	.word	-1
-int_const5:
+int_const6:
 	.word	0
 	.word	4
 	.word	
 	.word	10
 	.word	-1
-int_const4:
+int_const5:
 	.word	0
 	.word	4
 	.word	
 	.word	2
 	.word	-1
-int_const3:
+int_const4:
 	.word	0
 	.word	4
 	.word	
 	.word	3
 	.word	-1
-int_const2:
+int_const3:
 	.word	0
 	.word	4
 	.word	
 	.word	6
+	.word	-1
+int_const2:
+	.word	0
+	.word	4
+	.word	
+	.word	11
 	.word	-1
 int_const1:
 	.word	0

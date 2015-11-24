@@ -398,16 +398,16 @@ void StringEntry::code_def(ostream& s, int stringclasstag)
 
   code_ref(s);  s  << LABEL                                             // label
       << WORD << stringclasstag << endl                                 // tag
-      << WORD << (DEFAULT_OBJFIELDS + STRING_SLOTS + (len+4)/4) << endl // size
-      << WORD;
+      << WORD << (DEFAULT_OBJFIELDS + STRING_SLOTS + (len+4)/4) << endl; // size
 
 
  /***** Add dispatch information for class String ******/
 
-      s << endl;                                              // dispatch table
+      s << WORD << STRINGNAME << DISPTAB_SUFFIX << endl; // dispatch table
+
       s << WORD;  lensym->code_ref(s);  s << endl;            // string length
-  emit_string_constant(s,str);                                // ascii string
-  s << ALIGN;                                                 // align to word
+      emit_string_constant(s,str);                                // ascii string
+      s << ALIGN;                                                 // align to word
 }
 
 //
