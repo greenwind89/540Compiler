@@ -21,6 +21,7 @@ private:
    int stringclasstag;
    int intclasstag;
    int boolclasstag;
+   int otherObjectTag;
 
 
 // The following methods emit code for
@@ -31,6 +32,9 @@ private:
    void code_bools(int);
    void code_select_gc();
    void code_constants();
+
+   void code_class_layout();
+   void code_class_name_table();
 
 // The following creates an inheritance graph from
 // a list of classes.  The graph is implemented as
@@ -46,11 +50,12 @@ public:
    CgenClassTable(Classes, ostream& str);
    void code();
    CgenNodeP root();
+
 };
 
 
 class CgenNode : public class__class {
-private: 
+private:
    CgenNodeP parentnd;                        // Parent of class
    List<CgenNode> *children;                  // Children of class
    Basicness basic_status;                    // `Basic' if class is basic
@@ -66,15 +71,18 @@ public:
    void set_parentnd(CgenNodeP p);
    CgenNodeP get_parentnd() { return parentnd; }
    int basic() { return (basic_status == Basic); }
+
+   void code_class_layout(ostream& str, int &tagNumber);
+   Features get_features();
+   Symbol get_name();
 };
 
-class BoolConst 
+class BoolConst
 {
- private: 
+ private:
   int val;
  public:
   BoolConst(int);
   void code_def(ostream&, int boolclasstag);
   void code_ref(ostream&) const;
 };
-

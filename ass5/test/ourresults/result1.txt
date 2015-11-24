@@ -3,21 +3,24 @@ Copyright 1990-2003 by James R. Larus (larus@cs.wisc.edu).
 All Rights Reserved.
 See the file README for a full copyright notice.
 Loaded: ./lib/trap.handler
-spim: (parser) syntax error on line 33 of file ./test/ourtemp/test1.s
-	  .word	
-	        ^
 The following symbols are undefined:
-heap_start
-Int_protObj
+Katara.waterBend
+Bender.bend
+WaterBender_init
 Main.main
-String_protObj
-class_nameTab
+Bool_init
+str_const16
+str_const19
+IO_init
 Int_init
 String_init
-Main_protObj
-bool_const0
-bool_const1
+Object_init
+str_const30
+str_const33
+Bender_init
+Katara_init
+WaterBender.waterBend
 Main_init
 
-Instruction references undefined symbol at 0x0040129c
-[0x0040129c]	0x3c010000  lui $1, 0 [heap_start]          ; 2521: la	$gp heap_start			# set $gp to the start of the heap
+Instruction references undefined symbol at 0x004000a4
+[0x004000a4]	0x0c000000  jal 0x00000000 [Main_init]      ; 429: jal	Main_init		# initialize the Main object
