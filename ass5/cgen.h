@@ -35,6 +35,9 @@ private:
 
    void code_class_layout();
    void code_class_name_table();
+   void code_object_init();
+   void code_class_methods();
+   void code_class_dispatch_table();
 
 // The following creates an inheritance graph from
 // a list of classes.  The graph is implemented as
@@ -75,6 +78,10 @@ public:
    void code_class_layout(ostream& str, int &tagNumber);
    Features get_features();
    Symbol get_name();
+
+   void code_init(ostream &str);
+   void code_method(ostream &str);
+   void code_class_dispatch_table(ostream &str);
 };
 
 class BoolConst

@@ -26,6 +26,7 @@
 #include "cgen_gc.h"
 
 extern void emit_string_constant(ostream& str, char *s);
+
 extern int cgen_debug;
 
 //
@@ -50,6 +51,7 @@ Symbol
        concat,
        cool_abort,
        copy,
+       cool_copy,
        Int,
        in_int,
        in_string,
@@ -81,6 +83,7 @@ static void initialize_constants(void)
   concat      = idtable.add_string("concat");
   cool_abort  = idtable.add_string("abort");
   copy        = idtable.add_string("copy");
+  cool_copy   = idtable.add_string("copy");
   Int         = idtable.add_string("Int");
   in_int      = idtable.add_string("in_int");
   in_string   = idtable.add_string("in_string");
@@ -355,6 +358,31 @@ static void emit_gc_check(char *source, ostream &s)
 }
 
 
+// custome support emit
+static void emit_function_def_start(ostream &str) {
+  emit_addiu("$sp", "$sp", -12 ,str); // move current 3 words
+  emit_store("$fp", 3, "$sp", str); // first word is for last frame pointer
+  emit_store("$s0", 2, "$sp", str); // second word is for self
+  emit_store("$ra", 1, "$sp", str); // third word is for return pointer
+  emit_addiu("$fp", "$sp", 4, str); // update frame pointer to pointer to first of new frame (location of return address also)
+
+  emit_move("$s0", "$a0", str); // save self pointer to s0
+
+}
+
+static void emit_function_def_end(ostream &str) {
+  emit_move("$a0", "$s0", str);
+
+  // load stored information back to register
+  emit_load("$fp", 3, "$sp", str);
+  emit_load("$s0", 2, "$sp", str);
+  emit_load("$ra", 1, "$sp", str);
+
+  emit_addiu("$sp", "$sp", 12 ,str); // move back to position at the begining of function
+  emit_return(str);
+
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // coding strings, ints, and booleans
@@ -614,33 +642,31 @@ void CgenClassTable::code_constants()
   code_bools(boolclasstag);
 }
 
-// MARK: working
-
 void CgenClassTable::code_class_name_table()
 {
   str << CLASSNAMETAB << LABEL;
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
     str << WORD;
-    ((StringEntry *) l->hd()->get_name())->code_ref(str);
+    // ((StringEntry *) l->hd()->get_name())->code_ref(str);
+    stringtable.lookup_string(l->hd()->get_name()->get_string())->code_ref(str);
+    // str << l->hd()->get_name();
     str << endl;
   }
 
   str << CLASSOBJTAB << LABEL;
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
     str << WORD;
-    str << ((StringEntry *) l->hd()->get_name())->get_string() << PROTOBJ_SUFFIX << endl;
+    str << l->hd()->get_name() << PROTOBJ_SUFFIX << endl;
     str << WORD;
-    str << ((StringEntry *) l->hd()->get_name())->get_string() << CLASSINIT_SUFFIX << endl;
+    str << l->hd()->get_name() << CLASSINIT_SUFFIX << endl;
   }
 }
 
 void CgenClassTable::code_class_layout()
 {
-  // get the root
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
     l->hd()->code_class_layout(str, otherObjectTag);
   }
-  // emit the prototype of the
 }
 
 void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
@@ -650,13 +676,11 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
   List<Entry> *attrList = NULL;
   List<Entry> *methodList = NULL;
   int size = 0;
-  //nds = new List<CgenNode>(nd,nds);
-  str << WORD << -1 << endl;
-  str << name << DISPTAB_SUFFIX << LABEL;
+  // stupid process to get size of attributes
   while(parent != NULL) {
     Features ftrs = parent->get_features();
     for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
-      ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name());
+      ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), false, true);
     }
     parent = parent->get_parentnd();
   }
@@ -673,11 +697,16 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
   str << WORD << tagNumber << endl; // tag
   str << WORD << (size + 3) << endl ; // size
   str << WORD << name << DISPTAB_SUFFIX << endl;
-  for(List<Entry> *l = attrList; l; l = l->tl()) {
-    str << WORD;
-    ((StringEntry *) l->hd() )->code_ref(str);
-    str << endl;
-    //cout << "MMMMM" << l->hd()->get_string() <<endl;
+  parent = this;
+  attrList = NULL;
+  methodList = NULL;
+
+  while(parent != NULL) {
+    Features ftrs = parent->get_features();
+    for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
+      ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), false, false);
+    }
+    parent = parent->get_parentnd();
   }
 
   tagNumber++;
@@ -688,6 +717,31 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
   // }
 }
 
+void CgenClassTable::code_class_dispatch_table() {
+
+  for(List<CgenNode> *l = nds; l; l = l->tl()) {
+    l->hd()->code_class_dispatch_table(str);
+  }
+}
+
+void CgenNode::code_class_dispatch_table(ostream &str) {
+  CgenNodeP parent = this;
+  List<Entry> *attrList = NULL;
+  List<Entry> *methodList = NULL;
+  int size = 0;
+  //nds = new List<CgenNode>(nd,nds);
+  str << name << DISPTAB_SUFFIX << LABEL;
+  while(parent != NULL) {
+    Features ftrs = parent->get_features();
+    for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
+      ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), true, false);
+    }
+    parent = parent->get_parentnd();
+  }
+
+}
+
+
 Symbol CgenNode::get_name() {
   return name;
 }
@@ -695,23 +749,40 @@ Features CgenNode::get_features() {
   return features;
 }
 
-void attr_class::update_class_layout(List<Entry> *&attrList, List<Entry> *&methodList, ostream &str, Symbol className) {
+void attr_class::update_class_layout(List<Entry> *&attrList, List<Entry> *&methodList, ostream &str, Symbol className, bool isDispatch, bool isNoStreamUpdate) {
   //cout << name;
-   List<Entry> *newItem = new List<Entry>(name, attrList);
-   attrList = newItem;
+  List<Entry> *newItem = new List<Entry>(name, attrList);
+  attrList = newItem;
+  if(!isDispatch && !isNoStreamUpdate) {
+    str << WORD;
+
+    // spit out the default value for primitive typem otherwise it is 0 (void)
+    if(type_decl == Int) {
+      inttable.lookup_string("0")->code_ref(str);
+    } else if (type_decl == Str) {
+      stringtable.lookup_string("")->code_ref(str);
+    } else {
+      str << 0;
+    }
+
+    str << endl;
+  }
 }
 
-void method_class::update_class_layout(List<Entry> *&attrList, List<Entry> *&methodList, ostream &str, Symbol className) {
-  for(List<Entry> *l = methodList; l; l = l->tl()) {
-    if(l->hd() == name) {
-      return ;
+void method_class::update_class_layout(List<Entry> *&attrList, List<Entry> *&methodList, ostream &str, Symbol className, bool isDispatch, bool isNoStreamUpdate) {
+    for(List<Entry> *l = methodList; l; l = l->tl()) {
+      if(l->hd() == name) {
+        return ;
+      }
     }
+
+    List<Entry> *newItem = new List<Entry>(name, methodList);
+    methodList = newItem;
+
+  if(isDispatch && !isNoStreamUpdate) {
+    str << WORD << className << "." << name <<endl;
+
   }
-
-  List<Entry> *newItem = new List<Entry>(name, methodList);
-  methodList = newItem;
-
-  str << WORD << className << "." << name <<endl;
 }
 
 CgenClassTable::CgenClassTable(Classes classes, ostream& s) : nds(NULL) , str(s)
@@ -926,27 +997,34 @@ void CgenClassTable::code()
   if (cgen_debug) cout << "coding constants" << endl;
   code_constants();
 
-  // MARK: Working
-
   if (cgen_debug) cout << "coding class name table" << endl;
   code_class_name_table();
 
+  if (cgen_debug) cout << "coding class dispatch table" << endl;
+  code_class_dispatch_table();
+
   if (cgen_debug) cout << "coding class layout" << endl;
   code_class_layout();
-//                 Add your code to emit
-//                   - prototype objects
-//                   - class_nameTab
-//                   - dispatch tables
-//
 
   if (cgen_debug) cout << "coding global text" << endl;
   code_global_text();
 
-//                 Add your code to emit
-//                   - object initializer
-//                   - the class methods
-//                   - etc...
+  if (cgen_debug) cout << "coding object initialization" << endl;
+  code_object_init();
 
+  if (cgen_debug) cout << "coding class methods" << endl;
+  code_class_methods();
+
+}
+
+void CgenClassTable::code_object_init() {
+  CgenNodeP r = root();
+  r->code_init(str);
+}
+
+void CgenClassTable::code_class_methods() {
+  CgenNodeP r = root();
+  r->code_method(str);
 }
 
 
@@ -955,6 +1033,75 @@ CgenNodeP CgenClassTable::root()
    return probe(Object);
 }
 
+void CgenNode::code_method(ostream &str) {
+
+  // initialize attributes of this class
+  for(int i = features->first(); features->more(i); i = features->next(i)) {
+    features->nth(i)->code_method(str, name);
+  }
+
+  for (List<CgenNode> *l = children; l; l = l->tl())
+    l->hd()->code_method(str);
+}
+
+void CgenNode::code_init(ostream &str) {
+  emit_init_ref(name, str);
+  str << LABEL;
+  emit_function_def_start(str);
+
+  if(parentnd && parentnd->get_name() != No_class) {
+    str << JAL;
+    emit_init_ref(parentnd->get_name(), str);
+    str << endl;
+  }
+
+  // initialize attributes of this class
+  for(int i = features->first(); features->more(i); i = features->next(i)) {
+    features->nth(i)->code_init(str);
+  }
+
+  emit_function_def_end(str);
+  for (List<CgenNode> *l = children; l; l = l->tl())
+    l->hd()->code_init(str);
+}
+
+void attr_class::code_init(ostream &str) {
+  if(type_decl == Int) {
+    // emit_load_int("$a0", str)
+  }
+}
+
+void method_class::code_init(ostream &str) {
+
+}
+
+void attr_class::code_method(ostream &str, Symbol className) {
+}
+
+void method_class::code_method(ostream &str, Symbol className) {
+
+  // do not generate runtime provided functions, they are already defined in trap.handler
+  if((className == Object && name == cool_abort) ||
+     (className == Object && name == cool_copy) ||
+     (className == Object && name == type_name) ||
+     (className == IO && name == out_string) ||
+     (className == IO && name == in_string) ||
+     (className == IO && name == out_int) ||
+     (className == IO && name == in_int) ||
+     (className == Str && name == length) ||
+     (className == Str && name == concat) ||
+     (className == Str && name == substr)
+  ) {
+      return ;
+  }
+
+  emit_method_ref(className, name, str); str << LABEL;
+
+  emit_function_def_start(str);
+  expr->code(str);
+  emit_function_def_end(str);
+
+}
 
 ///////////////////////////////////////////////////////////////////////
 //

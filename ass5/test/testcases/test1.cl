@@ -1,5 +1,5 @@
 Class Bender {
-  hp: Int;
+  hp: Int <- 10 + 50;
 
   bend() : Object {
     self
@@ -7,17 +7,16 @@ Class Bender {
 };
 
 Class WaterBender inherits Bender {
-  mana: Int <- 1;
+  mana: Int <- 100;
   mutate: Bender;
 
   waterBend(): Object {
-    self
+    1 + 1
   };
 
 };
 
 Class Katara inherits WaterBender {
-
   waterBend(): Object {
     mana
   };
@@ -25,7 +24,11 @@ Class Katara inherits WaterBender {
 };
 
 Class Main inherits IO{
+  newBender: WaterBender <- new WaterBender;
   main(): Object {
-    out_string("Hello")
+    {
+      out_string("Hello");
+      newBender.waterBend();
+    }
   };
 };
