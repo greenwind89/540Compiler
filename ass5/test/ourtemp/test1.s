@@ -304,12 +304,16 @@ Main_dispTab:
 	.word	Object.copy
 Katara_dispTab:
 	.word	Katara.waterBend
+	.word	WaterBender.sum
+	.word	WaterBender.sumKatara
 	.word	Bender.bend
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
 WaterBender_dispTab:
 	.word	WaterBender.waterBend
+	.word	WaterBender.sum
+	.word	WaterBender.sumKatara
 	.word	Bender.bend
 	.word	Object.abort
 	.word	Object.type_name
@@ -349,8 +353,12 @@ Object_dispTab:
 	.word	-1
 Main_protObj:
 	.word	6
-	.word	4
+	.word	8
 	.word	Main_dispTab
+	.word	0
+	.word	0
+	.word	int_const6
+	.word	0
 	.word	0
 	.word	-1
 Katara_protObj:
@@ -447,6 +455,18 @@ Main_init:
 	addiu	$fp $sp 4
 	move	$s0 $a0
 	jal	IO_init
+	la	$a0 WaterBender_protObj
+	jal	Object.copy
+	jal	WaterBender_init
+	sw	$a0 12($s0)
+	la	$a0 Katara_protObj
+	jal	Object.copy
+	jal	Katara_init
+	sw	$a0 16($s0)
+	la	$a0 Katara_protObj
+	jal	Object.copy
+	jal	Katara_init
+	sw	$a0 28($s0)
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -556,31 +576,33 @@ label0:
 	lw	$t1 4($t1)
 	jalr		$t1
 	la	$a0 int_const3
-	move	$s1 $a0
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
 	la	$a0 int_const4
-	jal	Object.copy
-	lw	$t1 12($a0)
-	lw	$t2 12($s1)
-	add	$t1 $t1 $t2
-	sw	$t1 12($a0)
-	move	$s1 $a0
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
 	la	$a0 int_const5
-	jal	Object.copy
-	lw	$t1 12($a0)
-	lw	$t2 12($s1)
-	add	$t1 $t1 $t2
-	sw	$t1 12($a0)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
 	move	$a0 $s0
+	lw	$a0 12($s0)
 	bne	$a0 $zero label1
 	la	$a0 str_const0
 	jal	_dispatch_abort
 label1:
 	lw	$t1 8($a0)
+	lw	$t1 4($t1)
+	jalr		$t1
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	move	$a0 $s0
+	bne	$a0 $zero label2
+	la	$a0 str_const0
+	jal	_dispatch_abort
+label2:
+	lw	$t1 8($a0)
 	lw	$t1 8($t1)
 	jalr		$t1
-	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -593,7 +615,6 @@ Bender.bend:
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -614,11 +635,64 @@ WaterBender.waterBend:
 	lw	$t2 12($s1)
 	add	$t1 $t1 $t2
 	sw	$t1 12($a0)
-	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
 	addiu	$sp $sp 12
+	jr	$ra	
+WaterBender.sum:
+	addiu	$sp $sp -12
+	sw	$fp 12($sp)
+	sw	$s0 8($sp)
+	sw	$ra 4($sp)
+	addiu	$fp $sp 4
+	move	$s0 $a0
+	lw	$a0 20($fp)
+	move	$s1 $a0
+	lw	$a0 12($fp)
+	jal	Object.copy
+	lw	$t1 12($a0)
+	lw	$t2 12($s1)
+	add	$t1 $t1 $t2
+	sw	$t1 12($a0)
+	move	$s1 $a0
+	lw	$a0 16($fp)
+	jal	Object.copy
+	lw	$t1 12($a0)
+	lw	$t2 12($s1)
+	add	$t1 $t1 $t2
+	sw	$t1 12($a0)
+	lw	$fp 12($sp)
+	lw	$s0 8($sp)
+	lw	$ra 4($sp)
+	addiu	$sp $sp 24
+	jr	$ra	
+WaterBender.sumKatara:
+	addiu	$sp $sp -12
+	sw	$fp 12($sp)
+	sw	$s0 8($sp)
+	sw	$ra 4($sp)
+	addiu	$fp $sp 4
+	move	$s0 $a0
+	lw	$a0 24($fp)
+	move	$s1 $a0
+	lw	$a0 16($fp)
+	jal	Object.copy
+	lw	$t1 12($a0)
+	lw	$t2 12($s1)
+	add	$t1 $t1 $t2
+	sw	$t1 12($a0)
+	move	$s1 $a0
+	lw	$a0 20($fp)
+	jal	Object.copy
+	lw	$t1 12($a0)
+	lw	$t2 12($s1)
+	add	$t1 $t1 $t2
+	sw	$t1 12($a0)
+	lw	$fp 12($sp)
+	lw	$s0 8($sp)
+	lw	$ra 4($sp)
+	addiu	$sp $sp 28
 	jr	$ra	
 Katara.waterBend:
 	addiu	$sp $sp -12
@@ -627,8 +701,7 @@ Katara.waterBend:
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 0($s0)
-	move	$a0 $s0
+	lw	$a0 12($s0)
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)

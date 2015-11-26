@@ -375,7 +375,7 @@ static void emit_function_def_start(ostream &str) {
 }
 
 static void emit_function_def_end(ostream &str) {
-  emit_move("$a0", "$s0", str);
+  // emit_move("$a0", "$s0", str);
 
   // load stored information back to register
   emit_load("$fp", 3, "$sp", str);
@@ -714,10 +714,10 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
   }
 
   tagNumber++;
-  int idx = 3;
+  int idx = 0;
   for(List<Entry> *l = attrList; l; l = l->tl()) {
     TableData *t = new TableData();
-    t->offset = size + 3 - idx - 1;
+    t->offset = 3 + (size - idx - 1);
     attrTbl->addid((Entry *) l->hd(), t);
     idx++;
   }
@@ -1039,7 +1039,7 @@ void CgenClassTable::code()
 
 void CgenClassTable::code_object_init() {
   CgenNodeP r = root();
-  r->code_init(str);
+  r->code_init(str, this);
 }
 
 void CgenClassTable::code_class_methods() {
@@ -1055,10 +1055,20 @@ void CgenClassTable::set_current_class(CgenNodeP n) {
   currentClass = n;
 }
 
-int CgenClassTable::getOffsetOfObjectInCurrentClass(Symbol objectName) {
-  CgenNodeP c = current_class();
+CgenNodeP CgenClassTable::getClassByName(Symbol className) {
+  for(List<CgenNode> *l = nds; l; l = l->tl()) {
+    if(l->hd()->get_name() == className) {
+      return l->hd();
+    }
+  }
+
+  return NULL;
+}
+int CgenClassTable::getOffsetOfObject(Symbol className, Symbol objectName) {
+
+  CgenNodeP c = getClassByName(className);
   if(c == NULL) return -1;
-  // cout << objectName << c->get_name();
+  // cout << objectName << c->get_name() << endl << c->attrTbl->lookup(objectName)->offset;
   return c->attrTbl->lookup(objectName)->offset;
 }
 int CgenClassTable::getOffsetOfMethod(Symbol className, Symbol methodName) {
@@ -1073,6 +1083,21 @@ int CgenClassTable::getOffsetOfMethod(Symbol className, Symbol methodName) {
 
   return -1;
 }
+void CgenClassTable::set_method_variables_offset_table(SymbolTable<Symbol, TableData> *tbl, int initOffset) {
+  methodVarTbl = tbl;
+  currentOffset = initOffset;
+}
+
+int CgenClassTable::set_method_variable(Symbol name) {
+  TableData *t = new TableData();
+  int tempOffset = currentOffset;
+  t->offset = tempOffset;
+  methodVarTbl->addid(name, t);
+  currentOffset--;
+
+  return tempOffset;
+}
+
 
 CgenNodeP CgenClassTable::root()
 {
@@ -1091,7 +1116,8 @@ void CgenNode::code_method(ostream &str, CgenClassTable *ct) {
     l->hd()->code_method(str, ct);
 }
 
-void CgenNode::code_init(ostream &str) {
+void CgenNode::code_init(ostream &str, CgenClassTableP ct) {
+  ct->set_current_class(this);
   emit_init_ref(name, str);
   str << LABEL;
   emit_function_def_start(str);
@@ -1104,21 +1130,34 @@ void CgenNode::code_init(ostream &str) {
 
   // initialize attributes of this class
   for(int i = features->first(); features->more(i); i = features->next(i)) {
-    features->nth(i)->code_init(str);
+    features->nth(i)->code_init(str, ct);
   }
+
+  // return value
+  emit_move(ACC, SELF, str); // by default, init return self
 
   emit_function_def_end(str);
   for (List<CgenNode> *l = children; l; l = l->tl())
-    l->hd()->code_init(str);
+    l->hd()->code_init(str, ct);
 }
 
-void attr_class::code_init(ostream &str) {
-  if(type_decl == Int) {
-    // emit_load_int("$a0", str)
+void attr_class::code_init(ostream &str, CgenClassTable* ct) {
+  if(type_decl == Int || type_decl == Str || type_decl == Bool) {
+    return ;
   }
+
+  if(init->get_type() != NULL) {
+
+    init->code(str, ct);
+    int offset = ct->getOffsetOfObject(ct->current_class()->get_name(), name);
+    emit_store(ACC, offset, SELF, str);
+  }
+
+
+  // cout << "INIT TYPE" << ct->current_class()->get_name() << ":" << init->get_type() << endl;
 }
 
-void method_class::code_init(ostream &str) {
+void method_class::code_init(ostream &str, CgenClassTable* ct) {
 
 }
 
@@ -1142,11 +1181,43 @@ void method_class::code_method(ostream &str, Symbol className, CgenClassTable *c
       return ;
   }
 
+  // count number of variables in this method to position frame pointer
+  int count = 0;
+  // expr->preprocess(count);
+
   emit_method_ref(className, name, str); str << LABEL;
 
-  emit_function_def_start(str);
+  emit_addiu("$sp", "$sp", -(count + 3)*4 ,str); // move current 3 words
+  emit_store("$fp", 3, "$sp", str); // first word is for last frame pointer
+  emit_store("$s0", 2, "$sp", str); // second word is for self
+  emit_store("$ra", 1, "$sp", str); // third word is for return pointer
+  emit_addiu("$fp", "$sp", 4, str); // update frame pointer to pointer to first of new frame (location of return address also)
+
+  emit_move("$s0", "$a0", str); // save self pointer to s0
+  // emit_move("$a0", "$s0", str);
+
+  // init offset table for variables in method
+  SymbolTable<Symbol, TableData> *tbl = new SymbolTable<Symbol, TableData>();
+  tbl->enterscope();
+  ct->set_method_variables_offset_table(tbl, count + formals->len() + 2);
+
+  for(int i = formals->first(); formals->more(i); i = formals->next(i)) {
+    ct->set_method_variable(((formal_class *)formals->nth(i))->get_name());
+  }
+
   expr->code(str, ct);
-  emit_function_def_end(str);
+  // emit_function_def_end(str);
+
+  // given any variable name => offset from frame pointer
+
+  //
+  emit_load("$fp", 3, "$sp", str);
+  emit_load("$s0", 2, "$sp", str);
+  emit_load("$ra", 1, "$sp", str);
+
+  emit_addiu("$sp", "$sp", (count + 3 + formals->len())*4 ,str); // move back to position at the begining of function including the passed parameters' space
+  emit_return(str);
+
 
 }
 
@@ -1299,6 +1370,14 @@ void bool_const_class::code(ostream &str, CgenClassTable *ct)
 }
 
 void new__class::code(ostream &str, CgenClassTable *ct) {
+  // load prototype object of the class to a0
+  emit_partial_load_address(ACC, str); emit_protobj_ref(type_name, str); str << endl;
+
+  // jump tp copy object which copying object at a0
+  emit_jal(OBJECT_COPY, str);
+
+  // jump tp init the object which initialize with self at a0
+  str << JAL; emit_init_ref(type_name, str); str << endl;
 }
 
 void isvoid_class::code(ostream &str, CgenClassTable *ct) {
@@ -1312,7 +1391,98 @@ void object_class::code(ostream &str, CgenClassTable *ct) {
   if(name == self) {
     // emit_move(SELF, ACC, str); // at athe beginning of dispatching, acc points to self, now we save it to self
   } else {
-    int offset = ct->getOffsetOfObjectInCurrentClass(name);
-    emit_load(ACC, offset, SELF, str);
+
+    TableData *data = ct->methodVarTbl->lookup(name); // find the offset within current method fp
+    if(data != NULL) {
+      emit_load(ACC, data->offset, FP, str );
+    } else {
+      // find offset in current class
+      int offset = ct->getOffsetOfObject(ct->current_class()->get_name(), name);
+      emit_load(ACC, offset, SELF, str);
+    }
   }
+}
+
+
+// preprocess -------------------------------------------------
+
+void assign_class::preprocess(int &count) {
+  expr->preprocess(count);
+}
+
+void static_dispatch_class::preprocess(int &count) {
+  expr->preprocess(count);
+}
+
+void dispatch_class::preprocess(int &count) {
+}
+
+void cond_class::preprocess(int &count) {
+}
+
+void loop_class::preprocess(int &count) {
+}
+
+void typcase_class::preprocess(int &count) {
+}
+
+void block_class::preprocess(int &count) {
+}
+
+void let_class::preprocess(int &count) {
+}
+
+void plus_class::preprocess(int &count) {
+}
+
+void sub_class::preprocess(int &count) {
+}
+
+void mul_class::preprocess(int &count) {
+}
+
+void divide_class::preprocess(int &count) {
+}
+
+void neg_class::preprocess(int &count) {
+}
+
+void lt_class::preprocess(int &count) {
+}
+
+void eq_class::preprocess(int &count) {
+}
+
+void leq_class::preprocess(int &count) {
+}
+
+void comp_class::preprocess(int &count) {
+}
+
+void int_const_class::preprocess(int &count)
+{
+}
+
+void string_const_class::preprocess(int &count)
+{
+}
+
+void bool_const_class::preprocess(int &count)
+{
+}
+
+void new__class::preprocess(int &count) {
+}
+
+void isvoid_class::preprocess(int &count) {
+}
+
+void no_expr_class::preprocess(int &count) {
+}
+
+void object_class::preprocess(int &count) {
+}
+
+Symbol formal_class::get_name() {
+  return name;
 }

@@ -61,8 +61,14 @@ public:
    CgenNodeP root();
    CgenNodeP current_class();
    void set_current_class(CgenNodeP n);
-   int getOffsetOfObjectInCurrentClass(Symbol objectName);
+   int getOffsetOfObject(Symbol className, Symbol objectName);
    int getOffsetOfMethod(Symbol className, Symbol methodName);
+   CgenNodeP getClassByName(Symbol className);
+   void set_method_variables_offset_table(SymbolTable<Symbol, TableData> *tbl, int initOffset);
+   int set_method_variable(Symbol varName);
+
+   SymbolTable<Symbol, TableData> *methodVarTbl;
+   int currentOffset;
 
 };
 
@@ -92,7 +98,7 @@ public:
    Features get_features();
    Symbol get_name();
 
-   void code_init(ostream &str);
+   void code_init(ostream &str, CgenClassTableP ct);
    void code_method(ostream &str, CgenClassTable *ct);
    void code_class_dispatch_table(ostream &str);
 };

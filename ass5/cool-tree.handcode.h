@@ -72,11 +72,13 @@ void dump_with_types(ostream&,int);
 
 #define Feature_EXTRAS                                        \
 virtual void dump_with_types(ostream&,int) = 0; \
-virtual void code_method(ostream &str, Symbol className, CgenClassTable *ct) = 0; 
+virtual void code_init(ostream &str, CgenClassTable* ct) = 0; \
+virtual void code_method(ostream &str, Symbol className, CgenClassTable *ct) = 0;
 
 
 #define Feature_SHARED_EXTRAS                                       \
 void dump_with_types(ostream&,int); \
+void code_init(ostream &str, CgenClassTable* ct); \
 void code_method(ostream &str, Symbol className, CgenClassTable *ct);
 
 
@@ -103,11 +105,13 @@ Expression set_type(Symbol s) { type = s; return this; } \
 virtual void code(ostream& str, CgenClassTable* ct) = 0; \
 virtual void dump_with_types(ostream&,int) = 0;  \
 void dump_type(ostream&, int);               \
-Expression_class() { type = (Symbol) NULL; }
+Expression_class() { type = (Symbol) NULL; } \
+virtual void preprocess(int &count)  = 0;
 
 #define Expression_SHARED_EXTRAS           \
 void code(ostream& str, CgenClassTable* ct); 			   \
-void dump_with_types(ostream&,int);
+void dump_with_types(ostream&,int);\
+void preprocess(int &count);
 
 
 #endif
