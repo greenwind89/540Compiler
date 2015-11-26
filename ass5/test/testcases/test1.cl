@@ -28,7 +28,8 @@ Class Main inherits IO{
   main(): Object {
     {
       out_string("Hello");
-      newBender.waterBend();
+      -- newBender.waterBend();
+      -- 1+1;
     }
   };
 };

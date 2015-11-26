@@ -51,7 +51,6 @@ public:
    virtual Feature copy_Feature() = 0;
    virtual void update_class_layout(List<Entry> *&attrList, List<Entry> *&methodList, ostream &str, Symbol className, bool isDispatch, bool isNoStreamUpdate) = 0;
    virtual void code_init(ostream &str) = 0;
-   virtual void code_method(ostream &str, Symbol className) = 0;
 
 #ifdef Feature_EXTRAS
    Feature_EXTRAS
@@ -192,7 +191,6 @@ public:
    void dump(ostream& stream, int n);
    void update_class_layout(List<Entry> *&attrList, List<Entry>*& methodList, ostream &str, Symbol className, bool isDispatch, bool isNoStreamUpdate);
    void code_init(ostream &str);
-   void code_method(ostream &str, Symbol className);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS
@@ -220,7 +218,6 @@ public:
    void update_class_layout(List<Entry> *&attrList, List<Entry>*& methodList, ostream &str, Symbol className, bool isDispatch, bool isNoStreamUpdate);
 
    void code_init(ostream &str);
-   void code_method(ostream &str, Symbol className);
 
 #ifdef Feature_SHARED_EXTRAS
    Feature_SHARED_EXTRAS

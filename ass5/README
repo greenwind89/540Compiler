@@ -3,27 +3,27 @@ README file for Programming Assignment 5  (C++ edition)
 
 Your directory should now contain the following files:
 
- Makefile	     
+ Makefile
  README
- ast-lex.cc	      
- ast-parse.cc	      
- cgen-phase.cc	      
+ ast-lex.cc
+ ast-parse.cc
+ cgen-phase.cc
  cgen.cc
  cgen.h
  cgen_supp.cc
- cool-tree.cc	      
+ cool-tree.cc
  cool-tree.handcode.h
- dumptype.cc	      
+ dumptype.cc
  emit.h
  example.cl
- handle_flags.cc      
- mycoolc	      
- stringtab.cc	      
- tree.cc	      
- utilities.cc	      
- 
+ handle_flags.cc
+ mycoolc
+ stringtab.cc
+ tree.cc
+ utilities.cc
+
 	The Makefile contains targets for compiling and running your
-	program, as well as handing it in. 
+	program, as well as handing it in.
 
 	The README contains this info. Part of the assignment is to
 	fill the README with the write-up for your project. You should
@@ -42,10 +42,10 @@ Your directory should now contain the following files:
 	assignments.  The skeleton provides three components of the
 	code generator:
 
-		- functions to build the inheritance graph; 
+		- functions to build the inheritance graph;
 
 		- functions to emit global data and constants;
-		 
+
 		- functions to emit spim instructions; (we supply
 		  these last two to save you some tedious coding)
 
@@ -81,7 +81,7 @@ Your directory should now contain the following files:
 	      }
 
 	symtab.h contains a symbol table implementation. You may
-        modify this file if you'd like. 
+        modify this file if you'd like.
 
 	cool.h contains definitions that are used by almost all parts
 	of the compiler. DO NOT MODIFY.
@@ -104,7 +104,7 @@ Your directory should now contain the following files:
 	dumptype.cc contains functions for printing out an abstract
 	syntax tree.  DO NOT MODIFY.
 
-      
+
 
 Instructions
 ------------
@@ -128,7 +128,7 @@ Instructions
 	To run the produced code:
 
 	% spim -file file1.s  /* or the output filename you chose */
-	
+
 	% gmake clean
 
 	when you switch from one type of machine to the other.  If at
@@ -141,4 +141,4 @@ Instructions
 
 Write-up for PA5
 ----------------
-
+modified files: cgen.cc, cgen.h, cool-tree.h, cool-tree.handcode.h 

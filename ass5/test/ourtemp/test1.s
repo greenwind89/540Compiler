@@ -293,7 +293,6 @@ class_objTab:
 	.word	IO_init
 	.word	Object_protObj
 	.word	Object_init
-	.word	-1
 Main_dispTab:
 	.word	Main.main
 	.word	IO.out_string
@@ -303,27 +302,23 @@ Main_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 Katara_dispTab:
 	.word	Katara.waterBend
 	.word	Bender.bend
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 WaterBender_dispTab:
 	.word	WaterBender.waterBend
 	.word	Bender.bend
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 Bender_dispTab:
 	.word	Bender.bend
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 String_dispTab:
 	.word	String.length
 	.word	String.concat
@@ -331,17 +326,14 @@ String_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 Bool_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 Int_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 IO_dispTab:
 	.word	IO.out_string
 	.word	IO.out_int
@@ -350,7 +342,6 @@ IO_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
-	.word	-1
 Object_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
@@ -553,6 +544,18 @@ Main.main:
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
+	move	$s0 $a0
+	la	$a0 str_const1
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	move	$a0 $s0
+	bne	$a0 $zero label0
+	la	$a0 str_const0
+	jal	_dispatch_abort
+label0:
+	lw	$t1 8($a0)
+	lw	$t1 4($t1)
+	jalr		$t1
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -565,6 +568,7 @@ Bender.bend:
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
+	move	$s0 $a0
 	move	$s0 $a0
 	move	$a0 $s0
 	lw	$fp 12($sp)
@@ -592,6 +596,7 @@ Katara.waterBend:
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
+	lw	$a0 20($s0)
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)

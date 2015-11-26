@@ -14,6 +14,10 @@ typedef CgenClassTable *CgenClassTableP;
 class CgenNode;
 typedef CgenNode *CgenNodeP;
 
+struct TableData {
+  int offset;
+} ;
+
 class CgenClassTable : public SymbolTable<Symbol,CgenNode> {
 private:
    List<CgenNode> *nds;
@@ -22,6 +26,7 @@ private:
    int intclasstag;
    int boolclasstag;
    int otherObjectTag;
+   CgenNodeP currentClass;
 
 
 // The following methods emit code for
@@ -39,6 +44,7 @@ private:
    void code_class_methods();
    void code_class_dispatch_table();
 
+
 // The following creates an inheritance graph from
 // a list of classes.  The graph is implemented as
 // a tree of `CgenNode', and class names are placed
@@ -53,6 +59,10 @@ public:
    CgenClassTable(Classes, ostream& str);
    void code();
    CgenNodeP root();
+   CgenNodeP current_class();
+   void set_current_class(CgenNodeP n);
+   int getOffsetOfObjectInCurrentClass(Symbol objectName);
+   int getOffsetOfMethod(Symbol className, Symbol methodName);
 
 };
 
@@ -65,6 +75,9 @@ private:
                                               // `NotBasic' otherwise
 
 public:
+  SymbolTable<Symbol, TableData> *attrTbl;
+  SymbolTable<Symbol, TableData> *methodTbl;
+
    CgenNode(Class_ c,
             Basicness bstatus,
             CgenClassTableP class_table);
@@ -80,7 +93,7 @@ public:
    Symbol get_name();
 
    void code_init(ostream &str);
-   void code_method(ostream &str);
+   void code_method(ostream &str, CgenClassTable *ct);
    void code_class_dispatch_table(ostream &str);
 };
 
