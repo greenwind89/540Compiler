@@ -26,6 +26,7 @@
 #define STRINGTAG            "_string_tag"
 #define HEAP_START           "heap_start"
 #define DISPATCH_ABORT       "_dispatch_abort"
+#define OBJECT_COPY          "Object.copy"
 
 // Naming conventions
 #define DISPTAB_SUFFIX       "_dispTab"
@@ -75,6 +76,7 @@
 #define SP   "$sp"		// Stack pointer
 #define FP   "$fp"		// Frame pointer
 #define RA   "$ra"		// Return address
+#define S1   "$s1"     // tempora value for addition
 
 //
 // Opcodes

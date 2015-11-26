@@ -10,14 +10,14 @@ Class WaterBender inherits Bender {
   mana: Int <- 100;
   mutate: Bender;
 
-  waterBend(): Object {
+  waterBend(): Int {
     1 + 1
   };
 
 };
 
 Class Katara inherits WaterBender {
-  waterBend(): Object {
+  waterBend(): Int {
     mana
   };
 
@@ -28,8 +28,8 @@ Class Main inherits IO{
   main(): Object {
     {
       out_string("Hello");
-      -- newBender.waterBend();
-      -- 1+1;
+      -- out_int(newBender.waterBend());
+      out_int(1+2+3);
     }
   };
 };

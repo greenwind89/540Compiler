@@ -717,7 +717,7 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
   int idx = 3;
   for(List<Entry> *l = attrList; l; l = l->tl()) {
     TableData *t = new TableData();
-    t->offset = idx;
+    t->offset = size + 3 - idx - 1;
     attrTbl->addid((Entry *) l->hd(), t);
     idx++;
   }
@@ -749,10 +749,12 @@ void CgenNode::code_class_dispatch_table(ostream &str) {
     size++;
   }
 
+  // cout << "CLASS:" << name <<endl;
   for(List<Entry> *l = methodList; l; l = l->tl()) {
     TableData *t = new TableData();
     t->offset = size - idx - 1;
     methodTbl->addid((Entry *) l->hd(), t);
+    // cout << l->hd() << ": " << t->offset <<endl;
     idx++;
   }
 
@@ -1061,6 +1063,8 @@ int CgenClassTable::getOffsetOfObjectInCurrentClass(Symbol objectName) {
 }
 int CgenClassTable::getOffsetOfMethod(Symbol className, Symbol methodName) {
   if(className == SELF_TYPE) className = current_class()->get_name();
+
+  // cout << className << methodName;
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
     if(l->hd()->get_name() == className) {
       return l->hd()->methodTbl->lookup(methodName)->offset;
@@ -1183,7 +1187,6 @@ void static_dispatch_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void dispatch_class::code(ostream &str, CgenClassTable *ct) {
-  expr->code(str, ct);
 
   for(int i = actual->first(); actual->more(i); i = actual->next(i)) {
     actual->nth(i)->code(str, ct);
@@ -1194,6 +1197,7 @@ void dispatch_class::code(ostream &str, CgenClassTable *ct) {
 
   emit_move(ACC, SELF, str); // we restore self into accumualte to prepare for next statements (self object must be passed in a0)
 
+  expr->code(str, ct); // update a0 to address of current object
   emit_bne(ACC, ZERO, labelIdx, str);
 
 
@@ -1237,6 +1241,19 @@ void let_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void plus_class::code(ostream &str, CgenClassTable *ct) {
+  e1->code(str, ct); // result stored in A0
+  emit_move(S1, ACC, str); // move data from A0 -> S1
+  e2->code(str, ct); // stored in A0
+
+  emit_jal(OBJECT_COPY, str);
+
+  emit_load(T1, 3, ACC, str); // 3 is offset of integer value in int object
+  emit_load(T2, 3, S1, str);
+
+  emit_add(T1, T1, T2, str);
+
+  emit_store(T1, 3, ACC, str); // store value back to memory where A0 is pointing to since A0 only holds address
+
 }
 
 void sub_class::code(ostream &str, CgenClassTable *ct) {
@@ -1293,7 +1310,7 @@ void no_expr_class::code(ostream &str, CgenClassTable *ct) {
 void object_class::code(ostream &str, CgenClassTable *ct) {
   // find the offset of the object in current class and load into a0
   if(name == self) {
-    emit_move(SELF, ACC, str); // at athe beginning of dispatching, acc points to self, now we save it to self
+    // emit_move(SELF, ACC, str); // at athe beginning of dispatching, acc points to self, now we save it to self
   } else {
     int offset = ct->getOffsetOfObjectInCurrentClass(name);
     emit_load(ACC, offset, SELF, str);
