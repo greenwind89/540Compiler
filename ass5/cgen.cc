@@ -811,6 +811,8 @@ void attr_class::update_class_layout(List<Entry> *&attrList, List<Entry> *&metho
       inttable.lookup_string("0")->code_ref(str);
     } else if (type_decl == Str) {
       stringtable.lookup_string("")->code_ref(str);
+    } else if (type_decl == Bool) {
+      falsebool.code_ref(str);
     } else {
       str << 0;
     }
@@ -1173,7 +1175,7 @@ void CgenNode::code_init(ostream &str, CgenClassTableP ct) {
 }
 
 void attr_class::code_init(ostream &str, CgenClassTable* ct) {
-  if(type_decl == Int || type_decl == Str || type_decl == Bool) {
+  if(type_decl == Int || type_decl == Str ) {
     return ;
   }
 
@@ -1326,6 +1328,20 @@ void dispatch_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void cond_class::code(ostream &str, CgenClassTable *ct) {
+  pred->code(str, ct); // address of bool object is in A0
+  emit_load(T1, 3, ACC, str); // load bool value to T1
+  int falseLabel = labelIdx; labelIdx++;
+  int resumeLabel = labelIdx; labelIdx++;
+
+  emit_beq(T1, ZERO, falseLabel, str); // if T1 is zero, jump to false label
+
+  then_exp->code(str, ct); // if it is not zero, then execute the then code
+  emit_branch(resumeLabel, str);
+
+  emit_label_def(falseLabel, str);
+  else_exp->code(str, ct);
+
+  emit_label_def(resumeLabel, str);
 }
 
 void loop_class::code(ostream &str, CgenClassTable *ct) {
@@ -1368,18 +1384,66 @@ void divide_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void neg_class::code(ostream &str, CgenClassTable *ct) {
+  e1->code(str, ct);
+
+  emit_jal(OBJECT_COPY, str); // clone an int object which will be used as the result
+
+  emit_load(T1, 3, ACC, str);
+  emit_neg(T1, T1, str);
+  emit_store(T1, 3, ACC, str);
 }
 
 void lt_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void eq_class::code(ostream &str, CgenClassTable *ct) {
+  e1->code(str, ct);
+
+  emit_store(ACC, 0, SP, str); // store data to top of stack
+  emit_addiu(SP, SP, -4, str); // move SP ahead
+
+  e2->code(str, ct); // stored in A0
+  emit_move(T2, ACC, str); // store A0 into T2
+
+  emit_load(T1, 1, SP, str); // load the data on top of stack to temp T1
+  emit_addiu(SP, SP, 4, str); // move SP back to pop it out
+
+  int newLabel = labelIdx; labelIdx++;
+  emit_load_bool(ACC, truebool, str);
+
+  if((e1->get_type() == Int && e2->get_type() == Int) ||
+     (e1->get_type() == Bool && e2->get_type() == Bool)
+  ) {
+    emit_load(T1, 3, T1, str);
+    emit_load(T2, 3, T2, str);
+  } else if(e1->get_type() == Str && e2->get_type() == Str) {
+    emit_load(T1, 4, T1, str);
+    emit_load(T2, 4, T2, str);
+  }
+
+
+  emit_beq(T1, T2, newLabel, str);
+
+  emit_load_bool(ACC, falsebool, str);
+
+  emit_label_def(newLabel, str);
+
 }
 
 void leq_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void comp_class::code(ostream &str, CgenClassTable *ct) {
+  // not operation
+  e1->code(str, ct); // address of bool object is in A0
+  emit_load(T1, 3, ACC, str); // load bool value to T1
+
+  int newLabel = labelIdx; labelIdx++;
+  emit_load_bool(ACC, truebool, str);
+  emit_beq(T1, ZERO, newLabel, str);
+  emit_load_bool(ACC, falsebool, str);
+
+  emit_label_def(newLabel, str);
 }
 
 void int_const_class::code(ostream &str, CgenClassTable *ct)

@@ -113,3 +113,6 @@
 #define OPERATION_SUB 2
 #define OPERATION_MUL 3
 #define OPERATION_DIV 4
+
+
+#define COND_EQUAL 1
