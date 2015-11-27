@@ -116,3 +116,5 @@
 
 
 #define COND_EQUAL 1
+#define COND_LT 2
+#define COND_LEQ 3

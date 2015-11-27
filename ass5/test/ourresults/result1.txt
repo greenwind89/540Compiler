@@ -3,4 +3,4 @@ Copyright 1990-2003 by James R. Larus (larus@cs.wisc.edu).
 All Rights Reserved.
 See the file README for a full copyright notice.
 Loaded: ./lib/trap.handler
-not bool1not bool1Hello WorldHello Hello FalseCOOL program successfully executed
+12345678910COOL program successfully executed

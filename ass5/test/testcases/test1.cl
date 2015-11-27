@@ -40,12 +40,28 @@ Class Main inherits IO{
   benderKatara: WaterBender <- new Katara;
   bool1: Bool <- false;
   bool2: Bool <- true;
+  i: Int <- 0;
 
   main(): Object {
     {
+      -- i < i +1;
+      -- out_int(i);
+
+      -- if i < 2 then out_string(" <2 ") else out_string(" >= 2") fi;
+      while i < 10 loop {
+        i <- i + 1;
+        out_int(i);
+      } pool;
+
+
+      (*
+      bool1 <- true;
       if not bool1 then out_string("not bool1") else out_string("bool1") fi;
       if bool1 then out_string(" bool1") else out_string("not bool1") fi;
       if 1 = 1 then out_string("Hello ") else out_string("World") fi;
+      if 2 < 1 then out_string("Hello ") else out_string("World") fi;
+      if 1 <= 2 then out_string("Hello ") else out_string("World") fi;
+      if 1 <= 1 then out_string("Hello ") else out_string("World") fi;
       if 1+1 = 1 then out_string("Hello ") else out_string("World") fi;
 
       if  "a" = "a" then out_string("Hello ") else out_string("World") fi;
@@ -60,6 +76,8 @@ Class Main inherits IO{
       else
         out_string("False" )
       fi;
+      *)
+
       -- out_string("Hello");
       -- shout();
       -- newBender.waterBend();
