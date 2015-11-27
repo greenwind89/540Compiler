@@ -387,6 +387,37 @@ static void emit_function_def_end(ostream &str) {
 
 }
 
+static void emit_operation(ostream &str, Expression e1, Expression e2, CgenClassTable *ct, int type) {
+  e1->code(str, ct); // result stored in A0
+  // emit_move(S1, ACC, str); // move data from A0 -> S1
+  emit_store(ACC, 0, SP, str); // store data to top of stack
+  emit_addiu(SP, SP, -4, str); // move SP ahead
+
+  e2->code(str, ct); // stored in A0
+
+  emit_load(S1, 1, SP, str); // load the data on top of stack to temp s1
+  emit_addiu(SP, SP, 4, str); // move SP back to pop it out
+
+
+  emit_jal(OBJECT_COPY, str); // clone an int object which will be used as the result
+
+  emit_load(T1, 3, ACC, str); // 3 is offset of integer value in int object
+  emit_load(T2, 3, S1, str);
+
+  if(type == OPERATION_PLUS) {
+    emit_add(T1, T2, T1, str);
+  } else if(type == OPERATION_MUL) {
+    emit_mul(T1, T2, T1, str);
+  } else if(type == OPERATION_SUB) {
+    emit_sub(T1, T2, T1, str);
+  } else if(type == OPERATION_DIV) {
+    emit_div(T1, T2, T1, str);
+  }
+
+  emit_store(T1, 3, ACC, str); // store value back to memory where A0 is pointing to since A0 only holds address
+
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // coding strings, ints, and booleans
@@ -1182,7 +1213,7 @@ void method_class::code_method(ostream &str, Symbol className, CgenClassTable *c
   }
 
   // count number of variables in this method to position frame pointer
-  int count = 0;
+  int count = 20;
   // expr->preprocess(count);
 
   emit_method_ref(className, name, str); str << LABEL;
@@ -1309,31 +1340,31 @@ void block_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void let_class::code(ostream &str, CgenClassTable *ct) {
+  ct->methodVarTbl->enterscope();
+  int offset = ct->set_method_variable(identifier);
+  if(init->get_type() != NULL) {
+    init->code(str, ct);
+    emit_store(ACC, offset, FP, str);
+  }
+  body->code(str, ct);
+  ct->methodVarTbl->exitscope();
+
 }
 
 void plus_class::code(ostream &str, CgenClassTable *ct) {
-  e1->code(str, ct); // result stored in A0
-  emit_move(S1, ACC, str); // move data from A0 -> S1
-  e2->code(str, ct); // stored in A0
-
-  emit_jal(OBJECT_COPY, str);
-
-  emit_load(T1, 3, ACC, str); // 3 is offset of integer value in int object
-  emit_load(T2, 3, S1, str);
-
-  emit_add(T1, T1, T2, str);
-
-  emit_store(T1, 3, ACC, str); // store value back to memory where A0 is pointing to since A0 only holds address
-
+  emit_operation(str, e1, e2, ct, OPERATION_PLUS);
 }
 
 void sub_class::code(ostream &str, CgenClassTable *ct) {
+  emit_operation(str, e1, e2, ct, OPERATION_SUB);
 }
 
 void mul_class::code(ostream &str, CgenClassTable *ct) {
+  emit_operation(str, e1, e2, ct, OPERATION_MUL);
 }
 
 void divide_class::code(ostream &str, CgenClassTable *ct) {
+  emit_operation(str, e1, e2, ct, OPERATION_DIV);
 }
 
 void neg_class::code(ostream &str, CgenClassTable *ct) {

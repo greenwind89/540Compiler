@@ -107,3 +107,9 @@
 #define BLEQ     "\tble\t"
 #define BLT      "\tblt\t"
 #define BGT      "\tbgt\t"
+
+
+#define OPERATION_PLUS 1
+#define OPERATION_SUB 2
+#define OPERATION_MUL 3
+#define OPERATION_DIV 4
