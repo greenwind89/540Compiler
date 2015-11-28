@@ -1729,7 +1729,7 @@ void no_expr_class::code(ostream &str, CgenClassTable *ct) {
 void object_class::code(ostream &str, CgenClassTable *ct) {
   // find the offset of the object in current class and load into a0
   if(name == self) {
-    // emit_move(SELF, ACC, str); // at athe beginning of dispatching, acc points to self, now we save it to self
+    emit_move(ACC, SELF, str); // store self to A0
   } else {
 
     TableData *data = ct->methodVarTbl->lookup(name); // find the offset within current method fp
