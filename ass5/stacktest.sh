@@ -1,5 +1,6 @@
 
 ./mycoolc ./test/stack_atoi.cl -o ./test/stack_atoi.s;
+# ../bin/coolc ./test/stack_atoi.cl -o ./test/stack_atoi.s;
 
 for i in {1..10}
 do

@@ -129,11 +129,6 @@ class StackMachine inherits IO {
           currentStr <- in_string();
           let command : StackCommand <- (new StackCommandFactory).getCommandObject(currentStr) in {
             shouldExit <- command.initExecute(commandStack);
-            if (shouldExit = true) then
-              (new IO).out_string("Exiting ...")
-            else
-              (new IO).out_string("Executing next command")
-            fi;
           };
         }
         pool;

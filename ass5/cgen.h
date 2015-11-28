@@ -64,6 +64,7 @@ public:
    int set_method_variable(Symbol varName);
 
    SymbolTable<Symbol, TableData> *methodVarTbl;
+   SymbolTable<Symbol, TableData> *classTagTbl;
    int currentOffset;
 
    int objectclasstag;

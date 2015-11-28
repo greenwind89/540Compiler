@@ -716,6 +716,9 @@ void CgenClassTable::code_constants()
 
 void CgenClassTable::code_class_name_table()
 {
+  classTagTbl = new SymbolTable<Symbol, TableData>();
+  classTagTbl->enterscope();
+
   str << CLASSNAMETAB << LABEL;
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
     str << WORD;
@@ -726,11 +729,53 @@ void CgenClassTable::code_class_name_table()
   }
 
   str << CLASSOBJTAB << LABEL;
+
+  str << WORD; str << Object << PROTOBJ_SUFFIX << endl;
+  str << WORD; str << Object << CLASSINIT_SUFFIX << endl;
+
+  str << WORD; str << IO << PROTOBJ_SUFFIX << endl;
+  str << WORD; str << IO << CLASSINIT_SUFFIX << endl;
+
+  str << WORD; str << Main << PROTOBJ_SUFFIX << endl;
+  str << WORD; str << Main << CLASSINIT_SUFFIX << endl;
+
+  str << WORD; str << Int << PROTOBJ_SUFFIX << endl;
+  str << WORD; str << Int << CLASSINIT_SUFFIX << endl;
+
+  str << WORD; str << Bool << PROTOBJ_SUFFIX << endl;
+  str << WORD; str << Bool << CLASSINIT_SUFFIX << endl;
+
+  str << WORD; str << Str << PROTOBJ_SUFFIX << endl;
+  str << WORD; str << Str << CLASSINIT_SUFFIX << endl;
+
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
-    str << WORD;
-    str << l->hd()->get_name() << PROTOBJ_SUFFIX << endl;
-    str << WORD;
-    str << l->hd()->get_name() << CLASSINIT_SUFFIX << endl;
+    int tn;
+    Symbol name = l->hd()->get_name();
+    if(name == Str) {
+      tn = stringclasstag;
+    } else if (name == Int) {
+      tn = intclasstag;
+    } else if (name == Bool) {
+      tn = boolclasstag;
+    } else if (name == Main) {
+      tn = mainclasstag;
+    } else if (name == IO) {
+      tn = ioclasstag;
+    } else if (name == Object) {
+      tn = objectclasstag;
+    } else {
+      tn = otherObjectTag;
+      otherObjectTag++;
+    }
+
+    TableData *t = new TableData();
+    t->offset = tn;
+    classTagTbl->addid(name, t);
+
+    if(!l->hd()->basic() && l->hd()->get_name() != Main) {
+      str << WORD; str << l->hd()->get_name() << PROTOBJ_SUFFIX << endl;
+      str << WORD; str << l->hd()->get_name() << CLASSINIT_SUFFIX << endl;
+    }
   }
 }
 
@@ -768,25 +813,8 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber, CgenClassTable *c
   // prototype object
   str << WORD << -1 << endl;
   str << name << PROTOBJ_SUFFIX << LABEL;
-  int tn;
-  if(name == Str) {
-    tn = ct->stringclasstag;
-  } else if (name == Int) {
-    tn = ct->intclasstag;
-  } else if (name == Bool) {
-    tn = ct->boolclasstag;
-  } else if (name == Main) {
-    tn = ct->mainclasstag;
-  } else if (name == IO) {
-    tn = ct->ioclasstag;
-  } else if (name == Object) {
-    tn = ct->objectclasstag;
-  } else {
-    tn = tagNumber;
-    tagNumber++;
-  }
 
-  str << WORD << tn << endl; // tag
+  str << WORD << (ct->classTagTbl->lookup(name))->offset << endl; // tag
   str << WORD << (size + 3) << endl ; // size
   str << WORD << name << DISPTAB_SUFFIX << endl;
   parent = this;
@@ -1282,7 +1310,7 @@ void method_class::code_method(ostream &str, Symbol className, CgenClassTable *c
   }
 
   // count number of variables in this method to position frame pointer
-  int count = 100;
+  int count = 50;
   // expr->preprocess(count);
 
   emit_method_ref(className, name, str); str << LABEL;
@@ -1588,14 +1616,29 @@ void bool_const_class::code(ostream &str, CgenClassTable *ct)
 }
 
 void new__class::code(ostream &str, CgenClassTable *ct) {
-  // load prototype object of the class to a0
-  emit_partial_load_address(ACC, str); emit_protobj_ref(type_name, str); str << endl;
+  if(type_name == SELF_TYPE) {
+    emit_load_address(T1, CLASSOBJTAB, str);
+    emit_load(T2, 0, SELF, str); // load classtag of self into t2
+    emit_sll(T2, T2, 3, str); // 2 because of init, 4 because of byte word => 8 which is shift left 3
+    emit_addu(T1, T2, T1, str); // address of address of the prototype
+    emit_load(ACC, 0, T1, str); // load address of prototype to A0
+    emit_move(S1, T1, str); // save proto address to S1, hope that S1 will not be changed ??
 
-  // jump tp copy object which copying object at a0
-  emit_jal(OBJECT_COPY, str);
+    emit_jal(OBJECT_COPY, str); // copy new object into A0
 
-  // jump tp init the object which initialize with self at a0
-  str << JAL; emit_init_ref(type_name, str); str << endl;
+    emit_load(T1, 1, S1, str); //load init address into T1 since init just 1 word above prototype
+    emit_jalr(T1, str);
+  } else {
+    // load prototype object of the class to a0
+    emit_partial_load_address(ACC, str); emit_protobj_ref(type_name, str); str << endl;
+    // jump tp copy object which copying object at a0
+    emit_jal(OBJECT_COPY, str);
+
+    // jump tp init the object which initialize with self at a0
+    str << JAL; emit_init_ref(type_name, str); str << endl;
+  }
+
+
 }
 
 void isvoid_class::code(ostream &str, CgenClassTable *ct) {

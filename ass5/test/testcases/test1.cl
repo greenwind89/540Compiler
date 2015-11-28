@@ -11,6 +11,17 @@ Class Bender {
       (new IO).out_int(hp);
     }
   };
+
+  getMe(): Bender {
+    new SELF_TYPE
+  };
+
+};
+
+Class Factory {
+  getBender() : Bender {
+    new Bender
+  };
 };
 
 Class WaterBender inherits Bender {
@@ -61,13 +72,16 @@ Class Main inherits IO{
   bender: Bender <- new Bender;
   num: Int <- 1000;
   str1: String <- "hello minh";
+  factory: Factory <- new Factory;
 
   main(): Object {
     {
-      out_int(num);
-      out_string(str1);
-      newBender.shoutType();
-      newBender@Bender.shoutType();
+      ((factory.getBender()).getMe()).shoutType();
+
+      -- out_int(num);
+      --out_string(str1);
+      -- newBender.shoutType();
+      -- newBender@Bender.shoutType();
       -- shoutType(bender);
       -- shoutType(newBender);
       -- shoutType(katara1);
