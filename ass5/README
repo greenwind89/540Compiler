@@ -1,144 +1,42 @@
-README file for Programming Assignment 5  (C++ edition)
-=======================================================
-
-Your directory should now contain the following files:
-
- Makefile
- README
- ast-lex.cc
- ast-parse.cc
- cgen-phase.cc
- cgen.cc
- cgen.h
- cgen_supp.cc
- cool-tree.cc
- cool-tree.handcode.h
- dumptype.cc
- emit.h
- example.cl
- handle_flags.cc
- mycoolc
- stringtab.cc
- tree.cc
- utilities.cc
-
-	The Makefile contains targets for compiling and running your
-	program, as well as handing it in.
-
-	The README contains this info. Part of the assignment is to
-	fill the README with the write-up for your project. You should
-	explain design decisions, explain why your code is correct,
-	and why your test cases are adequate. It is part of the
-	assignment to clearly and concisely explain things in text as
-	well as to comment your code. Just edit this file.
-
-	In example.cl you should write a correct Cool program which
-	tests as many aspects of the code generator as possible. It
-	should pass your code generator, and running spim on the
-	generated output should run the program correctly.
-
-	cgen.cc is the skeleton file for the code generator. This
-	skeleton is much larger than the ones for previous
-	assignments.  The skeleton provides three components of the
-	code generator:
-
-		- functions to build the inheritance graph;
-
-		- functions to emit global data and constants;
-
-		- functions to emit spim instructions; (we supply
-		  these last two to save you some tedious coding)
-
-	You should work to understand this code, and it will help you
-        write the rest of the code generator.
-
-	cgen.h is the header file for the code generator. Feel free to
-	add anything you need.
-
-	cgen_supp.cc is general support code for the code generator.
-	You can add functions as you see fit, but do not modify the 3
-	functions:
-
-		o byte_mode
-		o ascii_mode
-		o emit_string_constant
-
-	emit.h defines a bunch of macros which should come in handy
-	when you actually want to emit code. Feel free to change
-	anything here to suit your needs.
-
-        cgen-phase.cc supplies the driver for the compiler. You should
-        not modify this code.  The script mycoolc can pass any of the
-        standard flags to the code generator; for this assignment, -c
-        (code generator debug) may be useful as it sets a global
-        variable cgen_debug to true (1).  If you want your code
-        generator to print debug information when the option is set,
-        write your debug code in the following format:
-
-	      if (cgen_debug)
-	      {
-		...
-	      }
-
-	symtab.h contains a symbol table implementation. You may
-        modify this file if you'd like.
-
-	cool.h contains definitions that are used by almost all parts
-	of the compiler. DO NOT MODIFY.
-
-        tree.h contains the base class `tree_node' of the AST nodes.
-
-        cool-tree.cc, cool-tree.h, and cool-tree.handcode.h contain
-        the declarations and definitions of code generation AST nodes.
-        You may add fields as you wish, but you shouldn't modify any
-        of the methods already there except `code', which you may
-        modify or remove as you wish.  Note that cool-tree.handcode.h
-        is different from the same file in PA4---this file contains
-        function definitions needed for the cgen.cc skeleton.  You may
-        modify cool-tree.h or cool-tree.handcode.h, but don't modify
-        cool-tree.cc.  Place all method definitions in cgen.cc
-
-	stringtab.h contains functions to manipulate the string table.
-	DO NOT MODIFY.
-
-	dumptype.cc contains functions for printing out an abstract
-	syntax tree.  DO NOT MODIFY.
-
-
-
-Instructions
-------------
-
-	To compile your compiler and code generator type:
-
-	% gmake cgen
-
-	To test your compiler, type:
-
-	% ./mycoolc [-o output filename] <file1.cl> <file2.cl> ...
-
-	This command parses all the cool files given on the command
-	line, passes them through the semantic checker, and then hands
-	the program AST to your code generator.
-
-	To run your compiler on the file example.cl, type:
-
-	% gmake dotest
-
-	To run the produced code:
-
-	% spim -file file1.s  /* or the output filename you chose */
-
-	% gmake clean
-
-	when you switch from one type of machine to the other.  If at
-	some point you get weird errors from the linker, you probably
-	forgot this step.
-
-	GOOD LUCK!
-
----8<------8<------8<------8<---cut here---8<------8<------8<------8<---
 
 Write-up for PA5
 ----------------
-modified files: cgen.cc, cgen.h, cool-tree.h, cool-tree.handcode.h 
+modified files: cgen.cc, cgen.h, cool-tree.h, cool-tree.handcode.h
+
+
+In this assignment, we implement two general phases, first phase goes through class structure to build inheritance tree, string, int, bool constants, class name table and class tag table. The second phase goes through each class again to build init method for each class to initialize class' attributes and then recursively generate code for each expression.
+
+Each phase includes multiple smaller phases with general skeleton like below:
+
+code_global_data(): generate general global data
+
+code_select_gc(): generate information about garbage collector
+
+code_constants(): generate int, string and bool constants
+
+code_class_name_table(): generate class name and class object table. Class object table is used when encountering new SELF_TYPE in which we want to refer to class initialization and class prototype from class tag. The order of classes in this table reflect its class tag value.
+
+code_class_dispatch_table(): generate dispatch table for each class, each function in a class is referred by a unique offset int the dispatch table.
+
+code_class_layout(): generate prototype layout for each class, we reuse class tag value generated from previous phases, since children class inherits attributes from parent classes, we need to put attributes of highest parent class first then children of that parent then so on so that offset of an attribute is the same for both parent and children. At this phase, all attributes are initialized with default value or void and will be updated to correct initialize value at later phase.
+
+code_global_text(): init heap code
+
+code_object_init(): generate initialization code for each object. Since at the layout phase assigns default values for attributes, in this phase we generally go through initialization code for each attributes, copy object and assign address of newly created object to that attribute.
+
+code_class_methods(): this is the heart of the generator, it recursively goes through each expression and generate code for each of them. One important point is to keep the invariant in which S0 points to self, ACC points to most current result of an expression, FP points to the beginning of variables of current scope which can be used to refer to any variable. Common information is passed among expression via a CgenClassTable pointer.
+
+We ignore the performance aspect in this implementation so our code includes many algorithm which run in O(n^2) or O(n^3). Also, we do not optimize the use of temporary registers in this application, instead we use stack storage to store variables in most of the case which is bad in real world application since registers are much faster.
+
+Testing:
+We have two general scenarios for testing:
+
+Atomically testing: We divide test into multiple cases, each case for each operational semantic and expected runtime errors.
+
+Batch testing: we reuse test cases written for assignment 1 to test the operational semantic of our generator in a relatively complicated cool program.
+
+Our test code include automatic script test.sh and stacktest.sh to test two different scenarios as mentioned above. test/testcases includes tests for test.sh and test/stacktest/testcases includes tests for stacktest.sh
+
+Some notes:
+
+- We use some global variables like labelIdx and make some attributes of class CgenClassTable public intentionally to accelerate the development speed with full awareness of the evil of this way of development

@@ -921,6 +921,23 @@ label7:
 	lw	$t1 8($a0)
 	lw	$t1 16($t1)
 	jalr		$t1
+	lw	$a0 16($s0)
+	bne	$a0 $zero label8
+	la	$a0 str_const1
+	li	$t1 80
+	jal	_dispatch_abort
+label8:
+	lw	$t1 8($a0)
+	lw	$t1 20($t1)
+	jalr		$t1
+	bne	$a0 $zero label9
+	la	$a0 str_const1
+	li	$t1 80
+	jal	_dispatch_abort
+label9:
+	lw	$t1 8($a0)
+	lw	$t1 16($t1)
+	jalr		$t1
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -935,56 +952,56 @@ Main.shoutType:
 	move	$s0 $a0
 	sw	$s1 0($fp)
 	lw	$a0 16($fp)
-	bne	$a0 $zero label9
-	la	$a0 str_const1
-	li	$t1 153
-	jal	_case_abort2
-label9:
-	lw	$t2 0($a0)
-	blt	$t2 8 label10
-	bgt	$t2 8 label10
-	move	$s1 $a0
-	move	$a0 $s1
 	bne	$a0 $zero label11
 	la	$a0 str_const1
-	li	$t1 156
-	jal	_dispatch_abort
+	li	$t1 154
+	jal	_case_abort2
 label11:
-	lw	$t1 8($a0)
-	lw	$t1 16($t1)
-	jalr		$t1
-	b	label8
-label10:
-	blt	$t2 7 label12
+	lw	$t2 0($a0)
+	blt	$t2 8 label12
 	bgt	$t2 8 label12
 	move	$s1 $a0
 	move	$a0 $s1
 	bne	$a0 $zero label13
 	la	$a0 str_const1
-	li	$t1 155
+	li	$t1 157
 	jal	_dispatch_abort
 label13:
 	lw	$t1 8($a0)
 	lw	$t1 16($t1)
 	jalr		$t1
-	b	label8
+	b	label10
 label12:
-	blt	$t2 6 label14
+	blt	$t2 7 label14
 	bgt	$t2 8 label14
 	move	$s1 $a0
 	move	$a0 $s1
 	bne	$a0 $zero label15
 	la	$a0 str_const1
-	li	$t1 154
+	li	$t1 156
 	jal	_dispatch_abort
 label15:
 	lw	$t1 8($a0)
 	lw	$t1 16($t1)
 	jalr		$t1
-	b	label8
+	b	label10
 label14:
+	blt	$t2 6 label16
+	bgt	$t2 8 label16
+	move	$s1 $a0
+	move	$a0 $s1
+	bne	$a0 $zero label17
+	la	$a0 str_const1
+	li	$t1 155
+	jal	_dispatch_abort
+label17:
+	lw	$t1 8($a0)
+	lw	$t1 16($t1)
+	jalr		$t1
+	b	label10
+label16:
 	jal	_case_abort
-label8:
+label10:
 	lw	$s1 0($fp)
 	lw	$fp 16($sp)
 	lw	$s0 12($sp)

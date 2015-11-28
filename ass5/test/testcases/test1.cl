@@ -77,6 +77,7 @@ Class Main inherits IO{
   main(): Object {
     {
       ((factory.getBender()).getMe()).shoutType();
+      katara1.getMe().shoutType();
 
       -- out_int(num);
       --out_string(str1);

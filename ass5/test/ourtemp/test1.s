@@ -710,6 +710,23 @@ label2:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
+	move	$a0 $s0
+	move	$a0 $s0
+	lw	$a0 16($s0)
+	bne	$a0 $zero label3
+	la	$a0 str_const0
+	jal	_dispatch_abort
+label3:
+	lw	$t1 8($a0)
+	lw	$t1 20($t1)
+	jalr		$t1
+	bne	$a0 $zero label4
+	la	$a0 str_const0
+	jal	_dispatch_abort
+label4:
+	lw	$t1 8($a0)
+	lw	$t1 4($t1)
+	jalr		$t1
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -726,50 +743,50 @@ Main.shoutType:
 	lw	$s1 0($a0)
 	la	$t1 Bender_protObj
 	lw	$t2 0($t1)
-	bne	$t2 $s1 label4
+	bne	$t2 $s1 label6
 	sw	$a0 208($fp)
 	move	$a0 $s0
 	lw	$a0 208($fp)
-	bne	$a0 $zero label5
-	la	$a0 str_const0
-	jal	_dispatch_abort
-label5:
-	lw	$t1 8($a0)
-	lw	$t1 4($t1)
-	jalr		$t1
-	b	label3
-label4:
-	la	$t1 WaterBender_protObj
-	lw	$t2 0($t1)
-	bne	$t2 $s1 label6
-	sw	$a0 204($fp)
-	move	$a0 $s0
-	lw	$a0 204($fp)
 	bne	$a0 $zero label7
 	la	$a0 str_const0
 	jal	_dispatch_abort
 label7:
 	lw	$t1 8($a0)
-	lw	$t1 12($t1)
+	lw	$t1 4($t1)
 	jalr		$t1
-	b	label3
+	b	label5
 label6:
-	la	$t1 Katara_protObj
+	la	$t1 WaterBender_protObj
 	lw	$t2 0($t1)
 	bne	$t2 $s1 label8
-	sw	$a0 200($fp)
+	sw	$a0 204($fp)
 	move	$a0 $s0
-	lw	$a0 200($fp)
+	lw	$a0 204($fp)
 	bne	$a0 $zero label9
 	la	$a0 str_const0
 	jal	_dispatch_abort
 label9:
 	lw	$t1 8($a0)
+	lw	$t1 12($t1)
+	jalr		$t1
+	b	label5
+label8:
+	la	$t1 Katara_protObj
+	lw	$t2 0($t1)
+	bne	$t2 $s1 label10
+	sw	$a0 200($fp)
+	move	$a0 $s0
+	lw	$a0 200($fp)
+	bne	$a0 $zero label11
+	la	$a0 str_const0
+	jal	_dispatch_abort
+label11:
+	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
-	b	label3
-label8:
-label3:
+	b	label5
+label10:
+label5:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -801,10 +818,10 @@ Bender.shoutType:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label10
+	bne	$a0 $zero label12
 	la	$a0 str_const0
 	jal	_dispatch_abort
-label10:
+label12:
 	lw	$t1 8($a0)
 	lw	$t1 0($t1)
 	jalr		$t1
@@ -815,10 +832,10 @@ label10:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label11
+	bne	$a0 $zero label13
 	la	$a0 str_const0
 	jal	_dispatch_abort
-label11:
+label13:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
@@ -951,10 +968,10 @@ WaterBender.shoutType:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label12
+	bne	$a0 $zero label14
 	la	$a0 str_const0
 	jal	_dispatch_abort
-label12:
+label14:
 	lw	$t1 8($a0)
 	lw	$t1 0($t1)
 	jalr		$t1
@@ -965,10 +982,10 @@ label12:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label13
+	bne	$a0 $zero label15
 	la	$a0 str_const0
 	jal	_dispatch_abort
-label13:
+label15:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
@@ -1004,10 +1021,10 @@ Katara.shoutType:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label14
+	bne	$a0 $zero label16
 	la	$a0 str_const0
 	jal	_dispatch_abort
-label14:
+label16:
 	lw	$t1 8($a0)
 	lw	$t1 0($t1)
 	jalr		$t1
