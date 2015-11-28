@@ -1282,7 +1282,7 @@ void method_class::code_method(ostream &str, Symbol className, CgenClassTable *c
   }
 
   // count number of variables in this method to position frame pointer
-  int count = 20;
+  int count = 100;
   // expr->preprocess(count);
 
   emit_method_ref(className, name, str); str << LABEL;

@@ -629,7 +629,7 @@ Katara_init:
 	addiu	$sp $sp 12
 	jr	$ra	
 Main.main:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -679,23 +679,23 @@ label3:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 Main.shoutType:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 92($fp)
+	lw	$a0 412($fp)
 	lw	$s1 0($a0)
 	la	$t1 Bender_protObj
 	lw	$t2 0($t1)
 	bne	$t2 $s1 label5
-	sw	$a0 88($fp)
+	sw	$a0 408($fp)
 	move	$a0 $s0
-	lw	$a0 88($fp)
+	lw	$a0 408($fp)
 	bne	$a0 $zero label6
 	la	$a0 str_const0
 	jal	_dispatch_abort
@@ -708,9 +708,9 @@ label5:
 	la	$t1 WaterBender_protObj
 	lw	$t2 0($t1)
 	bne	$t2 $s1 label7
-	sw	$a0 84($fp)
+	sw	$a0 404($fp)
 	move	$a0 $s0
-	lw	$a0 84($fp)
+	lw	$a0 404($fp)
 	bne	$a0 $zero label8
 	la	$a0 str_const0
 	jal	_dispatch_abort
@@ -723,9 +723,9 @@ label7:
 	la	$t1 Katara_protObj
 	lw	$t2 0($t1)
 	bne	$t2 $s1 label9
-	sw	$a0 80($fp)
+	sw	$a0 400($fp)
 	move	$a0 $s0
-	lw	$a0 80($fp)
+	lw	$a0 400($fp)
 	bne	$a0 $zero label10
 	la	$a0 str_const0
 	jal	_dispatch_abort
@@ -739,10 +739,10 @@ label4:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 96
+	addiu	$sp $sp 416
 	jr	$ra	
 Bender.bend:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -751,10 +751,10 @@ Bender.bend:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 Bender.shoutType:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -791,10 +791,10 @@ label12:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 WaterBender.waterBend:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -814,19 +814,19 @@ WaterBender.waterBend:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 WaterBender.sum:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 100($fp)
+	lw	$a0 420($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 92($fp)
+	lw	$a0 412($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -836,7 +836,7 @@ WaterBender.sum:
 	sw	$t1 12($a0)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 96($fp)
+	lw	$a0 416($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -847,19 +847,19 @@ WaterBender.sum:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 104
+	addiu	$sp $sp 424
 	jr	$ra	
 WaterBender.sumKatara:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 104($fp)
+	lw	$a0 424($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 96($fp)
+	lw	$a0 416($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -869,7 +869,7 @@ WaterBender.sumKatara:
 	sw	$t1 12($a0)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 100($fp)
+	lw	$a0 420($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -880,10 +880,10 @@ WaterBender.sumKatara:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 108
+	addiu	$sp $sp 428
 	jr	$ra	
 WaterBender.shoutType:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -920,10 +920,10 @@ label14:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 Katara.waterBend:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -933,10 +933,10 @@ Katara.waterBend:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 Katara.shoutType:
-	addiu	$sp $sp -92
+	addiu	$sp $sp -412
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -959,7 +959,7 @@ label15:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 92
+	addiu	$sp $sp 412
 	jr	$ra	
 
 # end of generated code
