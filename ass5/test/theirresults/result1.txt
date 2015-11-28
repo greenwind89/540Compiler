@@ -3,5 +3,4 @@ Copyright 1990-2003 by James R. Larus (larus@cs.wisc.edu).
 All Rights Reserved.
 See the file README for a full copyright notice.
 Loaded: ./lib/trap.handler
-GenGC initialized.
-I am Bender60I am KataraCOOL program successfully executed
+I am Bender60I am Katara1000hello minhI am Water Bender100I am Bender60I am Bender60I am Water Bender100I am Katarakatara2 is voidnot void0 <2 12345678910bool1 bool1Hello WorldHello Hello WorldHello Hello FalseHello2-567030-16abcCOOL program successfully executed

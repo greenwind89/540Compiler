@@ -864,32 +864,78 @@ void CgenNode::code_class_dispatch_table(ostream &str) {
   CgenNodeP parent = this;
   List<Entry> *attrList = NULL;
   List<Entry> *methodList = NULL;
+  List<CgenNode> *classList = NULL;
+
+  SymbolTable<Symbol, Entry> *methodNameToClassTbl = new SymbolTable<Symbol, Entry>();
+  methodNameToClassTbl->enterscope();
+
+  SymbolTable<Symbol, Entry> *alreadyExistMethodsTbl = new SymbolTable<Symbol, Entry>();
+  alreadyExistMethodsTbl->enterscope();
   //nds = new List<CgenNode>(nd,nds);
   str << name << DISPTAB_SUFFIX << LABEL;
   while(parent != NULL) {
+    classList = new List<CgenNode>(parent, classList);
     Features ftrs = parent->get_features();
     for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
-      ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), true, false);
+      ftrs->nth(i)->code_dispatch_round1(str, methodNameToClassTbl, parent->name);
     }
     parent = parent->get_parentnd();
   }
-  int idx = 0;
-  int size = 0;
-  for(List<Entry> *l = methodList; l; l = l->tl()) {
-    size++;
+  // int idx = 0;
+  // int size = 0;
+  // for(List<Entry> *l = methodList; l; l = l->tl()) {
+  //   size++;
+  // }
+  //
+  // attrList = NULL;
+  // methodList = NULL;
+
+  int offset = 0;
+  for(List<CgenNode> *l = classList; l; l = l->tl()) {
+    parent = l->hd();
+    Features ftrs = parent->get_features();
+    for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
+      ftrs->nth(i)->code_dispatch_round2(str, methodNameToClassTbl, parent->name, alreadyExistMethodsTbl, methodTbl, offset);
+    }
   }
 
   // cout << "CLASS:" << name <<endl;
-  for(List<Entry> *l = methodList; l; l = l->tl()) {
-    TableData *t = new TableData();
-    t->offset = size - idx - 1;
-    methodTbl->addid((Entry *) l->hd(), t);
-    // cout << l->hd() << ": " << t->offset <<endl;
-    idx++;
-  }
+  // for(List<Entry> *l = methodList; l; l = l->tl()) {
+  //   TableData *t = new TableData();
+  //   t->offset = size - idx - 1;
+  //   methodTbl->addid((Entry *) l->hd(), t);
+  //   // cout << l->hd() << ": " << t->offset <<endl;
+  //   idx++;
+  // }
 
 }
 
+void attr_class::code_dispatch_round1(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className) {
+
+}
+
+void method_class::code_dispatch_round1(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className) {
+  if(tbl->lookup(name) == NULL) {
+    tbl->addid( name, className);
+  }
+}
+
+void attr_class::code_dispatch_round2(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className, SymbolTable<Symbol, Entry> *alreadyExistMethodsTbl, SymbolTable<Symbol, TableData> *methodTbl, int &offset) {
+
+}
+
+void method_class::code_dispatch_round2(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className, SymbolTable<Symbol, Entry> *alreadyExistMethodsTbl, SymbolTable<Symbol, TableData> *methodTbl, int &offset) {
+  if(alreadyExistMethodsTbl->lookup(name) == NULL ) {
+    Symbol c = tbl->lookup(name);
+    str << WORD << c << "." << name <<endl;
+
+    alreadyExistMethodsTbl->addid(name, c);
+    TableData *t = new TableData();
+    t->offset = offset;
+    methodTbl->addid(name, t);
+    offset++;
+  }
+}
 
 Symbol CgenNode::get_name() {
   return name;

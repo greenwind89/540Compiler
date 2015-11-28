@@ -1,6 +1,16 @@
 Class Bender {
   hp: Int <- 10 + 50;
 
+  me: Bender;
+
+  shoutMe(): Object {
+    me.shoutType()
+  };
+
+  dump(): Object {
+    1
+  };
+
   bend() : Object {
     self
   };
@@ -15,6 +25,9 @@ Class Bender {
   getMe(): Bender {
     new SELF_TYPE
   };
+
+
+
 
 };
 
@@ -76,32 +89,32 @@ Class Main inherits IO{
 
   main(): Object {
     {
+      1;
       ((factory.getBender()).getMe()).shoutType();
       katara1.getMe().shoutType();
+      katara1.getMe();
 
-      -- out_int(num);
-      --out_string(str1);
-      -- newBender.shoutType();
-      -- newBender@Bender.shoutType();
-      -- shoutType(bender);
-      -- shoutType(newBender);
-      -- shoutType(katara1);
-      -- if isvoid katara2 then out_string("katara2 is void") else out_string("not void") fi;
-      -- if isvoid katara1 then out_string("katara1 is void") else out_string("not void") fi;
+      out_int(num);
+      out_string(str1);
+      newBender.shoutType();
+      newBender@Bender.shoutType();
+      shoutType(bender);
+      shoutType(newBender);
+      shoutType(katara1);
+      if isvoid katara2 then out_string("katara2 is void") else out_string("not void") fi;
+      if isvoid katara1 then out_string("katara1 is void") else out_string("not void") fi;
 
-      -- i < i +1;
-      -- out_int(i);
+      i < i +1;
+      out_int(i);
 
-      -- if i < 2 then out_string(" <2 ") else out_string(" >= 2") fi;
-      (*
+      if i < 2 then out_string(" <2 ") else out_string(" >= 2") fi;
       while i < 10 loop {
         i <- i + 1;
         out_int(i);
       } pool;
-      *)
 
 
-      (*
+
       bool1 <- true;
       if not bool1 then out_string("not bool1") else out_string("bool1") fi;
       if bool1 then out_string(" bool1") else out_string("not bool1") fi;
@@ -123,15 +136,12 @@ Class Main inherits IO{
       else
         out_string("False" )
       fi;
-      *)
 
-      -- out_string("Hello");
-      -- shout();
-      -- newBender.waterBend();
-      -- out_int(newBender.waterBend());
-      -- out_int(1+1+1 - 2 -3 * 4/2);
-      -- out_int(newBender.sum(1 , 2, 3));
-      (*
+      out_string("Hello");
+      newBender.waterBend();
+      out_int(newBender.waterBend());
+      out_int(1+1+1 - 2 -3 * 4/2);
+      out_int(newBender.sum(1 , 2, 3));
       let katara3: Katara <- new Katara, katara4: Katara <- new Katara, katara5: Katara <- new Katara in {
         let int1: Int <- 10, int2: Int <- 30, int3: Int <- 10, int4: Int <- 30, int5: Int <- 10, int6: Int <- 30 in {
           out_int(newBender.sumKatara(int6, int2, int3, katara3));
@@ -144,9 +154,8 @@ Class Main inherits IO{
       };
 
       out_int(~1);
-      *)
-      -- out_int(1+2+3);
-      -- (new IO).out_string("abc");
+      out_int(1+2+3);
+      (new IO).out_string("abc");
     }
   };
 

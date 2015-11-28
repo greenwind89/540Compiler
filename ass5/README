@@ -29,7 +29,7 @@ code_class_methods(): this is the heart of the generator, it recursively goes th
 We ignore the performance aspect in this implementation so our code includes many algorithm which run in O(n^2) or O(n^3). Also, we do not optimize the use of temporary registers in this application, instead we use stack storage to store variables in most of the case which is bad in real world application since registers are much faster.
 
 Garbage collection:
-We support garbage collection simply by loading the new updated attributes of into A1 and call _GenGC_Assign. 
+We support garbage collection simply by loading the new updated attributes of into A1 and call _GenGC_Assign.
 
 Testing:
 We have two general scenarios for testing:

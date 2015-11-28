@@ -35,6 +35,11 @@ typedef Case_class *Case;
 
 class CgenClassTable;
 
+struct TableData;
+
+template <class SYM, class DAT>
+class SymbolTable;
+
 typedef list_node<Class_> Classes_class;
 typedef Classes_class *Classes;
 typedef list_node<Feature> Features_class;
@@ -73,13 +78,17 @@ void dump_with_types(ostream&,int);
 #define Feature_EXTRAS                                        \
 virtual void dump_with_types(ostream&,int) = 0; \
 virtual void code_init(ostream &str, CgenClassTable* ct) = 0; \
-virtual void code_method(ostream &str, Symbol className, CgenClassTable *ct) = 0;
+virtual void code_method(ostream &str, Symbol className, CgenClassTable *ct) = 0; \
+virtual void code_dispatch_round1(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className) = 0; \
+virtual void code_dispatch_round2(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className, SymbolTable<Symbol, Entry> *alreadyExistMethodsTbl, SymbolTable<Symbol, TableData> *methodTbl, int &offset) = 0;
 
 
 #define Feature_SHARED_EXTRAS                                       \
 void dump_with_types(ostream&,int); \
 void code_init(ostream &str, CgenClassTable* ct); \
-void code_method(ostream &str, Symbol className, CgenClassTable *ct);
+void code_method(ostream &str, Symbol className, CgenClassTable *ct); \
+void code_dispatch_round1(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className); \
+void code_dispatch_round2(ostream &str, SymbolTable<Symbol, Entry> *tbl, Symbol className, SymbolTable<Symbol, Entry> *alreadyExistMethodsTbl, SymbolTable<Symbol, TableData> *methodTbl, int &offset);
 
 
 #define Formal_EXTRAS                              \

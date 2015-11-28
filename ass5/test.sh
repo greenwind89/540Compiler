@@ -1,5 +1,5 @@
 make cgen
-for i in {1..2}
+for i in {1..1}
 do
   echo 'Executing test' $i
   ./mycoolc ./test/testcases/test$i.cl -o ./test/ourtemp/test$i.s;
