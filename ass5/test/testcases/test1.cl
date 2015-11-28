@@ -6,7 +6,10 @@ Class Bender {
   };
 
   shoutType(): Object {
-    (new IO).out_string("I am Bender")
+    {
+      (new IO).out_string("I am Bender");
+      (new IO).out_int(hp);
+    }
   };
 };
 
@@ -29,7 +32,10 @@ Class WaterBender inherits Bender {
   };
 
   shoutType(): Object {
-    (new IO).out_string("I am Water Bender")
+    {
+      (new IO).out_string("I am Water Bender");
+      (new IO).out_int(mana);
+    }
   };
 };
 
@@ -53,12 +59,18 @@ Class Main inherits IO{
   bool2: Bool <- true;
   i: Int <- 0;
   bender: Bender <- new Bender;
+  num: Int <- 1000;
+  str1: String <- "hello minh";
 
   main(): Object {
     {
-      shoutType(bender);
-      shoutType(newBender);
-      shoutType(katara1);
+      out_int(num);
+      out_string(str1);
+      newBender.shoutType();
+      newBender@Bender.shoutType();
+      -- shoutType(bender);
+      -- shoutType(newBender);
+      -- shoutType(katara1);
       -- if isvoid katara2 then out_string("katara2 is void") else out_string("not void") fi;
       -- if isvoid katara1 then out_string("katara1 is void") else out_string("not void") fi;
 

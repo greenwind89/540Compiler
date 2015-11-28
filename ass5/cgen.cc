@@ -747,6 +747,7 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber, CgenClassTable *c
   CgenNodeP parent = this;
   List<Entry> *attrList = NULL;
   List<Entry> *methodList = NULL;
+  List<CgenNode> *classList = NULL;
   int size = 0;
   // stupid process to get size of attributes
   while(parent != NULL) {
@@ -754,6 +755,7 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber, CgenClassTable *c
     for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
       ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), false, true);
     }
+    classList = new List<CgenNode>(parent, classList);
     parent = parent->get_parentnd();
   }
 
@@ -791,18 +793,28 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber, CgenClassTable *c
   attrList = NULL;
   methodList = NULL;
 
-  while(parent != NULL) {
+  for(List<CgenNode> *l = classList; l; l = l->tl()) {
+    parent = l->hd();
     Features ftrs = parent->get_features();
     for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
       ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), false, false);
     }
-    parent = parent->get_parentnd();
   }
+
+
+  // while(parent != NULL) {
+  //   Features ftrs = parent->get_features();
+  //   for(int i = ftrs->first(); ftrs->more(i); i = ftrs->next(i)) {
+  //     ftrs->nth(i)->update_class_layout(attrList, methodList, str, parent->get_name(), false, false);
+  //   }
+  //   parent = parent->get_parentnd();
+  // }
 
   int idx = 0;
   for(List<Entry> *l = attrList; l; l = l->tl()) {
     TableData *t = new TableData();
     t->offset = 3 + (size - idx - 1);
+    // t->offset = 3 + idx ;
     attrTbl->addid((Entry *) l->hd(), t);
     idx++;
   }
@@ -1233,9 +1245,6 @@ void CgenNode::code_init(ostream &str, CgenClassTableP ct) {
 }
 
 void attr_class::code_init(ostream &str, CgenClassTable* ct) {
-  if(type_decl == Int || type_decl == Str ) {
-    return ;
-  }
 
   if(init->get_type() != NULL) {
 
@@ -1358,6 +1367,41 @@ void assign_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void static_dispatch_class::code(ostream &str, CgenClassTable *ct) {
+  int dispatchingLabel = labelIdx; labelIdx++;
+  for(int i = actual->first(); actual->more(i); i = actual->next(i)) {
+    actual->nth(i)->code(str, ct);
+
+    emit_store(ACC, 0, SP, str); // store result into the top of stack
+    emit_addiu(SP, SP, -4, str); // increase stack position
+  }
+
+  emit_move(ACC, SELF, str); // we restore self into accumualte to prepare for next statements (self object must be passed in a0)
+
+  expr->code(str, ct); // update a0 to address of current object
+
+  emit_bne(ACC, ZERO, dispatchingLabel, str);
+
+  // reset a0 to null
+  emit_partial_load_address(ACC, str);
+  str << "str_const0" <<endl;
+  //  stringtable.lookup_string("")->code_ref(str); str << endl;
+
+
+  emit_jal(DISPATCH_ABORT, str); // dispatch abort after jump to label
+
+  emit_label_def(dispatchingLabel, str); // start dispatching
+
+  emit_partial_load_address(T1, str); emit_protobj_ref(type_name, str);  str << endl;// load address of prototype of static type to T1
+  emit_load(T1, 2, T1, str); // load address of dispatching table to T1
+
+  int offset = ct->getOffsetOfMethod(type_name, name);
+  if(offset > -1) {
+    emit_load(T1, offset, T1, str); // load address of the dispatch function
+  } else {
+    cout << "cannot find the method " << name << "In class"  << expr->get_type() <<endl;
+  }
+
+  emit_jalr(T1, str); // jump to the function
 }
 
 void dispatch_class::code(ostream &str, CgenClassTable *ct) {
