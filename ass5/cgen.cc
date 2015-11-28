@@ -720,12 +720,17 @@ void CgenClassTable::code_class_name_table()
   classTagTbl->enterscope();
 
   str << CLASSNAMETAB << LABEL;
+  str << WORD; stringtable.lookup_string(OBJETNAME)->code_ref(str); str << endl;
+  str << WORD; stringtable.lookup_string(IONAME)->code_ref(str); str << endl;
+  str << WORD; stringtable.lookup_string(MAINNAME)->code_ref(str); str << endl;
+  str << WORD; stringtable.lookup_string(INTNAME)->code_ref(str); str << endl;
+  str << WORD; stringtable.lookup_string(BOOLNAME)->code_ref(str); str << endl;
+  str << WORD; stringtable.lookup_string(STRINGNAME)->code_ref(str); str << endl;
+
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
-    str << WORD;
-    // ((StringEntry *) l->hd()->get_name())->code_ref(str);
-    stringtable.lookup_string(l->hd()->get_name()->get_string())->code_ref(str);
-    // str << l->hd()->get_name();
-    str << endl;
+    if(!l->hd()->basic() && l->hd()->get_name() != Main) {
+      str << WORD; stringtable.lookup_string(l->hd()->get_name()->get_string())->code_ref(str); str << endl;
+    }
   }
 
   str << CLASSOBJTAB << LABEL;
@@ -1279,6 +1284,11 @@ void attr_class::code_init(ostream &str, CgenClassTable* ct) {
     init->code(str, ct);
     int offset = ct->getOffsetOfObject(ct->current_class()->get_name(), name);
     emit_store(ACC, offset, SELF, str);
+
+    if(cgen_Memmgr == GC_GENGC) { // support garbage collector
+      emit_addiu(A1, SELF, offset * 4, str);
+      emit_jal(GENGC_ASSIGN, str);
+    }
   }
 
 
@@ -1310,7 +1320,7 @@ void method_class::code_method(ostream &str, Symbol className, CgenClassTable *c
   }
 
   // count number of variables in this method to position frame pointer
-  int count = 50;
+  int count = 200;
   // expr->preprocess(count);
 
   emit_method_ref(className, name, str); str << LABEL;
@@ -1409,13 +1419,9 @@ void static_dispatch_class::code(ostream &str, CgenClassTable *ct) {
 
   emit_bne(ACC, ZERO, dispatchingLabel, str);
 
-  // reset a0 to null
-  emit_partial_load_address(ACC, str);
-  str << "str_const0" <<endl;
-  //  stringtable.lookup_string("")->code_ref(str); str << endl;
-
-
-  emit_jal(DISPATCH_ABORT, str); // dispatch abort after jump to label
+  emit_partial_load_address(ACC, str); str << "str_const0" <<endl; // set ACC to point to file name
+  emit_load_imm(T1, get_line_number(), str); // T1 point to line number
+  emit_jal(DISPATCH_ABORT, str); // dispatch abort if A0 is 0 which means dispatching on void
 
   emit_label_def(dispatchingLabel, str); // start dispatching
 
@@ -1447,13 +1453,9 @@ void dispatch_class::code(ostream &str, CgenClassTable *ct) {
   emit_bne(ACC, ZERO, labelIdx, str);
 
 
-  // reset a0 to null
-  emit_partial_load_address(ACC, str);
-  str << "str_const0" <<endl;
-  //  stringtable.lookup_string("")->code_ref(str); str << endl;
-
-
-  emit_jal(DISPATCH_ABORT, str); // dispatch abort after jump to label
+  emit_partial_load_address(ACC, str); str << "str_const0" <<endl; // set ACC to point to file name
+  emit_load_imm(T1, get_line_number(), str); // T1 point to line number
+  emit_jal(DISPATCH_ABORT, str); // dispatch abort if A0 is 0 which means dispatching on void
 
   emit_label_def(labelIdx, str); // start dispatching
   emit_load(T1, 2, ACC, str); // load display table address into t1
@@ -1501,9 +1503,19 @@ void loop_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void typcase_class::code(ostream &str, CgenClassTable *ct) {
-  expr->code(str, ct);
-  emit_load(S1, 0, ACC, str); // load tag of the object into S1
   int resumeLabel = labelIdx; labelIdx++;
+  int afterCheckingVoidLabel = labelIdx; labelIdx++;
+
+  expr->code(str, ct);
+
+  emit_bne(ACC, ZERO, afterCheckingVoidLabel, str);
+  emit_partial_load_address(ACC, str); str << "str_const0" <<endl; // set ACC to point to file name
+  emit_load_imm(T1, get_line_number(), str); // T1 point to line number
+  emit_jal(CASE_ABORT2, str); // dispatch abort if A0 is 0 which means dispatching on void
+
+
+  emit_label_def(afterCheckingVoidLabel, str);
+  emit_load(S1, 0, ACC, str); // load tag of the object into S1
 
   for(int i = cases->first(); cases->more(i); i = cases->next(i)) {
     int nextCaseLabel = labelIdx; labelIdx++;
@@ -1524,6 +1536,9 @@ void typcase_class::code(ostream &str, CgenClassTable *ct) {
 
     emit_label_def(nextCaseLabel, str);
   }
+
+  emit_jal(CASE_ABORT, str); // dispatch abort if A0 is 0 which means dispatching on void
+  // no matching case here
 
   emit_label_def(resumeLabel, str);
 

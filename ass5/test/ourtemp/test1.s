@@ -18,10 +18,10 @@ _string_tag:
 	.word	5
 	.globl	_MemMgr_INITIALIZER
 _MemMgr_INITIALIZER:
-	.word	_NoGC_Init
+	.word	_GenGC_Init
 	.globl	_MemMgr_COLLECTOR
 _MemMgr_COLLECTOR:
-	.word	_NoGC_Collect
+	.word	_GenGC_Collect
 	.globl	_MemMgr_TEST
 _MemMgr_TEST:
 	.word	0
@@ -313,16 +313,16 @@ bool_const1:
 	.word	Bool_dispTab
 	.word	1
 class_nameTab:
+	.word	str_const9
+	.word	str_const10
 	.word	str_const18
+	.word	str_const11
+	.word	str_const12
+	.word	str_const13
 	.word	str_const17
 	.word	str_const16
 	.word	str_const15
 	.word	str_const14
-	.word	str_const13
-	.word	str_const12
-	.word	str_const11
-	.word	str_const10
-	.word	str_const9
 class_objTab:
 	.word	Object_protObj
 	.word	Object_init
@@ -534,32 +534,52 @@ Main_init:
 	jal	Object.copy
 	jal	WaterBender_init
 	sw	$a0 12($s0)
+	addiu	$a1 $s0 12
+	jal	_GenGC_Assign
 	la	$a0 Katara_protObj
 	jal	Object.copy
 	jal	Katara_init
 	sw	$a0 16($s0)
+	addiu	$a1 $s0 16
+	jal	_GenGC_Assign
 	la	$a0 Katara_protObj
 	jal	Object.copy
 	jal	Katara_init
 	sw	$a0 28($s0)
+	addiu	$a1 $s0 28
+	jal	_GenGC_Assign
 	la	$a0 bool_const0
 	sw	$a0 32($s0)
+	addiu	$a1 $s0 32
+	jal	_GenGC_Assign
 	la	$a0 bool_const1
 	sw	$a0 36($s0)
+	addiu	$a1 $s0 36
+	jal	_GenGC_Assign
 	la	$a0 int_const4
 	sw	$a0 40($s0)
+	addiu	$a1 $s0 40
+	jal	_GenGC_Assign
 	la	$a0 Bender_protObj
 	jal	Object.copy
 	jal	Bender_init
 	sw	$a0 44($s0)
+	addiu	$a1 $s0 44
+	jal	_GenGC_Assign
 	la	$a0 int_const5
 	sw	$a0 48($s0)
+	addiu	$a1 $s0 48
+	jal	_GenGC_Assign
 	la	$a0 str_const4
 	sw	$a0 52($s0)
+	addiu	$a1 $s0 52
+	jal	_GenGC_Assign
 	la	$a0 Factory_protObj
 	jal	Object.copy
 	jal	Factory_init
 	sw	$a0 56($s0)
+	addiu	$a1 $s0 56
+	jal	_GenGC_Assign
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -628,6 +648,8 @@ Bender_init:
 	add	$t1 $t2 $t1
 	sw	$t1 12($a0)
 	sw	$a0 12($s0)
+	addiu	$a1 $s0 12
+	jal	_GenGC_Assign
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -644,6 +666,8 @@ WaterBender_init:
 	jal	Bender_init
 	la	$a0 int_const2
 	sw	$a0 16($s0)
+	addiu	$a1 $s0 16
+	jal	_GenGC_Assign
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -679,7 +703,7 @@ Factory_init:
 	addiu	$sp $sp 12
 	jr	$ra	
 Main.main:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -691,6 +715,7 @@ Main.main:
 	lw	$a0 56($s0)
 	bne	$a0 $zero label0
 	la	$a0 str_const0
+	li	$t1 79
 	jal	_dispatch_abort
 label0:
 	lw	$t1 8($a0)
@@ -698,6 +723,7 @@ label0:
 	jalr		$t1
 	bne	$a0 $zero label1
 	la	$a0 str_const0
+	li	$t1 79
 	jal	_dispatch_abort
 label1:
 	lw	$t1 8($a0)
@@ -705,6 +731,7 @@ label1:
 	jalr		$t1
 	bne	$a0 $zero label2
 	la	$a0 str_const0
+	li	$t1 79
 	jal	_dispatch_abort
 label2:
 	lw	$t1 8($a0)
@@ -715,6 +742,7 @@ label2:
 	lw	$a0 16($s0)
 	bne	$a0 $zero label3
 	la	$a0 str_const0
+	li	$t1 80
 	jal	_dispatch_abort
 label3:
 	lw	$t1 8($a0)
@@ -722,6 +750,7 @@ label3:
 	jalr		$t1
 	bne	$a0 $zero label4
 	la	$a0 str_const0
+	li	$t1 80
 	jal	_dispatch_abort
 label4:
 	lw	$t1 8($a0)
@@ -730,70 +759,79 @@ label4:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 Main.shoutType:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 212($fp)
+	lw	$a0 812($fp)
+	bne	$a0 $zero label6
+	la	$a0 str_const0
+	li	$t1 154
+	jal	_case_abort2
+label6:
 	lw	$s1 0($a0)
 	la	$t1 Bender_protObj
 	lw	$t2 0($t1)
-	bne	$t2 $s1 label6
-	sw	$a0 208($fp)
+	bne	$t2 $s1 label7
+	sw	$a0 808($fp)
 	move	$a0 $s0
-	lw	$a0 208($fp)
-	bne	$a0 $zero label7
+	lw	$a0 808($fp)
+	bne	$a0 $zero label8
 	la	$a0 str_const0
+	li	$t1 155
 	jal	_dispatch_abort
-label7:
+label8:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
 	b	label5
-label6:
+label7:
 	la	$t1 WaterBender_protObj
 	lw	$t2 0($t1)
-	bne	$t2 $s1 label8
-	sw	$a0 204($fp)
+	bne	$t2 $s1 label9
+	sw	$a0 804($fp)
 	move	$a0 $s0
-	lw	$a0 204($fp)
-	bne	$a0 $zero label9
+	lw	$a0 804($fp)
+	bne	$a0 $zero label10
 	la	$a0 str_const0
+	li	$t1 156
 	jal	_dispatch_abort
-label9:
+label10:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
 	b	label5
-label8:
+label9:
 	la	$t1 Katara_protObj
 	lw	$t2 0($t1)
-	bne	$t2 $s1 label10
-	sw	$a0 200($fp)
+	bne	$t2 $s1 label11
+	sw	$a0 800($fp)
 	move	$a0 $s0
-	lw	$a0 200($fp)
-	bne	$a0 $zero label11
+	lw	$a0 800($fp)
+	bne	$a0 $zero label12
 	la	$a0 str_const0
+	li	$t1 157
 	jal	_dispatch_abort
-label11:
+label12:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
 	b	label5
-label10:
+label11:
+	jal	_case_abort
 label5:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 216
+	addiu	$sp $sp 816
 	jr	$ra	
 Bender.bend:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -802,10 +840,10 @@ Bender.bend:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 Bender.shoutType:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -818,10 +856,11 @@ Bender.shoutType:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label12
+	bne	$a0 $zero label13
 	la	$a0 str_const0
+	li	$t1 10
 	jal	_dispatch_abort
-label12:
+label13:
 	lw	$t1 8($a0)
 	lw	$t1 0($t1)
 	jalr		$t1
@@ -832,20 +871,21 @@ label12:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label13
+	bne	$a0 $zero label14
 	la	$a0 str_const0
+	li	$t1 11
 	jal	_dispatch_abort
-label13:
+label14:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 Bender.getMe:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -863,10 +903,10 @@ Bender.getMe:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 WaterBender.waterBend:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -886,19 +926,19 @@ WaterBender.waterBend:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 WaterBender.sum:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 220($fp)
+	lw	$a0 820($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 212($fp)
+	lw	$a0 812($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -908,7 +948,7 @@ WaterBender.sum:
 	sw	$t1 12($a0)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 216($fp)
+	lw	$a0 816($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -919,19 +959,19 @@ WaterBender.sum:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 224
+	addiu	$sp $sp 824
 	jr	$ra	
 WaterBender.sumKatara:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	lw	$a0 224($fp)
+	lw	$a0 824($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 216($fp)
+	lw	$a0 816($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -941,7 +981,7 @@ WaterBender.sumKatara:
 	sw	$t1 12($a0)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
-	lw	$a0 220($fp)
+	lw	$a0 820($fp)
 	lw	$s1 4($sp)
 	addiu	$sp $sp 4
 	jal	Object.copy
@@ -952,10 +992,10 @@ WaterBender.sumKatara:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 228
+	addiu	$sp $sp 828
 	jr	$ra	
 WaterBender.shoutType:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -968,10 +1008,11 @@ WaterBender.shoutType:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label14
+	bne	$a0 $zero label15
 	la	$a0 str_const0
+	li	$t1 47
 	jal	_dispatch_abort
-label14:
+label15:
 	lw	$t1 8($a0)
 	lw	$t1 0($t1)
 	jalr		$t1
@@ -982,20 +1023,21 @@ label14:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label15
+	bne	$a0 $zero label16
 	la	$a0 str_const0
+	li	$t1 48
 	jal	_dispatch_abort
-label15:
+label16:
 	lw	$t1 8($a0)
 	lw	$t1 4($t1)
 	jalr		$t1
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 Katara.waterBend:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -1005,10 +1047,10 @@ Katara.waterBend:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 Katara.shoutType:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -1021,20 +1063,21 @@ Katara.shoutType:
 	la	$a0 IO_protObj
 	jal	Object.copy
 	jal	IO_init
-	bne	$a0 $zero label16
+	bne	$a0 $zero label17
 	la	$a0 str_const0
+	li	$t1 59
 	jal	_dispatch_abort
-label16:
+label17:
 	lw	$t1 8($a0)
 	lw	$t1 0($t1)
 	jalr		$t1
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 Factory.getBender:
-	addiu	$sp $sp -212
+	addiu	$sp $sp -812
 	sw	$fp 12($sp)
 	sw	$s0 8($sp)
 	sw	$ra 4($sp)
@@ -1046,7 +1089,7 @@ Factory.getBender:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
-	addiu	$sp $sp 212
+	addiu	$sp $sp 812
 	jr	$ra	
 
 # end of generated code

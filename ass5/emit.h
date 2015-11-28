@@ -26,7 +26,10 @@
 #define STRINGTAG            "_string_tag"
 #define HEAP_START           "heap_start"
 #define DISPATCH_ABORT       "_dispatch_abort"
+#define CASE_ABORT           "_case_abort"
+#define CASE_ABORT2          "_case_abort2"
 #define OBJECT_COPY          "Object.copy"
+#define GENGC_ASSIGN         "_GenGC_Assign"
 
 // Naming conventions
 #define DISPTAB_SUFFIX       "_dispTab"
@@ -46,6 +49,8 @@
 #define INTNAME    (char *) "Int"
 #define BOOLNAME   (char *) "Bool"
 #define MAINNAME   (char *) "Main"
+#define OBJETNAME  (char *) "Object"
+#define IONAME     (char *) "IO"
 
 //
 // information about object headers

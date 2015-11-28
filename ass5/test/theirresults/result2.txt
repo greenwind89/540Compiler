@@ -4,4 +4,4 @@ All Rights Reserved.
 See the file README for a full copyright notice.
 Loaded: ./lib/trap.handler
 GenGC initialized.
-I am Bender60I am KataraCOOL program successfully executed
+No match in case statement for Class Bender

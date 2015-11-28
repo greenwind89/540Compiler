@@ -17,10 +17,10 @@ _string_tag:
 	.word	5
 	.globl	_MemMgr_INITIALIZER
 _MemMgr_INITIALIZER:
-	.word	_NoGC_Init
+	.word	_GenGC_Init
 	.globl	_MemMgr_COLLECTOR
 _MemMgr_COLLECTOR:
-	.word	_NoGC_Collect
+	.word	_GenGC_Collect
 	.globl	_MemMgr_TEST
 _MemMgr_TEST:
 	.word	0
@@ -505,6 +505,8 @@ Bender_init:
 	add	$t1 $t1 $t2
 	sw	$t1 12($a0)
 	sw	$a0 12($s0)
+	addiu	$a1 $s0 12
+	jal	_GenGC_Assign
 	move	$a0 $s0
 	lw	$s1 0($fp)
 	lw	$fp 16($sp)
@@ -522,6 +524,8 @@ WaterBender_init:
 	jal	Bender_init
 	la	$a0 int_const2
 	sw	$a0 16($s0)
+	addiu	$a1 $s0 16
+	jal	_GenGC_Assign
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -610,32 +614,52 @@ Main_init:
 	jal	Object.copy
 	jal	WaterBender_init
 	sw	$a0 12($s0)
+	addiu	$a1 $s0 12
+	jal	_GenGC_Assign
 	la	$a0 Katara_protObj
 	jal	Object.copy
 	jal	Katara_init
 	sw	$a0 16($s0)
+	addiu	$a1 $s0 16
+	jal	_GenGC_Assign
 	la	$a0 Katara_protObj
 	jal	Object.copy
 	jal	Katara_init
 	sw	$a0 28($s0)
+	addiu	$a1 $s0 28
+	jal	_GenGC_Assign
 	la	$a0 bool_const0
 	sw	$a0 32($s0)
+	addiu	$a1 $s0 32
+	jal	_GenGC_Assign
 	la	$a0 bool_const1
 	sw	$a0 36($s0)
+	addiu	$a1 $s0 36
+	jal	_GenGC_Assign
 	la	$a0 int_const4
 	sw	$a0 40($s0)
+	addiu	$a1 $s0 40
+	jal	_GenGC_Assign
 	la	$a0 Bender_protObj
 	jal	Object.copy
 	jal	Bender_init
 	sw	$a0 44($s0)
+	addiu	$a1 $s0 44
+	jal	_GenGC_Assign
 	la	$a0 int_const5
 	sw	$a0 48($s0)
+	addiu	$a1 $s0 48
+	jal	_GenGC_Assign
 	la	$a0 str_const4
 	sw	$a0 52($s0)
+	addiu	$a1 $s0 52
+	jal	_GenGC_Assign
 	la	$a0 Factory_protObj
 	jal	Object.copy
 	jal	Factory_init
 	sw	$a0 56($s0)
+	addiu	$a1 $s0 56
+	jal	_GenGC_Assign
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)

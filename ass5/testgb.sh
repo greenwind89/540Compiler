@@ -2,9 +2,9 @@ make cgen
 for i in {1..2}
 do
   echo 'Executing test' $i
-  ./mycoolc ./test/testcases/test$i.cl -o ./test/ourtemp/test$i.s;
+  ./mycoolc ./test/testcases/test$i.cl -o ./test/ourtemp/test$i.s -g;
 
-  ../bin/coolc ./test/testcases/test$i.cl  -o ./test/theirtemp/test$i.s;
+  ../bin/coolc ./test/testcases/test$i.cl  -o ./test/theirtemp/test$i.s -g;
 
   ../bin/spim ./test/ourtemp/test$i.s > ./test/ourresults/result$i.txt 2>&1;
 
