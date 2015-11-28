@@ -22,10 +22,6 @@ class CgenClassTable : public SymbolTable<Symbol,CgenNode> {
 private:
    List<CgenNode> *nds;
    ostream& str;
-   int stringclasstag;
-   int intclasstag;
-   int boolclasstag;
-   int otherObjectTag;
    CgenNodeP currentClass;
 
 
@@ -70,6 +66,14 @@ public:
    SymbolTable<Symbol, TableData> *methodVarTbl;
    int currentOffset;
 
+   int objectclasstag;
+   int ioclasstag;
+   int mainclasstag;
+   int intclasstag;
+   int boolclasstag;
+   int stringclasstag;
+   int otherObjectTag;
+
 };
 
 
@@ -94,7 +98,7 @@ public:
    CgenNodeP get_parentnd() { return parentnd; }
    int basic() { return (basic_status == Basic); }
 
-   void code_class_layout(ostream& str, int &tagNumber);
+   void code_class_layout(ostream& str, int &tagNumber, CgenClassTable *ct);
    Features get_features();
    Symbol get_name();
 

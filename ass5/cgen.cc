@@ -737,11 +737,11 @@ void CgenClassTable::code_class_name_table()
 void CgenClassTable::code_class_layout()
 {
   for(List<CgenNode> *l = nds; l; l = l->tl()) {
-    l->hd()->code_class_layout(str, otherObjectTag);
+    l->hd()->code_class_layout(str, otherObjectTag, this);
   }
 }
 
-void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
+void CgenNode::code_class_layout(ostream& str, int &tagNumber, CgenClassTable *ct) {
   // get all info about attributes and methods of parents
   // invariant: info as is displayed in parent's prototype and dispatch table
   CgenNodeP parent = this;
@@ -766,7 +766,25 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
   // prototype object
   str << WORD << -1 << endl;
   str << name << PROTOBJ_SUFFIX << LABEL;
-  str << WORD << tagNumber << endl; // tag
+  int tn;
+  if(name == Str) {
+    tn = ct->stringclasstag;
+  } else if (name == Int) {
+    tn = ct->intclasstag;
+  } else if (name == Bool) {
+    tn = ct->boolclasstag;
+  } else if (name == Main) {
+    tn = ct->mainclasstag;
+  } else if (name == IO) {
+    tn = ct->ioclasstag;
+  } else if (name == Object) {
+    tn = ct->objectclasstag;
+  } else {
+    tn = tagNumber;
+    tagNumber++;
+  }
+
+  str << WORD << tn << endl; // tag
   str << WORD << (size + 3) << endl ; // size
   str << WORD << name << DISPTAB_SUFFIX << endl;
   parent = this;
@@ -781,7 +799,6 @@ void CgenNode::code_class_layout(ostream& str, int &tagNumber) {
     parent = parent->get_parentnd();
   }
 
-  tagNumber++;
   int idx = 0;
   for(List<Entry> *l = attrList; l; l = l->tl()) {
     TableData *t = new TableData();
@@ -877,8 +894,12 @@ void method_class::update_class_layout(List<Entry> *&attrList, List<Entry> *&met
 CgenClassTable::CgenClassTable(Classes classes, ostream& s) : nds(NULL) , str(s)
 {
    stringclasstag = 5 /* Change to your String class tag here */;
-   intclasstag =    3 /* Change to your Int class tag here */;
    boolclasstag =   4 /* Change to your Bool class tag here */;
+   intclasstag =    3 /* Change to your Int class tag here */;
+   ioclasstag = 2;
+   mainclasstag =   1;
+   objectclasstag = 0;
+
    otherObjectTag = 6;
 
 
@@ -1408,6 +1429,32 @@ void loop_class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void typcase_class::code(ostream &str, CgenClassTable *ct) {
+  expr->code(str, ct);
+  emit_load(S1, 0, ACC, str); // load tag of the object into S1
+  int resumeLabel = labelIdx; labelIdx++;
+
+  for(int i = cases->first(); cases->more(i); i = cases->next(i)) {
+    int nextCaseLabel = labelIdx; labelIdx++;
+    branch_class *b = (branch_class *) cases->nth(i);
+    emit_partial_load_address(T1, str); emit_protobj_ref(b->type_decl, str);  str << endl;// load address of prototype of this type to T1
+    emit_load(T2, 0, T1, str); // load class tag of this type to T2
+    emit_bne(T2, S1, nextCaseLabel, str); // jump to next label if not equal
+
+    // load new variable
+    ct->methodVarTbl->enterscope();
+    int offset = ct->set_method_variable(b->name);
+    emit_store(ACC, offset, FP, str); // store value at ACC into offset of the FP
+    // execute the expression
+    b->expr->code(str, ct);
+    ct->methodVarTbl->exitscope(); // out scope
+
+    emit_branch(resumeLabel, str);
+
+    emit_label_def(nextCaseLabel, str);
+  }
+
+  emit_label_def(resumeLabel, str);
+
 }
 
 void block_class::code(ostream &str, CgenClassTable *ct) {
@@ -1508,6 +1555,24 @@ void new__class::code(ostream &str, CgenClassTable *ct) {
 }
 
 void isvoid_class::code(ostream &str, CgenClassTable *ct) {
+  e1->code(str, ct);
+  if(e1->get_type() == Int ||
+     e1->get_type() == Str ||
+     e1->get_type() == Bool) {
+    emit_load_bool(ACC, truebool, str);
+
+  } else {
+    emit_move(T1, ACC, str);
+
+    int newLabel = labelIdx; labelIdx++;
+    emit_load_bool(ACC, truebool, str);
+    emit_beq(T1, ZERO, newLabel, str);
+    emit_load_bool(ACC, falsebool, str);
+
+    emit_label_def(newLabel, str);
+
+  }
+
 }
 
 void no_expr_class::code(ostream &str, CgenClassTable *ct) {

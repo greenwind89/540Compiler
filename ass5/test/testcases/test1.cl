@@ -4,6 +4,10 @@ Class Bender {
   bend() : Object {
     self
   };
+
+  shoutType(): Object {
+    (new IO).out_string("I am Bender")
+  };
 };
 
 Class WaterBender inherits Bender {
@@ -23,6 +27,10 @@ Class WaterBender inherits Bender {
   sumKatara(a: Int, b: Int, c: Int, d: Katara): Int {
     a +  c + b
   };
+
+  shoutType(): Object {
+    (new IO).out_string("I am Water Bender")
+  };
 };
 
 Class Katara inherits WaterBender {
@@ -30,6 +38,9 @@ Class Katara inherits WaterBender {
     mana
   };
 
+  shoutType(): Object {
+    (new IO).out_string("I am Katara")
+  };
 };
 
 Class Main inherits IO{
@@ -41,17 +52,26 @@ Class Main inherits IO{
   bool1: Bool <- false;
   bool2: Bool <- true;
   i: Int <- 0;
+  bender: Bender <- new Bender;
 
   main(): Object {
     {
+      shoutType(bender);
+      shoutType(newBender);
+      shoutType(katara1);
+      -- if isvoid katara2 then out_string("katara2 is void") else out_string("not void") fi;
+      -- if isvoid katara1 then out_string("katara1 is void") else out_string("not void") fi;
+
       -- i < i +1;
       -- out_int(i);
 
       -- if i < 2 then out_string(" <2 ") else out_string(" >= 2") fi;
+      (*
       while i < 10 loop {
         i <- i + 1;
         out_int(i);
       } pool;
+      *)
 
 
       (*
@@ -101,6 +121,14 @@ Class Main inherits IO{
       -- out_int(1+2+3);
       -- (new IO).out_string("abc");
     }
+  };
+
+  shoutType(bender: Bender): Object {
+    case bender of
+      b: Bender => b.shoutType();
+      w: WaterBender => w.shoutType();
+      k: Katara => k.shoutType();
+    esac
   };
 
 };

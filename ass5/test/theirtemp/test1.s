@@ -25,7 +25,7 @@ _MemMgr_COLLECTOR:
 _MemMgr_TEST:
 	.word	0
 	.word	-1
-str_const11:
+str_const14:
 	.word	5
 	.word	5
 	.word	String_dispTab
@@ -33,7 +33,7 @@ str_const11:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const10:
+str_const13:
 	.word	5
 	.word	6
 	.word	String_dispTab
@@ -42,7 +42,7 @@ str_const10:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const9:
+str_const12:
 	.word	5
 	.word	7
 	.word	String_dispTab
@@ -51,7 +51,7 @@ str_const9:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const8:
+str_const11:
 	.word	5
 	.word	6
 	.word	String_dispTab
@@ -60,7 +60,7 @@ str_const8:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const7:
+str_const10:
 	.word	5
 	.word	6
 	.word	String_dispTab
@@ -69,7 +69,7 @@ str_const7:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const6:
+str_const9:
 	.word	5
 	.word	6
 	.word	String_dispTab
@@ -78,7 +78,7 @@ str_const6:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const5:
+str_const8:
 	.word	5
 	.word	5
 	.word	String_dispTab
@@ -87,7 +87,7 @@ str_const5:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const4:
+str_const7:
 	.word	5
 	.word	6
 	.word	String_dispTab
@@ -96,7 +96,7 @@ str_const4:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const3:
+str_const6:
 	.word	5
 	.word	5
 	.word	String_dispTab
@@ -105,7 +105,7 @@ str_const3:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const2:
+str_const5:
 	.word	5
 	.word	6
 	.word	String_dispTab
@@ -114,7 +114,7 @@ str_const2:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const1:
+str_const4:
 	.word	5
 	.word	8
 	.word	String_dispTab
@@ -123,20 +123,53 @@ str_const1:
 	.byte	0	
 	.align	2
 	.word	-1
-str_const0:
+str_const3:
+	.word	5
+	.word	7
+	.word	String_dispTab
+	.word	int_const6
+	.ascii	"I am Katara"
+	.byte	0	
+	.align	2
+	.word	-1
+str_const2:
+	.word	5
+	.word	9
+	.word	String_dispTab
+	.word	int_const11
+	.ascii	"I am Water Bender"
+	.byte	0	
+	.align	2
+	.word	-1
+str_const1:
 	.word	5
 	.word	11
 	.word	String_dispTab
-	.word	int_const11
+	.word	int_const12
 	.ascii	"./test/testcases/test1.cl"
 	.byte	0	
 	.align	2
+	.word	-1
+str_const0:
+	.word	5
+	.word	7
+	.word	String_dispTab
+	.word	int_const6
+	.ascii	"I am Bender"
+	.byte	0	
+	.align	2
+	.word	-1
+int_const12:
+	.word	3
+	.word	4
+	.word	Int_dispTab
+	.word	25
 	.word	-1
 int_const11:
 	.word	3
 	.word	4
 	.word	Int_dispTab
-	.word	25
+	.word	17
 	.word	-1
 int_const10:
 	.word	3
@@ -216,15 +249,15 @@ bool_const1:
 	.word	Bool_dispTab
 	.word	1
 class_nameTab:
-	.word	str_const2
-	.word	str_const3
-	.word	str_const4
 	.word	str_const5
 	.word	str_const6
 	.word	str_const7
 	.word	str_const8
 	.word	str_const9
 	.word	str_const10
+	.word	str_const11
+	.word	str_const12
+	.word	str_const13
 class_objTab:
 	.word	Object_protObj
 	.word	Object_init
@@ -253,11 +286,13 @@ Bender_dispTab:
 	.word	Object.type_name
 	.word	Object.copy
 	.word	Bender.bend
+	.word	Bender.shoutType
 WaterBender_dispTab:
 	.word	Object.abort
 	.word	Object.type_name
 	.word	Object.copy
 	.word	Bender.bend
+	.word	WaterBender.shoutType
 	.word	WaterBender.waterBend
 	.word	WaterBender.sum
 	.word	WaterBender.sumKatara
@@ -266,6 +301,7 @@ Katara_dispTab:
 	.word	Object.type_name
 	.word	Object.copy
 	.word	Bender.bend
+	.word	Katara.shoutType
 	.word	Katara.waterBend
 	.word	WaterBender.sum
 	.word	WaterBender.sumKatara
@@ -301,6 +337,7 @@ Main_dispTab:
 	.word	IO.in_string
 	.word	IO.in_int
 	.word	Main.main
+	.word	Main.shoutType
 	.word	-1
 Object_protObj:
 	.word	0
@@ -355,7 +392,7 @@ IO_protObj:
 	.word	-1
 Main_protObj:
 	.word	2
-	.word	11
+	.word	12
 	.word	Main_dispTab
 	.word	0
 	.word	0
@@ -365,6 +402,7 @@ Main_protObj:
 	.word	bool_const0
 	.word	bool_const0
 	.word	int_const4
+	.word	0
 	.globl	heap_start
 heap_start:
 	.word	0
@@ -523,6 +561,10 @@ Main_init:
 	sw	$a0 36($s0)
 	la	$a0 int_const4
 	sw	$a0 40($s0)
+	la	$a0 Bender_protObj
+	jal	Object.copy
+	jal	Bender_init
+	sw	$a0 44($s0)
 	move	$a0 $s0
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
@@ -537,6 +579,32 @@ Bender.bend:
 	addiu	$fp $sp 4
 	move	$s0 $a0
 	move	$a0 $s0
+	lw	$fp 12($sp)
+	lw	$s0 8($sp)
+	lw	$ra 4($sp)
+	addiu	$sp $sp 12
+	jr	$ra	
+Bender.shoutType:
+	addiu	$sp $sp -12
+	sw	$fp 12($sp)
+	sw	$s0 8($sp)
+	sw	$ra 4($sp)
+	addiu	$fp $sp 4
+	move	$s0 $a0
+	la	$a0 str_const0
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	la	$a0 IO_protObj
+	jal	Object.copy
+	jal	IO_init
+	bne	$a0 $zero label0
+	la	$a0 str_const1
+	li	$t1 9
+	jal	_dispatch_abort
+label0:
+	lw	$t1 8($a0)
+	lw	$t1 12($t1)
+	jalr		$t1
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -619,6 +687,32 @@ WaterBender.sumKatara:
 	lw	$ra 8($sp)
 	addiu	$sp $sp 32
 	jr	$ra	
+WaterBender.shoutType:
+	addiu	$sp $sp -12
+	sw	$fp 12($sp)
+	sw	$s0 8($sp)
+	sw	$ra 4($sp)
+	addiu	$fp $sp 4
+	move	$s0 $a0
+	la	$a0 str_const2
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	la	$a0 IO_protObj
+	jal	Object.copy
+	jal	IO_init
+	bne	$a0 $zero label1
+	la	$a0 str_const1
+	li	$t1 32
+	jal	_dispatch_abort
+label1:
+	lw	$t1 8($a0)
+	lw	$t1 12($t1)
+	jalr		$t1
+	lw	$fp 12($sp)
+	lw	$s0 8($sp)
+	lw	$ra 4($sp)
+	addiu	$sp $sp 12
+	jr	$ra	
 Katara.waterBend:
 	addiu	$sp $sp -12
 	sw	$fp 12($sp)
@@ -632,7 +726,81 @@ Katara.waterBend:
 	lw	$ra 4($sp)
 	addiu	$sp $sp 12
 	jr	$ra	
+Katara.shoutType:
+	addiu	$sp $sp -12
+	sw	$fp 12($sp)
+	sw	$s0 8($sp)
+	sw	$ra 4($sp)
+	addiu	$fp $sp 4
+	move	$s0 $a0
+	la	$a0 str_const3
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	la	$a0 IO_protObj
+	jal	Object.copy
+	jal	IO_init
+	bne	$a0 $zero label2
+	la	$a0 str_const1
+	li	$t1 42
+	jal	_dispatch_abort
+label2:
+	lw	$t1 8($a0)
+	lw	$t1 12($t1)
+	jalr		$t1
+	lw	$fp 12($sp)
+	lw	$s0 8($sp)
+	lw	$ra 4($sp)
+	addiu	$sp $sp 12
+	jr	$ra	
 Main.main:
+	addiu	$sp $sp -12
+	sw	$fp 12($sp)
+	sw	$s0 8($sp)
+	sw	$ra 4($sp)
+	addiu	$fp $sp 4
+	move	$s0 $a0
+	lw	$a0 44($s0)
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	move	$a0 $s0
+	bne	$a0 $zero label3
+	la	$a0 str_const1
+	li	$t1 59
+	jal	_dispatch_abort
+label3:
+	lw	$t1 8($a0)
+	lw	$t1 32($t1)
+	jalr		$t1
+	lw	$a0 12($s0)
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	move	$a0 $s0
+	bne	$a0 $zero label4
+	la	$a0 str_const1
+	li	$t1 60
+	jal	_dispatch_abort
+label4:
+	lw	$t1 8($a0)
+	lw	$t1 32($t1)
+	jalr		$t1
+	lw	$a0 16($s0)
+	sw	$a0 0($sp)
+	addiu	$sp $sp -4
+	move	$a0 $s0
+	bne	$a0 $zero label5
+	la	$a0 str_const1
+	li	$t1 61
+	jal	_dispatch_abort
+label5:
+	lw	$t1 8($a0)
+	lw	$t1 32($t1)
+	jalr		$t1
+	lw	$fp 12($sp)
+	lw	$s0 8($sp)
+	lw	$ra 4($sp)
+	addiu	$sp $sp 12
+	jr	$ra	
+Main.shoutType:
 	addiu	$sp $sp -16
 	sw	$fp 16($sp)
 	sw	$s0 12($sp)
@@ -640,43 +808,60 @@ Main.main:
 	addiu	$fp $sp 4
 	move	$s0 $a0
 	sw	$s1 0($fp)
-label0:
-	lw	$s1 40($s0)
-	la	$a0 int_const0
-	lw	$t1 12($s1)
-	lw	$t2 12($a0)
-	la	$a0 bool_const1
-	blt	$t1 $t2 label2
-	la	$a0 bool_const0
-label2:
-	lw	$t1 12($a0)
-	beq	$t1 $zero label1
-	lw	$s1 40($s0)
-	la	$a0 int_const3
-	jal	Object.copy
-	lw	$t2 12($a0)
-	lw	$t1 12($s1)
-	add	$t1 $t1 $t2
-	sw	$t1 12($a0)
-	sw	$a0 40($s0)
-	lw	$a0 40($s0)
-	sw	$a0 0($sp)
-	addiu	$sp $sp -4
-	move	$a0 $s0
-	bne	$a0 $zero label3
-	la	$a0 str_const0
-	li	$t1 53
+	lw	$a0 16($fp)
+	bne	$a0 $zero label7
+	la	$a0 str_const1
+	li	$t1 127
+	jal	_case_abort2
+label7:
+	lw	$t2 0($a0)
+	blt	$t2 8 label8
+	bgt	$t2 8 label8
+	move	$s1 $a0
+	move	$a0 $s1
+	bne	$a0 $zero label9
+	la	$a0 str_const1
+	li	$t1 130
 	jal	_dispatch_abort
-label3:
+label9:
 	lw	$t1 8($a0)
 	lw	$t1 16($t1)
 	jalr		$t1
-	b	label0
-label1:
-	move	$a0 $zero
+	b	label6
+label8:
+	blt	$t2 7 label10
+	bgt	$t2 8 label10
+	move	$s1 $a0
+	move	$a0 $s1
+	bne	$a0 $zero label11
+	la	$a0 str_const1
+	li	$t1 129
+	jal	_dispatch_abort
+label11:
+	lw	$t1 8($a0)
+	lw	$t1 16($t1)
+	jalr		$t1
+	b	label6
+label10:
+	blt	$t2 6 label12
+	bgt	$t2 8 label12
+	move	$s1 $a0
+	move	$a0 $s1
+	bne	$a0 $zero label13
+	la	$a0 str_const1
+	li	$t1 128
+	jal	_dispatch_abort
+label13:
+	lw	$t1 8($a0)
+	lw	$t1 16($t1)
+	jalr		$t1
+	b	label6
+label12:
+	jal	_case_abort
+label6:
 	lw	$s1 0($fp)
 	lw	$fp 16($sp)
 	lw	$s0 12($sp)
 	lw	$ra 8($sp)
-	addiu	$sp $sp 16
+	addiu	$sp $sp 20
 	jr	$ra	
