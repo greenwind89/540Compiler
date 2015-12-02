@@ -1,3 +1,4 @@
+--big correct program
 class BenderFactory {
   getBender(str: String): Bender {
     if str = "1" then (new WaterBender).init(str) else
