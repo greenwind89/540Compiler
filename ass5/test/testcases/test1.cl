@@ -1,3 +1,4 @@
+-- overview of class Inheritance
 Class Bender {
   hp: Int <- 10 + 50;
 
