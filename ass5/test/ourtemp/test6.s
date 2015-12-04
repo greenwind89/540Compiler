@@ -740,7 +740,7 @@ Bender.bend:
 	move	$a0 $s0
 	bne	$a0 $zero label0
 	la	$a0 str_const0
-	li	$t1 41
+	li	$t1 42
 	jal	_dispatch_abort
 label0:
 	lw	$t1 8($a0)
@@ -765,7 +765,7 @@ FireBender.bend:
 	move	$a0 $s0
 	bne	$a0 $zero label1
 	la	$a0 str_const0
-	li	$t1 50
+	li	$t1 51
 	jal	_dispatch_abort
 label1:
 	lw	$t1 8($a0)
@@ -790,7 +790,7 @@ EarthBender.bend:
 	move	$a0 $s0
 	bne	$a0 $zero label2
 	la	$a0 str_const0
-	li	$t1 56
+	li	$t1 57
 	jal	_dispatch_abort
 label2:
 	lw	$t1 8($a0)
@@ -808,16 +808,7 @@ Main.main:
 	sw	$ra 4($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	move	$a0 $s0
-	move	$a0 $s0
-	bne	$a0 $zero label3
-	la	$a0 str_const0
-	li	$t1 66
-	jal	_dispatch_abort
-label3:
-	lw	$t1 8($a0)
-	lw	$t1 20($t1)
-	jalr		$t1
+	la	$a0 str_const1
 	sw	$a0 12($s0)
 	la	$a0 BendMachine2_protObj
 	jal	Object.copy
@@ -830,11 +821,11 @@ label3:
 	la	$a0 BenderFactory_protObj
 	jal	Object.copy
 	jal	BenderFactory_init
-	bne	$a0 $zero label4
+	bne	$a0 $zero label3
 	la	$a0 str_const0
-	li	$t1 68
+	li	$t1 69
 	jal	_dispatch_abort
-label4:
+label3:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
@@ -848,11 +839,11 @@ label4:
 	addiu	$sp $sp -4
 	move	$a0 $s0
 	lw	$a0 808($fp)
-	bne	$a0 $zero label5
+	bne	$a0 $zero label4
 	la	$a0 str_const0
-	li	$t1 70
+	li	$t1 71
 	jal	_dispatch_abort
-label5:
+label4:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
@@ -878,11 +869,11 @@ BenderFactory.getBender:
 	la	$a0 bool_const1
 	lw	$t1 16($t1)
 	lw	$t2 16($t2)
-	beq	$t1 $t2 label6
+	beq	$t1 $t2 label5
 	la	$a0 bool_const0
-label6:
+label5:
 	lw	$t1 12($a0)
-	beq	$t1 $zero label7
+	beq	$t1 $zero label6
 	lw	$a0 812($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
@@ -890,16 +881,16 @@ label6:
 	la	$a0 WaterBender_protObj
 	jal	Object.copy
 	jal	WaterBender_init
-	bne	$a0 $zero label9
+	bne	$a0 $zero label8
 	la	$a0 str_const0
-	li	$t1 3
+	li	$t1 4
 	jal	_dispatch_abort
-label9:
+label8:
 	lw	$t1 8($a0)
 	lw	$t1 28($t1)
 	jalr		$t1
-	b	label8
-label7:
+	b	label7
+label6:
 	lw	$a0 812($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
@@ -910,11 +901,11 @@ label7:
 	la	$a0 bool_const1
 	lw	$t1 16($t1)
 	lw	$t2 16($t2)
-	beq	$t1 $t2 label10
+	beq	$t1 $t2 label9
 	la	$a0 bool_const0
-label10:
+label9:
 	lw	$t1 12($a0)
-	beq	$t1 $zero label11
+	beq	$t1 $zero label10
 	lw	$a0 812($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
@@ -922,16 +913,16 @@ label10:
 	la	$a0 FireBender_protObj
 	jal	Object.copy
 	jal	FireBender_init
-	bne	$a0 $zero label13
+	bne	$a0 $zero label12
 	la	$a0 str_const0
-	li	$t1 4
+	li	$t1 5
 	jal	_dispatch_abort
-label13:
+label12:
 	lw	$t1 8($a0)
 	lw	$t1 28($t1)
 	jalr		$t1
-	b	label12
-label11:
+	b	label11
+label10:
 	lw	$a0 812($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
@@ -942,11 +933,11 @@ label11:
 	la	$a0 bool_const1
 	lw	$t1 16($t1)
 	lw	$t2 16($t2)
-	beq	$t1 $t2 label14
+	beq	$t1 $t2 label13
 	la	$a0 bool_const0
-label14:
+label13:
 	lw	$t1 12($a0)
-	beq	$t1 $zero label15
+	beq	$t1 $zero label14
 	lw	$a0 812($fp)
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
@@ -954,22 +945,22 @@ label14:
 	la	$a0 EarthBender_protObj
 	jal	Object.copy
 	jal	EarthBender_init
-	bne	$a0 $zero label17
+	bne	$a0 $zero label16
 	la	$a0 str_const0
-	li	$t1 5
+	li	$t1 6
 	jal	_dispatch_abort
-label17:
+label16:
 	lw	$t1 8($a0)
 	lw	$t1 28($t1)
 	jalr		$t1
-	b	label16
-label15:
+	b	label15
+label14:
 	la	$a0 Bender_protObj
 	jal	Object.copy
 	jal	Bender_init
-label16:
-label12:
-label8:
+label15:
+label11:
+label7:
 	lw	$fp 12($sp)
 	lw	$s0 8($sp)
 	lw	$ra 4($sp)
@@ -984,11 +975,11 @@ BendMachine.bend:
 	move	$s0 $a0
 	move	$a0 $s0
 	lw	$a0 812($fp)
-	bne	$a0 $zero label18
+	bne	$a0 $zero label17
 	la	$a0 str_const0
-	li	$t1 17
+	li	$t1 18
 	jal	_dispatch_abort
-label18:
+label17:
 	lw	$t1 8($a0)
 	lw	$t1 32($t1)
 	jalr		$t1

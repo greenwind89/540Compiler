@@ -1,0 +1,7 @@
+SPIM Version 6.5 of January 4, 2003
+Copyright 1990-2003 by James R. Larus (larus@cs.wisc.edu).
+All Rights Reserved.
+See the file README for a full copyright notice.
+Loaded: ./lib/trap.handler
+Exception occurred at PC=0x00401480
+  Exception 9  [Breakpoint/Division by 0]  Execution aborted

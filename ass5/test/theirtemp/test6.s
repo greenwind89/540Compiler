@@ -687,7 +687,7 @@ BendMachine.bend:
 	lw	$a0 12($fp)
 	bne	$a0 $zero label0
 	la	$a0 str_const3
-	li	$t1 17
+	li	$t1 18
 	jal	_dispatch_abort
 label0:
 	lw	$t1 8($a0)
@@ -739,7 +739,7 @@ label3:
 	jal	WaterBender_init
 	bne	$a0 $zero label4
 	la	$a0 str_const3
-	li	$t1 3
+	li	$t1 4
 	jal	_dispatch_abort
 label4:
 	lw	$t1 8($a0)
@@ -765,7 +765,7 @@ label7:
 	jal	FireBender_init
 	bne	$a0 $zero label8
 	la	$a0 str_const3
-	li	$t1 4
+	li	$t1 5
 	jal	_dispatch_abort
 label8:
 	lw	$t1 8($a0)
@@ -791,7 +791,7 @@ label11:
 	jal	EarthBender_init
 	bne	$a0 $zero label12
 	la	$a0 str_const3
-	li	$t1 5
+	li	$t1 6
 	jal	_dispatch_abort
 label12:
 	lw	$t1 8($a0)
@@ -821,15 +821,7 @@ Main.main:
 	sw	$s1 8($fp)
 	sw	$s2 4($fp)
 	sw	$s3 0($fp)
-	move	$a0 $s0
-	bne	$a0 $zero label13
-	la	$a0 str_const3
-	li	$t1 66
-	jal	_dispatch_abort
-label13:
-	lw	$t1 8($a0)
-	lw	$t1 20($t1)
-	jalr		$t1
+	la	$a0 str_const0
 	sw	$a0 12($s0)
 	la	$a0 BendMachine2_protObj
 	jal	Object.copy
@@ -841,11 +833,11 @@ label13:
 	la	$a0 BenderFactory_protObj
 	jal	Object.copy
 	jal	BenderFactory_init
-	bne	$a0 $zero label14
+	bne	$a0 $zero label13
 	la	$a0 str_const3
-	li	$t1 68
+	li	$t1 69
 	jal	_dispatch_abort
-label14:
+label13:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
@@ -857,11 +849,11 @@ label14:
 	sw	$s2 0($sp)
 	addiu	$sp $sp -4
 	move	$a0 $s3
-	bne	$a0 $zero label15
+	bne	$a0 $zero label14
 	la	$a0 str_const3
-	li	$t1 70
+	li	$t1 71
 	jal	_dispatch_abort
-label15:
+label14:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
@@ -899,11 +891,11 @@ Bender.bend:
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
 	move	$a0 $s0
-	bne	$a0 $zero label16
+	bne	$a0 $zero label15
 	la	$a0 str_const3
-	li	$t1 41
+	li	$t1 42
 	jal	_dispatch_abort
-label16:
+label15:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
@@ -923,11 +915,11 @@ EarthBender.bend:
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
 	move	$a0 $s0
-	bne	$a0 $zero label17
+	bne	$a0 $zero label16
 	la	$a0 str_const3
-	li	$t1 56
+	li	$t1 57
 	jal	_dispatch_abort
-label17:
+label16:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1
@@ -947,11 +939,11 @@ FireBender.bend:
 	sw	$a0 0($sp)
 	addiu	$sp $sp -4
 	move	$a0 $s0
-	bne	$a0 $zero label18
+	bne	$a0 $zero label17
 	la	$a0 str_const3
-	li	$t1 50
+	li	$t1 51
 	jal	_dispatch_abort
-label18:
+label17:
 	lw	$t1 8($a0)
 	lw	$t1 12($t1)
 	jalr		$t1

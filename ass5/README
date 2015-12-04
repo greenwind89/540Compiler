@@ -30,13 +30,16 @@ code_class_methods(): this is the heart of the generator, it recursively goes th
 
 We ignore the performance aspect in this implementation so our code includes many algorithm which run in O(n^2) or O(n^3). Also, we do not optimize the use of temporary registers in this application, instead we use stack storage to store variables in most of the case which is bad in real world application since registers are much faster.
 
+Runtime errors handling:
+We implement handler for first 3 runtime errors mentioned in cool-manual: dispatch on void, case on void and case without matching branches. Division by zero is not handle since we notice that the generator given by instructor does not handle this case also, instead we let cool runtime prints out its own error message which in turn, mentions about division by 0 (testcase 16). 
+
 Garbage collection:
 We support garbage collection simply by loading the new updated attributes of into A1 and call _GenGC_Assign. We test it by using testgc.sh script which runs with -g option to see if our generator conforms with the garbage collector.
 
 Testing:
 We have two general scenarios for testing:
 
-Atomically testing: We divide test into multiple cases, each case for each operational semantic and expected runtime errors.
+Atomically testing: We divide test into multiple cases, each case for each operational semantic and expected runtime errors. The first test case reflects how we developed the generator, it includes most of the cases altogether.
 
 Batch testing: we reuse test cases written for assignment 1 to test the operational semantic of our generator in a relatively complicated cool program.
 

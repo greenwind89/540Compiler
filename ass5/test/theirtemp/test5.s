@@ -1074,7 +1074,7 @@ StackCommandList.push:
 	jal	StackCommandList_init
 	bne	$a0 $zero label0
 	la	$a0 str_const13
-	li	$t1 276
+	li	$t1 274
 	jal	_dispatch_abort
 label0:
 	lw	$t1 8($a0)
@@ -1097,7 +1097,7 @@ StackCommandList.pop:
 	lw	$a0 16($s0)
 	bne	$a0 $zero label1
 	la	$a0 str_const13
-	li	$t1 281
+	li	$t1 279
 	jal	_dispatch_abort
 label1:
 	lw	$t1 8($a0)
@@ -1107,7 +1107,7 @@ label1:
 	lw	$a0 16($s0)
 	bne	$a0 $zero label2
 	la	$a0 str_const13
-	li	$t1 283
+	li	$t1 281
 	jal	_dispatch_abort
 label2:
 	lw	$t1 8($a0)
@@ -1220,7 +1220,7 @@ label9:
 	lw	$a0 16($s0)
 	bne	$a0 $zero label11
 	la	$a0 str_const13
-	li	$t1 312
+	li	$t1 310
 	jal	_dispatch_abort
 label11:
 	lw	$t1 8($a0)
@@ -1228,7 +1228,7 @@ label11:
 	jalr		$t1
 	bne	$a0 $zero label12
 	la	$a0 str_const13
-	li	$t1 312
+	li	$t1 310
 	jal	_dispatch_abort
 label12:
 	lw	$t1 8($a0)
@@ -1236,7 +1236,7 @@ label12:
 	jalr		$t1
 	bne	$a0 $zero label13
 	la	$a0 str_const13
-	li	$t1 312
+	li	$t1 310
 	jal	_dispatch_abort
 label13:
 	lw	$t1 8($a0)
@@ -1249,7 +1249,7 @@ label13:
 	jal	IO_init
 	bne	$a0 $zero label14
 	la	$a0 str_const13
-	li	$t1 312
+	li	$t1 310
 	jal	_dispatch_abort
 label14:
 	lw	$t1 8($a0)
@@ -1258,7 +1258,7 @@ label14:
 	lw	$a0 16($s0)
 	bne	$a0 $zero label15
 	la	$a0 str_const13
-	li	$t1 313
+	li	$t1 311
 	jal	_dispatch_abort
 label15:
 	lw	$t1 8($a0)
@@ -1301,7 +1301,7 @@ StackCommand.initExecute:
 	jal	IO_init
 	bne	$a0 $zero label16
 	la	$a0 str_const13
-	li	$t1 163
+	li	$t1 161
 	jal	_dispatch_abort
 label16:
 	lw	$t1 8($a0)
@@ -1313,7 +1313,7 @@ label16:
 	lw	$a0 12($fp)
 	bne	$a0 $zero label17
 	la	$a0 str_const13
-	li	$t1 164
+	li	$t1 162
 	jal	_dispatch_abort
 label17:
 	lw	$t1 8($a0)
@@ -1376,7 +1376,7 @@ DisplayStackCommand.initExecute:
 	lw	$a0 12($fp)
 	bne	$a0 $zero label18
 	la	$a0 str_const13
-	li	$t1 260
+	li	$t1 258
 	jal	_dispatch_abort
 label18:
 	lw	$t1 8($a0)
@@ -1399,7 +1399,7 @@ ExecuteStackCommand.initExecute:
 	lw	$a0 16($fp)
 	bne	$a0 $zero label22
 	la	$a0 str_const13
-	li	$t1 242
+	li	$t1 240
 	jal	_dispatch_abort
 label22:
 	lw	$t1 8($a0)
@@ -1415,7 +1415,7 @@ label21:
 	lw	$a0 16($fp)
 	bne	$a0 $zero label23
 	la	$a0 str_const13
-	li	$t1 243
+	li	$t1 241
 	jal	_dispatch_abort
 label23:
 	lw	$t1 8($a0)
@@ -1428,7 +1428,7 @@ label23:
 	move	$a0 $s1
 	bne	$a0 $zero label24
 	la	$a0 str_const13
-	li	$t1 245
+	li	$t1 243
 	jal	_dispatch_abort
 label24:
 	lw	$t1 8($a0)
@@ -1457,7 +1457,7 @@ SwapStackCommand.execute:
 	lw	$a0 20($fp)
 	bne	$a0 $zero label25
 	la	$a0 str_const13
-	li	$t1 226
+	li	$t1 224
 	jal	_dispatch_abort
 label25:
 	lw	$t1 8($a0)
@@ -1467,7 +1467,7 @@ label25:
 	lw	$a0 20($fp)
 	bne	$a0 $zero label26
 	la	$a0 str_const13
-	li	$t1 227
+	li	$t1 225
 	jal	_dispatch_abort
 label26:
 	lw	$t1 8($a0)
@@ -1479,7 +1479,7 @@ label26:
 	lw	$a0 20($fp)
 	bne	$a0 $zero label27
 	la	$a0 str_const13
-	li	$t1 229
+	li	$t1 227
 	jal	_dispatch_abort
 label27:
 	lw	$t1 8($a0)
@@ -1490,7 +1490,7 @@ label27:
 	lw	$a0 20($fp)
 	bne	$a0 $zero label28
 	la	$a0 str_const13
-	li	$t1 230
+	li	$t1 228
 	jal	_dispatch_abort
 label28:
 	lw	$t1 8($a0)
@@ -1519,7 +1519,7 @@ PlusStackCommand.execute:
 	lw	$a0 32($fp)
 	bne	$a0 $zero label29
 	la	$a0 str_const13
-	li	$t1 205
+	li	$t1 203
 	jal	_dispatch_abort
 label29:
 	lw	$t1 8($a0)
@@ -1529,7 +1529,7 @@ label29:
 	lw	$a0 32($fp)
 	bne	$a0 $zero label30
 	la	$a0 str_const13
-	li	$t1 206
+	li	$t1 204
 	jal	_dispatch_abort
 label30:
 	lw	$t1 8($a0)
@@ -1539,7 +1539,7 @@ label30:
 	move	$a0 $s5
 	bne	$a0 $zero label31
 	la	$a0 str_const13
-	li	$t1 208
+	li	$t1 206
 	jal	_dispatch_abort
 label31:
 	lw	$t1 8($a0)
@@ -1552,7 +1552,7 @@ label31:
 	jal	A2I_init
 	bne	$a0 $zero label32
 	la	$a0 str_const13
-	li	$t1 208
+	li	$t1 206
 	jal	_dispatch_abort
 label32:
 	lw	$t1 8($a0)
@@ -1562,7 +1562,7 @@ label32:
 	move	$a0 $s4
 	bne	$a0 $zero label33
 	la	$a0 str_const13
-	li	$t1 209
+	li	$t1 207
 	jal	_dispatch_abort
 label33:
 	lw	$t1 8($a0)
@@ -1575,7 +1575,7 @@ label33:
 	jal	A2I_init
 	bne	$a0 $zero label34
 	la	$a0 str_const13
-	li	$t1 209
+	li	$t1 207
 	jal	_dispatch_abort
 label34:
 	lw	$t1 8($a0)
@@ -1597,7 +1597,7 @@ label34:
 	jal	A2I_init
 	bne	$a0 $zero label35
 	la	$a0 str_const13
-	li	$t1 212
+	li	$t1 210
 	jal	_dispatch_abort
 label35:
 	lw	$t1 8($a0)
@@ -1610,7 +1610,7 @@ label35:
 	jal	IntegerStackCommand_init
 	bne	$a0 $zero label36
 	la	$a0 str_const13
-	li	$t1 212
+	li	$t1 210
 	jal	_dispatch_abort
 label36:
 	lw	$t1 8($a0)
@@ -1621,7 +1621,7 @@ label36:
 	lw	$a0 32($fp)
 	bne	$a0 $zero label37
 	la	$a0 str_const13
-	li	$t1 212
+	li	$t1 210
 	jal	_dispatch_abort
 label37:
 	lw	$t1 8($a0)
@@ -1651,7 +1651,7 @@ IntegerStackCommand.execute:
 	lw	$a0 12($fp)
 	bne	$a0 $zero label38
 	la	$a0 str_const13
-	li	$t1 197
+	li	$t1 195
 	jal	_dispatch_abort
 label38:
 	lw	$t1 8($a0)
@@ -1701,7 +1701,7 @@ label41:
 	jal	StopStackCommand_init
 	bne	$a0 $zero label42
 	la	$a0 str_const13
-	li	$t1 144
+	li	$t1 142
 	jal	_dispatch_abort
 label42:
 	lw	$t1 8($a0)
@@ -1727,7 +1727,7 @@ label45:
 	jal	DisplayStackCommand_init
 	bne	$a0 $zero label46
 	la	$a0 str_const13
-	li	$t1 146
+	li	$t1 144
 	jal	_dispatch_abort
 label46:
 	lw	$t1 8($a0)
@@ -1753,7 +1753,7 @@ label49:
 	jal	ExecuteStackCommand_init
 	bne	$a0 $zero label50
 	la	$a0 str_const13
-	li	$t1 148
+	li	$t1 146
 	jal	_dispatch_abort
 label50:
 	lw	$t1 8($a0)
@@ -1779,7 +1779,7 @@ label53:
 	jal	SwapStackCommand_init
 	bne	$a0 $zero label54
 	la	$a0 str_const13
-	li	$t1 150
+	li	$t1 148
 	jal	_dispatch_abort
 label54:
 	lw	$t1 8($a0)
@@ -1805,7 +1805,7 @@ label57:
 	jal	PlusStackCommand_init
 	bne	$a0 $zero label58
 	la	$a0 str_const13
-	li	$t1 152
+	li	$t1 150
 	jal	_dispatch_abort
 label58:
 	lw	$t1 8($a0)
@@ -1821,7 +1821,7 @@ label55:
 	jal	IntegerStackCommand_init
 	bne	$a0 $zero label59
 	la	$a0 str_const13
-	li	$t1 153
+	li	$t1 151
 	jal	_dispatch_abort
 label59:
 	lw	$t1 8($a0)
@@ -2633,7 +2633,7 @@ Main.main:
 	jal	StackMachine_init
 	bne	$a0 $zero label162
 	la	$a0 str_const13
-	li	$t1 330
+	li	$t1 328
 	jal	_dispatch_abort
 label162:
 	lw	$t1 8($a0)
@@ -2645,75 +2645,38 @@ label162:
 	addiu	$sp $sp 12
 	jr	$ra	
 StackMachine.run:
-	addiu	$sp $sp -28
-	sw	$fp 28($sp)
-	sw	$s0 24($sp)
-	sw	$ra 20($sp)
+	addiu	$sp $sp -24
+	sw	$fp 24($sp)
+	sw	$s0 20($sp)
+	sw	$ra 16($sp)
 	addiu	$fp $sp 4
 	move	$s0 $a0
-	sw	$s1 12($fp)
-	sw	$s2 8($fp)
-	sw	$s3 4($fp)
-	sw	$s4 0($fp)
-	la	$s4 bool_const0
+	sw	$s1 8($fp)
+	sw	$s2 4($fp)
+	sw	$s3 0($fp)
+	la	$s3 bool_const0
 	la	$a0 HeadList_protObj
 	jal	Object.copy
 	jal	HeadList_init
-	move	$s3 $a0
-	la	$s2 str_const10
+	move	$s2 $a0
+	la	$s1 str_const10
 label163:
-	lw	$t1 12($s4)
+	lw	$t1 12($s3)
 	la	$a0 bool_const1
 	beqz	$t1 label165
 	la	$a0 bool_const0
 label165:
 	lw	$t1 12($a0)
 	beq	$t1 $zero label164
-	move	$a0 $s0
-	bne	$a0 $zero label166
-	la	$a0 str_const13
-	li	$t1 129
-	jal	_dispatch_abort
-label166:
-	lw	$t1 8($a0)
-	lw	$t1 20($t1)
-	jalr		$t1
-	move	$s2 $a0
-	sw	$s2 0($sp)
-	addiu	$sp $sp -4
-	la	$a0 StackCommandFactory_protObj
-	jal	Object.copy
-	jal	StackCommandFactory_init
-	bne	$a0 $zero label167
-	la	$a0 str_const13
-	li	$t1 130
-	jal	_dispatch_abort
-label167:
-	lw	$t1 8($a0)
-	lw	$t1 12($t1)
-	jalr		$t1
-	move	$s1 $a0
-	sw	$s3 0($sp)
-	addiu	$sp $sp -4
-	move	$a0 $s1
-	bne	$a0 $zero label168
-	la	$a0 str_const13
-	li	$t1 131
-	jal	_dispatch_abort
-label168:
-	lw	$t1 8($a0)
-	lw	$t1 12($t1)
-	jalr		$t1
-	move	$s4 $a0
+	la	$s3 bool_const1
 	b	label163
 label164:
 	move	$a0 $zero
-	lw	$s1 12($fp)
-	lw	$s2 8($fp)
-	lw	$s3 4($fp)
-	lw	$s4 0($fp)
-	lw	$fp 28($sp)
-	lw	$s0 24($sp)
-	lw	$ra 20($sp)
-	addiu	$sp $sp 28
+	lw	$s1 8($fp)
+	lw	$s2 4($fp)
+	lw	$s3 0($fp)
+	lw	$fp 24($sp)
+	lw	$s0 20($sp)
+	lw	$ra 16($sp)
+	addiu	$sp $sp 24
 	jr	$ra	

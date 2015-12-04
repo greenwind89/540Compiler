@@ -5,7 +5,8 @@ class Main inherits IO{
     a:Int<-60;
     b:Int<-1;
     callRecursive(i:Int):Object{
-      callRecursive(i+1)
+      if i < 0 then 0
+      else callRecursive(i-1) fi
     };
     main() : Object {
         {

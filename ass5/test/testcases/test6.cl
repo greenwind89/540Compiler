@@ -64,7 +64,7 @@ class Main inherits IO{
 
   main(): Object {
     {
-      currentStr <- in_string();
+      currentStr <- "1";
 
       let bendMachine: BendMachine <- new BendMachine2, newBen:Bender <-( new BenderFactory).getBender(currentStr)  in
         let f: FireBender <- new FireBender in {
